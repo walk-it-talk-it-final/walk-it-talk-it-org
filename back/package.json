@@ -4,6 +4,7 @@
   "description": "2024 FE 과정 최종 프로젝트 (참여자 경험 중심의 다양한 여행 및 문화 체험, 스포츠/레저 활동을 제공하는 채팅형 크라우드 펀딩 플랫폼)",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
     "mysql2": "^3.9.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -25,5 +27,9 @@
     "sequelize-cli": "^6.6.2"
   },
   "author": "1team",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
+  }
 }
