@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
   config
 );
 
-db.project = require("./project")(sequelize, Sequelize);
+db.ChatRoom = require("./chatroom")(sequelize, Sequelize);
+db.Project = require("./project")(sequelize, Sequelize);
 db.User = require("./user")(sequelize, Sequelize);
 
 Object.keys(db).forEach((modelName) => {

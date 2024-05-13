@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const project = sequelize.define(
-    "project",
+  const Project = sequelize.define(
+    "Project",
     {
       projectId: {
         type: DataTypes.INTEGER,
@@ -64,13 +64,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  project.associate = (db) => {
-    db.project.belongsTo(db.User);
-    db.project.belongsToMany(db.User, {
+  Project.associate = (db) => {
+    db.Project.hasMany(db.Ingproject);
+    db.Project.hasMany(db.Ongoingproject);
+    db.Project.hasMany(db.Guestinfo);
+    db.Project.hasMany(db.Community);
+    db.Project.hasMany(db.Review);
+    db.Project.hasMany(db.Projectnotice);
+    db.Project.hasMany(db.Reward);
+    db.Project.hasMany(db.Chatroom);
+    db.Project.hasMany(db.Reply);
+    db.Project.belongsToMany(db.User, {
       through: "Like",
       as: "Likers",
       timestamps: false,
     });
   };
-  return project;
+  return Project;
 };

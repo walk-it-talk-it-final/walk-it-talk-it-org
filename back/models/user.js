@@ -37,8 +37,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   User.associate = (db) => {
-    db.User.hasMany(db.project);
-    db.User.belongsToMany(db.project, {
+    db.User.hasMany(db.Ingproject);
+    db.User.hasMany(db.Ongoingproject);
+    db.User.hasMany(db.Guestinfo);
+    db.User.hasMany(db.Chatroom);
+    db.User.hasMany(db.Message);
+    db.User.hasMany(db.Projectnotice);
+    db.User.hasMany(db.Review);
+    db.User.hasMany(db.Community);
+    db.User.hasMany(db.Reply);
+    db.User.belongsToMany(db.Project, {
       through: "Like",
       as: "Liked",
       timestamps: false,
