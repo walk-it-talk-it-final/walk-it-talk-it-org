@@ -1,22 +1,30 @@
-module.exports = (sequelize, DataTypes) => {
-  const Reply = sequelize.define(
-    "Reply",
-    {
-      replyContent: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Reply extends Sequelize.Model {
+  static initiate(sequelize) {
+    Reply.init(
+      {
+        replyContent: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        replyUploadDate: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+          allowNull: false,
+        },
       },
-      replyUploadDate: {
-        type: "TIMESTAMP",
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Reply.associate = (db) => {};
-  return Reply;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Reply.belongsTo(db.User);
+    db.Reply.belongsTo(db.Community);
+  }
+}
+
+module.exports = Reply;

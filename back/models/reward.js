@@ -1,34 +1,41 @@
-module.exports = (sequelize, DataTypes) => {
-  const Reward = sequelize.define(
-    "Reward",
-    {
-      rewardOption: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Reward extends Sequelize.Model {
+  static initiate(sequelize) {
+    Reward.init(
+      {
+        rewardOption: {
+          type: Sequelize.STRING(30),
+          allowNull: false,
+        },
+        rewardPrice: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        rewardEa: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        rewardSellCount: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
+        rewardStatus: {
+          type: Sequelize.STRING(2),
+          allowNull: true,
+        },
       },
-      rewardPrice: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rewardEa: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rewardSellCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      rewardStatus: {
-        type: DataTypes.STRING(2),
-        allowNull: true,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Reward.associate = (db) => {};
-  return Reward;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Reward.belongsTo(db.Project);
+  }
+}
+
+module.exports = Reward;

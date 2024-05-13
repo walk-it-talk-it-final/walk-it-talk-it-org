@@ -1,22 +1,30 @@
-module.exports = (sequelize, DataTypes) => {
-  const Ongoingproject = sequelize.define(
-    "Ongoingproject",
-    {
-      createdAt: {
-        type: "TIMESTAMP",
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Ongoingproject extends Sequelize.Model {
+  static initiate(sequelize) {
+    Ongoingproject.init(
+      {
+        thumbnailLink: {
+          type: Sequelize.STRING(500),
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+          allowNull: false,
+        },
       },
-      thumbnailLink: {
-        type: DataTypes.STRING(500),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Ongoingproject.associate = (db) => {};
-  return Ongoingproject;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Ongoingproject.belongsTo(db.Project);
+    db.Ongoingproject.belongsTo(db.User);
+  }
+}
+
+module.exports = Ongoingproject;

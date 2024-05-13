@@ -1,26 +1,34 @@
-module.exports = (sequelize, DataTypes) => {
-  const Message = sequelize.define(
-    "Message",
-    {
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Message extends Sequelize.Model {
+  static initiate(sequelize) {
+    Message.init(
+      {
+        content: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        status: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+          allowNull: false,
+        },
       },
-      createdAt: {
-        type: "TIMESTAMP",
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
-      },
-      status: {
-        type: DataTypes.STRING(2),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Message.associate = (db) => {};
-  return Message;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Message.belongsTo(db.ChatRoom);
+    db.Message.belongsTo(db.User);
+  }
+}
+
+module.exports = Message;

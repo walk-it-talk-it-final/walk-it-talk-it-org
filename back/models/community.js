@@ -1,28 +1,35 @@
-module.exports = (sequelize, DataTypes) => {
-  const Community = sequelize.define(
-    "Community",
-    {
-      commuTitle: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Community extends Sequelize.Model {
+  static initiate(sequelize) {
+    Community.init(
+      {
+        commuTitle: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        commuContent: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        commuUploadDate: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+          allowNull: false,
+        },
       },
-      commuContent: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      commuUploadDate: {
-        type: "TIMESTAMP",
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Community.associate = (db) => {
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Community.belongsTo(db.Project);
+    db.Community.belongsTo(db.User);
     db.Community.hasMany(db.Reply);
-  };
-  return Community;
-};
+  }
+}
+
+module.exports = Community;

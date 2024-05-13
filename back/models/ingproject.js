@@ -1,22 +1,30 @@
-module.exports = (sequelize, DataTypes) => {
-  const Ingproject = sequelize.define(
-    "Ingproject",
-    {
-      createdAt: {
-        type: "TIMESTAMP",
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
+const Sequelize = require("sequelize");
+
+class Ingproject extends Sequelize.Model {
+  static initiate(sequelize) {
+    Ingproject.init(
+      {
+        thumbnailLink: {
+          type: Sequelize.STRING(500),
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW,
+          allowNull: false,
+        },
       },
-      thumbnailLink: {
-        type: DataTypes.STRING(500),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Ingproject.associate = (db) => {};
-  return Ingproject;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Ingproject.belongsTo(db.Project);
+    db.Ingproject.belongsTo(db.User);
+  }
+}
+
+module.exports = Ingproject;

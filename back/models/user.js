@@ -1,46 +1,51 @@
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    "User",
-    {
-      email: {
-        type: DataTypes.STRING(40),
-        allowNull: true,
-        unique: true,
+const Sequelize = require("sequelize");
+
+class User extends Sequelize.Model {
+  static initiate(sequelize) {
+    User.init(
+      {
+        email: {
+          type: Sequelize.STRING(40),
+          allowNull: true,
+          unique: true,
+        },
+        nickname: {
+          type: Sequelize.STRING(15),
+          allowNull: false,
+        },
+        password: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
+        provider: {
+          type: Sequelize.ENUM("local", "kakao"),
+          allowNull: false,
+          defaultValue: "local",
+        },
+        snsId: {
+          type: Sequelize.STRING(50),
+          allowNull: true,
+        },
+        profileImage: {
+          type: Sequelize.STRING(200),
+          allowNull: true,
+        },
       },
-      nickname: {
-        type: DataTypes.STRING(15),
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING(100),
-        allowNull: true,
-      },
-      provider: {
-        type: DataTypes.STRING(10),
-        allowNull: false,
-        defaultValue: "local",
-      },
-      snsId: {
-        type: DataTypes.STRING(50),
-        allowNull: true,
-      },
-      profileImage: {
-        type: DataTypes.STRING(200),
-        allowNull: true,
-      },
-    },
-    {
-      charset: "utf8",
-      collate: "utf8_general_ci",
-      underscored: true,
-      timestamps: false,
-    }
-  );
-  User.associate = (db) => {
+      {
+        sequelize,
+        timestamps: false,
+        underscored: false,
+        paranoid: true,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
     db.User.hasMany(db.Ingproject);
     db.User.hasMany(db.Ongoingproject);
-    db.User.hasMany(db.Guestinfo);
-    db.User.hasMany(db.Chatroom);
+    db.User.hasOne(db.Guestinfo);
+    db.User.hasMany(db.ChatRoom);
     db.User.hasMany(db.Message);
     db.User.hasMany(db.Projectnotice);
     db.User.hasMany(db.Review);
@@ -63,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "FollowerId",
       timestamps: false,
     });
-  };
-  return User;
-};
+  }
+}
+
+module.exports = User;

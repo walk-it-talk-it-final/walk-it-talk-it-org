@@ -1,26 +1,34 @@
-module.exports = (sequelize, DataTypes) => {
-  const Guestinfo = sequelize.define(
-    "Guestinfo",
-    {
-      guestEmail: {
-        type: DataTypes.STRING(40),
-        allowNull: true,
-        unique: true,
+const Sequelize = require("sequelize");
+
+class Guestinfo extends Sequelize.Model {
+  static initiate(sequelize) {
+    Guestinfo.init(
+      {
+        guestEmail: {
+          type: Sequelize.STRING(40),
+          allowNull: true,
+          unique: true,
+        },
+        guestPhone: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        guestName: {
+          type: Sequelize.STRING(15),
+          allowNull: false,
+        },
       },
-      guestPhone: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      guestName: {
-        type: DataTypes.STRING(15),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8mb4",
-      collate: "utf8mb4_general_ci",
-    }
-  );
-  Guestinfo.associate = (db) => {};
-  return Guestinfo;
-};
+      {
+        sequelize,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+  static associate(db) {
+    db.Guestinfo.belongsTo(db.Project);
+    db.Guestinfo.belongsTo(db.User);
+  }
+}
+
+module.exports = Guestinfo;
