@@ -3,8 +3,6 @@ import "./App.css";
 import React from "react";
 import Layout from "./layouts/Layout";
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Layout from "./layouts/Layout";
 import SignUp from "./pages/SignUp";
 
 function App() {

@@ -10,7 +10,7 @@ import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useNavigate } from "react-router-dom";
 
-function DrawerAppBar() {
+function Header() {
   const theme = useTheme(); // 테마 접근
   const mainColor = theme.palette.mainColor.main; // mainColor 가져오기
 
@@ -69,4 +69,4 @@ function DrawerAppBar() {
   );
 }
 
-export default DrawerAppBar;
+export default Header;
