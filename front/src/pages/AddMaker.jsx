@@ -93,7 +93,7 @@ const AddMaker = () => {
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    width: "100%",
+                    width: "50ch",
                     gap: "30px"
                 }}
             >
@@ -108,7 +108,7 @@ const AddMaker = () => {
                             shrink: true,
                             sx: {
                                 '&.Mui-focused': {
-                                    color: subColor4,
+                                    color: mainColor,
                                 },
                             }
                         }}
@@ -130,7 +130,7 @@ const AddMaker = () => {
                             shrink: true,
                             sx: {
                                 '&.Mui-focused': {
-                                    color: subColor4,
+                                    color: mainColor,
                                 },
                             }
                         }}
@@ -166,7 +166,7 @@ const AddMaker = () => {
                                     shrink: true,
                                     sx: {
                                         '&.Mui-focused': {
-                                            color: subColor4,
+                                            color: mainColor,
                                         },
                                     }
                                 }}
@@ -191,7 +191,7 @@ const AddMaker = () => {
                                     shrink: true,
                                     sx: {
                                         '&.Mui-focused': {
-                                            color: subColor4,
+                                            color: mainColor,
                                         },
                                     }
                                 }}
@@ -223,7 +223,7 @@ const AddMaker = () => {
                         shrink: true,
                         sx: {
                             '&.Mui-focused': {
-                                color: subColor4,
+                                color: mainColor,
                             },
                         }
                     }}
@@ -240,10 +240,9 @@ const AddMaker = () => {
                         disablePortal
                         id="combo-box-demo"
                         options={bank}
-                        sx={{ width: 300 }}
+                        sx={{ width: "100%" }}
                         renderInput={(params) => <TextField {...params} label="은행 선택" />}
                     />
-                    <Button variant="outlined" color="mainColor" sx={{ width: "30%", alignSelf: "flex-start", ml: 1, height: "52px" }} >인증하기</Button>
                 </div>
                 <Button type="submit" variant="contained" color="mainColor" sx={{ width: "100%", mt: "10%", color: "white", height: "52px" }} >등록하기</Button>
             </Box>
