@@ -5,6 +5,7 @@ import Layout from "./layouts/Layout";
 import { Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import AddMaker from './pages/AddMaker';
+import AddProject from "./pages/AddProject";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/AddMaker" element={<AddMaker />}/>
+        <Route path="/AddProject" element={<AddProject />}/>
       </Routes>
     </Layout>
   );
