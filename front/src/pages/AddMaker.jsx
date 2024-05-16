@@ -78,15 +78,10 @@ const AddMaker = () => {
     };
 
     return (
-        <div className='wrap' style={{ display: "block", margin: "70px 16px" }}>
-            <Typography variant="h4" color="initial" fontWeight="medium">
-                생성자 등록하기
-            </Typography>
-            <Typography variant="body1" color="initial" sx={{ mt: 2, mb: 5 }}>
-                생성자 페이지를 멋지게 완성해서 더 많은 팬을 만들어보세요.
-            </Typography>
+        <div className='wrap' style={{ display: "block" }}>
             <Box
                 component="form"
+                p={2}
                 noValidate
                 autoComplete="off"
                 onSubmit={handleSubmit(handleRegisterButtonClick)} // handleSubmit 추가
@@ -97,6 +92,12 @@ const AddMaker = () => {
                     gap: "30px"
                 }}
             >
+            <Typography variant="h4" color="initial" fontWeight="medium" marginTop="70px">
+                생성자 등록하기
+            </Typography>
+            <Typography variant="body1" color="initial">
+                생성자 페이지를 멋지게 완성해서 더 많은 팬을 만들어보세요.
+            </Typography>
                 <div>
                     <TextField
                         required
@@ -178,7 +179,7 @@ const AddMaker = () => {
                                     },
                                 }}
                             />
-                            <Button variant="outlined" color="mainColor" id="auth_btn" sx={{ width: "30%", alignSelf: "flex-start", ml: 1, height: "52px" }} onClick={sendAuthCode} >인증번호 전송</Button>
+                            <Button variant="outlined" color="mainColor" id="auth_btn" sx={{ width: "30%", alignSelf: "flex-start", ml: 1, height: "55px" }} onClick={sendAuthCode} >인증번호 전송</Button>
                         </div>
                         <div style={{ display: "flex", width: "100%" }}>
                             <TextField
@@ -209,7 +210,7 @@ const AddMaker = () => {
                                 }}
                                 disabled={!isAuthCodeInputEnabled}
                             />
-                            <Button variant="outlined" color="mainColor" sx={{ width: "30%", alignSelf: "flex-start", ml: 1, height: "52px" }} disabled={!isVerifyButtonEnabled} onClick={chkAuthCode} >확인</Button>
+                            <Button variant="outlined" color="mainColor" sx={{ width: "30%", alignSelf: "flex-start", ml: 1, height: "55px" }} disabled={!isVerifyButtonEnabled} onClick={chkAuthCode} >확인</Button>
                         </div>
                     </Box>
                 </div>
