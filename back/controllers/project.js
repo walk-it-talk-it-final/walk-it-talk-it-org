@@ -42,25 +42,25 @@ exports.getProjects = async (req, res, next) => {
 
 exports.uploadProject = async (req, res, next) => {
   try {
-    const project = await Project.create({
-      content: req.body.content,
-      img: req.body.img,
-      UserId: req.user.id,
-    });
+    const projectInput = req.body;
+    projectInput["userId"] = req.user.id;
+    console.log(projectInput);
+    const project = await Project.create(projectInput);
 
-    const hashtags = req.body.content.match(/#[^\s#]*/g);
-    if (hashtags) {
-      const result = await Promise.all(
-        hashtags.map((tag) => {
-          return Hashtag.findOrCreate({
-            // 해시태그 있으면 찾아내고 없으면 만들어라
-            //'#해시태그'로 들어가므로 1번째 자리부터 슬라이스해 찾아
-            where: { title: tag.slice(1).toLowerCase() },
-          });
-        })
-      );
-      await project.addHashtags(result.map((r) => r[0]));
-    }
+    // const hashtags = req.body.hashtag.split(",");
+    // console.log(hashtags);
+    // if (hashtags) {
+    //   const result = await Promise.all(
+    //     hashtags.map((tag) => {
+    //       return Hashtag.findOrCreate({
+    //         // 해시태그 있으면 찾아내고 없으면 만들어라
+    //         //'#해시태그'로 들어가므로 1번째 자리부터 슬라이스해 찾아
+    //         where: { title: tag.slice(1).toLowerCase() },
+    //       });
+    //     })
+    //   );
+    //   await project.addHashtags(result.map((r) => r[0]));
+    // }
     res.json({
       code: 200,
       payload: project,

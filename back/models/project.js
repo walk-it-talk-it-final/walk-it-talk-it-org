@@ -7,6 +7,7 @@ class Project extends Sequelize.Model {
         projectId: {
           type: Sequelize.INTEGER,
           primaryKey: true,
+          autoIncrement: true,
         },
         projectTitle: {
           type: Sequelize.STRING(30),

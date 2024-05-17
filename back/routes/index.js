@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const projectRouter = require("./project");
-const { join } = require("../controllers/auth");
 const { verifyToken } = require("../middlewares");
 const passport = require("passport");
 const {
