@@ -15,6 +15,8 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/AddMaker" element={<AddMaker />} />
+          <Route path="/AddProject" element={<AddProject />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Layout>

@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const projectRouter = require("./project");
+const { verifyToken } = require("../middlewares");
 const passport = require("passport");
 const {
   createToken,
@@ -12,6 +14,8 @@ const {
 // POST /api/auth/join
 router.post("/auth/join", join);
 
+// POST /api/projects
+router.use("/projects", projectRouter);
 router.post("/auth/login", createToken);
 
 router.get("/auth/kakao", passport.authenticate("kakao"));
