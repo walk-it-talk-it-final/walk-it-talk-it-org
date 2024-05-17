@@ -17,10 +17,13 @@
 }
 
 .titleWrap {
-  margin-top: 87px;
+  margin-top: 13vw;
+  padding-bottom: 50px;
   font-size: 26px;
   font-weight: bold;
   color: #262626;
+  display: flex;
+  justify-content: center;
 }
 
 .contentWrap {
@@ -94,6 +97,19 @@
   width: 90%;
   max-width: 680px;
 }
+
+.separator2 {
+  display: block;
+  margin: 90px auto 10px;
+  text-align: center;
+  position: relative;
+  background: transparent;
+  color: rgba(#0f132a, 0.4);
+  font-size: 13px;
+  width: 90%;
+  max-width: 680px;
+}
+
 .separator::before {
   content: "";
   position: absolute;

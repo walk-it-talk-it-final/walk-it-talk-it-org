@@ -82,6 +82,11 @@ class Project extends Sequelize.Model {
       as: "Likers",
       timestamps: false,
     });
+    db.Project.belongsToMany(db.Hashtag, {
+      through: "ProjectHashtag",
+      as: "Hashtaging",
+      timestamps: false,
+    });
   }
 }
 

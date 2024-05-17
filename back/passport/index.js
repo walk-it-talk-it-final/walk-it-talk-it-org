@@ -3,11 +3,13 @@ const { User } = require("../models");
 const local = require("./local");
 const jwt = require("./jwt");
 const kakao = require("./kakao");
+const naver = require("./naver");
 
 module.exports = () => {
   local();
   jwt();
   kakao();
+  naver();
 
   // 전략 성공 시 호출
   passport.serializeUser((user, done) => {
