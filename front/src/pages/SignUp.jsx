@@ -15,12 +15,9 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
 import axios from "axios";
 
 const SignUp = () => {
-  const theme = useTheme(); // 테마 접근
-  const mainColor = theme.palette.mainColor.main; // mainColor 가져오기
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -91,7 +88,7 @@ const SignUp = () => {
           display: "flex",
           flexDirection: "column",
           width: "50ch",
-          gap: "50px",
+          gap: "30px",
         }}
         noValidate
         autoComplete="off"
@@ -166,11 +163,12 @@ const SignUp = () => {
         <Button
           type="submit"
           variant="contained"
+          color="mainColor"
           sx={{
             display: "block",
             height: "60px",
             marginTop: "50px",
-            backgroundColor: mainColor,
+            color: "#fff",
           }}
         >
           가입하기
