@@ -1428,10 +1428,23 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
+openid@0.5.x:
+  version "0.5.13"
+  resolved "https://registry.npmjs.org/openid/-/openid-0.5.13.tgz"
+  integrity sha512-MdWOwHQPaJ3B+7JnPiTyEEqJsMpoNv/+Q4JObuW5jt6xEpIdHaoazFtrcbukBjLg2+qj5xXOmc9TsqhCEw3HOw==
+
 parseurl@~1.3.3:
   version "1.3.3"
   resolved "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz"
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
+
+passport-google@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/passport-google/-/passport-google-0.3.0.tgz"
+  integrity sha512-sgm38NqzC3zRZ4ypsih4Qd84TQHGnDYi0ptvTOzva84Qzu70ZPajUL9CVrKE/FKdF1jwo44v3iGTSS92Ltll8Q==
+  dependencies:
+    passport-openid "0.3.x"
+    pkginfo "0.2.x"
 
 passport-jwt@^4.0.1:
   version "4.0.1"
@@ -1456,7 +1469,32 @@ passport-local@^1.0.0:
   dependencies:
     passport-strategy "1.x.x"
 
-passport-oauth2@~1.1.2:
+passport-naver@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/passport-naver/-/passport-naver-1.0.6.tgz"
+  integrity sha512-5XEbJesiPVshwE0cTDvbbJrOiYSJ9VFRJTctqiZL1Xip6qOi9n7d49UesOqavLT+Ry8C7aw3zdzbmWosqHcQ/Q==
+  dependencies:
+    passport-oauth "^1.0.0"
+    underscore "^1.8.3"
+
+passport-oauth@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/passport-oauth/-/passport-oauth-1.0.0.tgz"
+  integrity sha512-4IZNVsZbN1dkBzmEbBqUxDG8oFOIK81jqdksE3HEb/vI3ib3FMjbiZZ6MTtooyYZzmKu0BfovjvT1pdGgIq+4Q==
+  dependencies:
+    passport-oauth1 "1.x.x"
+    passport-oauth2 "1.x.x"
+
+passport-oauth1@1.x.x:
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/passport-oauth1/-/passport-oauth1-1.3.0.tgz"
+  integrity sha512-8T/nX4gwKTw0PjxP1xfD0QhrydQNakzeOpZ6M5Uqdgz9/a/Ag62RmJxnZQ4LkbdXGrRehQHIAHNAu11rCP46Sw==
+  dependencies:
+    oauth "0.9.x"
+    passport-strategy "1.x.x"
+    utils-merge "1.x.x"
+
+passport-oauth2@~1.1.2, passport-oauth2@1.x.x:
   version "1.1.2"
   resolved "https://registry.npmjs.org/passport-oauth2/-/passport-oauth2-1.1.2.tgz"
   integrity sha512-wpsGtJDHHQUjyc9WcV9FFB0bphFExpmKtzkQrxpH1vnSr6RcWa3ZEGHx/zGKAh2PN7Po9TKYB1fJeOiIBspNPA==
@@ -1464,6 +1502,15 @@ passport-oauth2@~1.1.2:
     oauth "0.9.x"
     passport-strategy "1.x.x"
     uid2 "0.0.x"
+
+passport-openid@0.3.x:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/passport-openid/-/passport-openid-0.3.1.tgz"
+  integrity sha512-tpSI98hDjDB3aPWOklYIs6Qw9uQk1vLgR5JjHUgpLyR2BhonBNT923ynRL7JTmvKsnc2UhDHCk2k/HqIMdPs4A==
+  dependencies:
+    openid "0.5.x"
+    passport "~0.1.3"
+    pkginfo "0.2.x"
 
 passport-strategy@^1.0.0, passport-strategy@1.x.x:
   version "1.0.0"
@@ -1478,6 +1525,14 @@ passport@^0.7.0:
     passport-strategy "1.x.x"
     pause "0.0.1"
     utils-merge "^1.0.1"
+
+passport@~0.1.3:
+  version "0.1.18"
+  resolved "https://registry.npmjs.org/passport/-/passport-0.1.18.tgz"
+  integrity sha512-qteYojKG/qth7UBbbGU7aqhe5ndJs6YaUkH2B6+7FWQ0OeyYmWknzOATpMhdoSTDcLLliq9n4Fcy1mGs80iUMw==
+  dependencies:
+    pause "0.0.1"
+    pkginfo "0.2.x"
 
 path-is-absolute@^1.0.0:
   version "1.0.1"
@@ -1526,6 +1581,11 @@ pkginfo@~0.3.0:
   version "0.3.1"
   resolved "https://registry.npmjs.org/pkginfo/-/pkginfo-0.3.1.tgz"
   integrity sha512-yO5feByMzAp96LtP58wvPKSbaKAi/1C4kV9XpTctr6EepnP6F33RBNOiVrdz9BrPA98U2BMFsTNHo44TWcbQ2A==
+
+pkginfo@0.2.x:
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/pkginfo/-/pkginfo-0.2.3.tgz"
+  integrity sha512-7W7wTrE/NsY8xv/DTGjwNIyNah81EQH0MWcTzrHL6pOpMocOGZc0Mbdz9aXxSrp+U0mSmkU8jrNCDCfUs3sOBg==
 
 prettier@^3.2.5:
   version "3.2.5"
@@ -1995,6 +2055,11 @@ undefsafe@^2.0.5:
   resolved "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz"
   integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
 
+underscore@^1.8.3:
+  version "1.13.6"
+  resolved "https://registry.npmjs.org/underscore/-/underscore-1.13.6.tgz"
+  integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
+
 undici-types@~5.26.4:
   version "5.26.5"
   resolved "https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz"
@@ -2015,7 +2080,7 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-utils-merge@^1.0.1, utils-merge@1.0.1:
+utils-merge@^1.0.1, utils-merge@1.0.1, utils-merge@1.x.x:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==

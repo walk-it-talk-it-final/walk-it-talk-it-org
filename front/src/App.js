@@ -8,6 +8,7 @@ import { useProvideAuth } from "./hooks/useProvideAuth";
 
 function App() {
   const auth = useProvideAuth();
+
   return (
     <LoginContext.Provider value={auth}>
       <Layout>

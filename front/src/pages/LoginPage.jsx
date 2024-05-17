@@ -1,12 +1,16 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+// import styled from "styled-components";
 import { useAuth } from "../hooks/useAuth";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import { Link, useNavigate } from "react-router-dom";
-import kakaoLoginImg from "../assets/kakao_login_medium_wide.png";
+import kakaoLoginImg from "../assets/kakao_login.png";
+import naverLoginImg from "../assets/naver_login.png";
+// import googleLoginImg from "../assets/google_login.png";
 
 const Home = () => {
+  // useContext -> global state management
   const { loginUser, login, logout, kakaoLogin } = useAuth();
   kakaoLogin();
 
@@ -62,9 +66,8 @@ const Home = () => {
     <>
       <div className="page">
         <div className="titleWrap">
-          이메일과 비밀번호를
+          로그인
           <br />
-          입력해주세요
         </div>
         {loginUser?.id ? (
           <Button
@@ -131,11 +134,21 @@ const Home = () => {
               <div className="wall">|</div>
               <button className="actionButton">비밀번호 찾기</button>
             </div>
+            <div class="separator2">
+              <p>소셜 계정으로 로그인</p>
+            </div>
             <Link to={`${process.env.REACT_APP_API_URL}/auth/kakao`}>
               <img
                 src={kakaoLoginImg}
                 alt="카카오 로그인"
-                style={{ width: "25ch" }}
+                style={{ width: "7ch" }}
+              />
+            </Link>
+            <Link to={`${process.env.REACT_APP_API_URL}/auth/naver`}>
+              <img
+                src={naverLoginImg}
+                alt="네이버 로그인"
+                style={{ width: "7ch" }}
               />
             </Link>
           </form>
