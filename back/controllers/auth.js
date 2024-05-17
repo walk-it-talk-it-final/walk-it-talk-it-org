@@ -188,3 +188,48 @@ exports.naverLogin = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.googleLogin = async (req, res, next) => {
+  try {
+    passport.authenticate("google", { session: false }, (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        throw new Error(info.message);
+      }
+      return req.login(user, (err) => {
+        const accessToken = jwt.sign(
+          { id: user.id, nickname: user.nickname },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h", issuer: "mini_project", subject: "accessToken" }
+        );
+
+        const refreshToken = jwt.sign(
+          { id: user.id, nickname: user.nickname },
+          process.env.JWT_SECRET,
+          { expiresIn: "7d", issuer: "mini_project", subject: "refreshToken" }
+        );
+
+        User.update({ refreshToken }, { where: { id: user.id } });
+        if (err) {
+          console.error(err);
+          return next(err);
+        }
+
+        res.cookie("userId", user.id, {
+          httpOnly: false,
+          secure: false,
+        });
+
+        res.cookie("accessToken", accessToken, {
+          httpOnly: false,
+          secure: false,
+        });
+        res.status(302).redirect(process.env.CLIENT_URL);
+      });
+    })(req, res, next);
+  } catch (err) {
+    return next(err);
+  }
+};

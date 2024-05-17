@@ -9,6 +9,15 @@ let corsOptions = {
   credentials: true,
 };
 
+const fs = require("fs");
+// 업로드 폴더 생성
+try {
+  fs.readdirSync("public/uploads");
+} catch (err) {
+  console.error("uploads 폴더가 없어서 생성합니다.");
+  fs.mkdirSync("public/uploads");
+}
+
 const passport = require("passport"); // 패스포트 모듈
 const passportConfig = require("./passport"); // 패스포트 설정 (자체)
 passportConfig();
@@ -18,7 +27,7 @@ const apiRouter = require("./routes"); // 라우터 경로 설정 (자체)
 const { sequelize } = require("./models");
 // 서버 실행 시 MySQL과 연동
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("데이터베이스 연결됨.");
   })

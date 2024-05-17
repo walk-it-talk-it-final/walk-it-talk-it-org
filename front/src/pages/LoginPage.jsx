@@ -7,6 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import { Link, useNavigate } from "react-router-dom";
 import kakaoLoginImg from "../assets/kakao_login.png";
 import naverLoginImg from "../assets/naver_login.png";
+import googleLoginImg from "../assets/google_login.png";
 // import googleLoginImg from "../assets/google_login.png";
 
 const Home = () => {
@@ -137,20 +138,29 @@ const Home = () => {
             <div class="separator2">
               <p>소셜 계정으로 로그인</p>
             </div>
-            <Link to={`${process.env.REACT_APP_API_URL}/auth/kakao`}>
-              <img
-                src={kakaoLoginImg}
-                alt="카카오 로그인"
-                style={{ width: "7ch" }}
-              />
-            </Link>
-            <Link to={`${process.env.REACT_APP_API_URL}/auth/naver`}>
-              <img
-                src={naverLoginImg}
-                alt="네이버 로그인"
-                style={{ width: "7ch" }}
-              />
-            </Link>
+            <div className="buttonWrapper">
+              <Link to={`${process.env.REACT_APP_API_URL}/auth/kakao`}>
+                <img
+                  src={kakaoLoginImg}
+                  alt="카카오 로그인"
+                  style={{ width: "7ch" }}
+                />
+              </Link>
+              <Link to={`${process.env.REACT_APP_API_URL}/auth/naver`}>
+                <img
+                  src={naverLoginImg}
+                  alt="네이버 로그인"
+                  style={{ width: "7ch" }}
+                />
+              </Link>
+              <Link to={`${process.env.REACT_APP_API_URL}/auth/google`}>
+                <img
+                  src={googleLoginImg}
+                  alt="구글 로그인"
+                  style={{ width: "7ch" }}
+                />
+              </Link>
+            </div>
           </form>
         )}
       </div>
