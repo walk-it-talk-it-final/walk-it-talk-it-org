@@ -5,6 +5,8 @@ import SignUp from "./pages/SignUp";
 import LoginPage from "./pages/LoginPage";
 import { LoginContext } from "./contexts/LoginContext";
 import { useProvideAuth } from "./hooks/useProvideAuth";
+import AddMaker from "./pages/AddMaker";
+import AddProject from "./pages/AddProject";
 
 function App() {
   const auth = useProvideAuth();
