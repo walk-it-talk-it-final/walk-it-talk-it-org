@@ -7,6 +7,7 @@ import { LoginContext } from "./contexts/LoginContext";
 import { useProvideAuth } from "./hooks/useProvideAuth";
 import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
+import SearchList from "./pages/SearchList";
 
 function App() {
   const auth = useProvideAuth();
@@ -20,6 +21,7 @@ function App() {
           <Route path="/AddMaker" element={<AddMaker />} />
           <Route path="/AddProject" element={<AddProject />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/SearchList" element={<SearchList />} />
         </Routes>
       </Layout>
     </LoginContext.Provider>

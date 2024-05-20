@@ -9,6 +9,7 @@ const {
   kakaoLogin,
   refreshToken,
   naverLogin,
+  googleLogin,
 } = require("../controllers/auth");
 
 // POST /api/auth/join
@@ -22,6 +23,11 @@ router.get("/auth/kakao", passport.authenticate("kakao"));
 router.get("/auth/kakao/callback", kakaoLogin);
 router.get("/auth/naver", passport.authenticate("naver"));
 router.get("/auth/naver/callback", naverLogin);
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+router.get("/auth/google/callback", googleLogin);
 
 router.post("/auth/refresh", refreshToken);
 
