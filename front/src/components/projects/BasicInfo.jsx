@@ -20,7 +20,13 @@ import Checkbox from "@mui/material/Checkbox";
 import Stack from "@mui/material/Stack";
 import "react-quill/dist/quill.snow.css";
 
-const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
+const BasicInfo = ({
+  formatCurrency,
+  inputs,
+  setInputs,
+  setBasicInfoSaved,
+  options,
+}) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
@@ -35,14 +41,19 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
     ref,
     reset,
     control,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      projectTitle: "Aaaa",
+      projectTargetPrice: "11111",
+    },
+  });
 
   // 등록 버튼 클릭 핸들러 (프로젝트 기본 정보 버튼)
   const basicInfoSaveBtnClick = (data) => {
     alert("기본 정보 저장 완료");
     setBasicInfoSaved(true);
-    const input = { ...maker, ...data };
-    console.log(input); // 들어간 값 확인
+    console.log({ ...inputs, ...data });
+    setInputs({ ...inputs, ...data }); // 들어간 값 확인
   };
 
   return (
