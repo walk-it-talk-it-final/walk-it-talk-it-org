@@ -14,7 +14,7 @@ class Project extends Sequelize.Model {
           allowNull: false,
         },
         projectTargetPrice: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: false,
         },
         projectContent: {
@@ -71,12 +71,12 @@ class Project extends Sequelize.Model {
   static associate(db) {
     db.Project.hasMany(db.Ingproject);
     db.Project.hasMany(db.Ongoingproject);
-    db.Project.hasOne(db.Guestinfo);
-    db.Project.hasOne(db.Community);
-    db.Project.hasOne(db.Review);
-    db.Project.hasOne(db.Projectnotice);
-    db.Project.hasOne(db.Reward);
-    db.Project.hasOne(db.ChatRoom);
+    db.Project.hasMany(db.Guestinfo);
+    db.Project.hasMany(db.Community);
+    db.Project.hasMany(db.Review);
+    db.Project.hasMany(db.Projectnotice);
+    db.Project.hasMany(db.Reward);
+    db.Project.hasMany(db.ChatRoom);
     db.Project.belongsToMany(db.User, {
       through: "Like",
       as: "Likers",
