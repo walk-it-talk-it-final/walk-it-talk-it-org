@@ -28,31 +28,12 @@ const AddProject = () => {
   const location = useLocation();
   const [basicInfoSaved, setBasicInfoSaved] = useState(false); // 프로젝트 기본 정보 저장 여부 상태
   const [rewardInfoSaved, setRewardInfoSaved] = useState(false); // 리워드 정보 저장 여부 상태
-
-  const [selectedFiles, setSelectedFiles] = useState([]); // 선택된 파일 배열 상태 (이미지 첨부 시 사용되는 코드)
-  const [storyContent, setStoryContent] = useState(""); // 리액트 큐일에 작성한 내용 확인 (스토리)
   const [inputs, setInputs] = useState(location.state);
 
-  // 옵션 셀렉트 박스 이게 해시태그의 역할을 하는건지 헷갈려서 일단 id 값에 해시태그로 써놓았습니당...
+
   const options = [
-    { title: "1인", id: "onePerson" },
-    { title: "2인", id: "twoPersens" },
-    { title: "3인", id: "threePersons" },
-    { title: "4인", id: "fourPersons" },
-    { title: "5인 이상", id: "FiveUpPersons" },
-    { title: "당일치기", id: "oneday" },
-    { title: "1박 2일", id: "twodays" },
+
   ];
-
-  // 리워드 영역에서  한정수량 체크
-  const [isLimited, setIsLimited] = useState(false);
-
-  const handleCheckboxChange = (event) => {
-    setIsLimited(event.target.checked);
-    if (!event.target.checked) {
-      setValue("limitedQuantity", "");
-    }
-  };
 
   // 금액 입력 필드에 반점 추가하는 함수
   const formatCurrency = (value) => {
