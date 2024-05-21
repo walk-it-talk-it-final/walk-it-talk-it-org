@@ -1,4 +1,4 @@
-const { Project, Hashtag, User } = require("../models");
+const { Project, Hashtag, User, Reward } = require("../models");
 const op = require("sequelize").Op;
 
 exports.getProjects = async (req, res, next) => {
@@ -47,14 +47,17 @@ exports.getProjects = async (req, res, next) => {
 
 exports.uploadProject = async (req, res, next) => {
   try {
+    // 요청 바디에서 프로젝트 데이터 가져오기
     const projectInput = req.body;
     projectInput["userId"] = req.user.id;
     console.log(projectInput);
+    // 프로젝트 생성
     const project = await Project.create(projectInput);
 
+    // 요청 바디에서 해시태그 배열 가져오기
     const hashtagArr = req.body.hashtags;
     console.log(hashtagArr);
-    // 해시태그 있으면 추가
+    // 해시태그 있으면 hashtag 테이블에 추가
     if (hashtagArr) {
       const result = await Promise.all(
         hashtagArr.map((tag) => {
@@ -64,6 +67,23 @@ exports.uploadProject = async (req, res, next) => {
         })
       );
       await project.addHashtags(result.map((r) => r[0]));
+    }
+
+    const rewards = req.body.rewards;
+    console.log(rewards);
+
+    if (rewards) {
+      await Promise.all(
+        rewards.map((reward) => {
+          return Reward.create({
+            rewardOption: reward.rewardOption,
+            rewardPrice: reward.rewardPrice,
+            rewardEa: reward.limitedQuantity || 0,
+            rewardSellCount: 0,
+            ProjectProjectId: project.id,
+          });
+        })
+      );
     }
     res.json({
       code: 200,
