@@ -34,14 +34,14 @@ const RewardAdd = ({
 
   const rewardSaveBtnClick = (data) => {
     alert("리워드 추가 완료");
-    console.log(data); // 들어간 값 확인
+    console.log([...rewards, data]); // 들어간 값 확인
     setRewards([...rewards, data]);
-    console.log({ ...inputs, ...data });
-    setInputs({ ...inputs, rewards });
+    setInputs({ ...inputs, rewards: [...rewards, data] });
     reset();
   };
 
   const rewardRegisterBtnClick = (data) => {
+    console.log(inputs);
     alert("리워드 등록 완료");
     setRewardInfoSaved(true);
     // console.log(data); // 들어간 값 확인
@@ -56,9 +56,8 @@ const RewardAdd = ({
     reset,
   } = useForm({
     defaultValues: {
-      rewardPrice: "111",
-      rewardOption: "11111",
-      limitedQuantity: "30",
+      rewardPrice: "1000000",
+      rewardOption: "1인 패키지",
     },
   });
 
@@ -195,7 +194,7 @@ const RewardAdd = ({
           }}
           onChange={(e) => {
             const { value } = e.target;
-            setValue("rewardPrice", formatCurrency(value));
+            setValue("rewardPrice", value);
           }}
         />
         <TextField

@@ -20,7 +20,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Stack from "@mui/material/Stack";
 import "react-quill/dist/quill.snow.css";
-import ImageIcon from '@mui/icons-material/Image';
+import ImageIcon from "@mui/icons-material/Image";
+import axios from "axios";
 
 const BasicInfo = ({
   formatCurrency,
@@ -45,13 +46,14 @@ const BasicInfo = ({
     control,
   } = useForm({
     defaultValues: {
-      projectTitle: "Aaaa",
-      projectTargetPrice: "11111",
+      projectTitle: "1박2일 여행가자",
+      projectTargetPrice: "33333333",
     },
   });
 
   // 미리보기 이미지를 저장할 상태
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [showPreview, setShowPreview] = useState();
 
   // 등록 버튼 클릭 핸들러 (프로젝트 기본 정보 버튼)
   const basicInfoSaveBtnClick = (data) => {
@@ -62,8 +64,30 @@ const BasicInfo = ({
   };
 
   // 썸네일 업로드 이벤트 핸들러
-  const handleThumbnailUpload = (e) => {
+  const handleThumbnailUpload = async (e) => {
     const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("img", file);
+
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/projects/image`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.getItem("token"),
+        },
+        data: file,
+      },
+    );
+    // back에서 code 200 반환하도록 추가
+    if (res.data.code === 200) {
+      console.log(res.data.img);
+      setValue("projectThumbImg", res.data.img);
+      setShowPreview(res.data.img);
+    }
+
+    // 이미지 미리보기
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -78,15 +102,15 @@ const BasicInfo = ({
   };
 
   // 썸네일 업로드 버튼
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
     height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
     bottom: 0,
     left: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
     width: 1,
   });
 
@@ -117,14 +141,13 @@ const BasicInfo = ({
           프로젝트를 대표할 주요 기본 정보를 입력하세요.
         </Typography>
         <div style={{ width: "100%" }}>
-
           {/* 썸네일 등록 부분 추가 */}
           <Typography
             sx={{
               variant: "body1",
               color: "initial",
               fontWeight: "medium",
-              mb: "2%"
+              mb: "2%",
             }}
           >
             프로젝트 썸네일 등록
@@ -136,7 +159,8 @@ const BasicInfo = ({
               mb: "5%",
             }}
           >
-            2MB 이하의 JPEG, JPG, PNG <br/> 파일 사이즈 : 최소 150X150 픽셀 이상
+            2MB 이하의 JPEG, JPG, PNG <br /> 파일 사이즈 : 최소 150X150 픽셀
+            이상
           </Typography>
           <Button
             component="label"
@@ -145,7 +169,7 @@ const BasicInfo = ({
             tabIndex={-1}
             startIcon={<ImageIcon />}
             sx={{
-              mb: "13%"
+              mb: "13%",
             }}
           >
             이미지 업로드
@@ -158,11 +182,14 @@ const BasicInfo = ({
               <img
                 src={thumbnailPreview}
                 alt="Thumbnail Preview"
-                style={{ maxWidth: "100%", maxHeight: "200px", marginBottom: "8%" }}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "200px",
+                  marginBottom: "8%",
+                }}
               />
             </div>
           )}
-
 
           <TextField
             required
@@ -182,9 +209,9 @@ const BasicInfo = ({
               width: "100%",
               mb: "8%",
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-              {
-                borderColor: subColor4,
-              },
+                {
+                  borderColor: subColor4,
+                },
             }}
           />
           <TextField
@@ -197,9 +224,9 @@ const BasicInfo = ({
               mb: "6%",
               width: "100%",
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-              {
-                borderColor: subColor4,
-              },
+                {
+                  borderColor: subColor4,
+                },
             }}
             InputProps={{
               endAdornment: <InputAdornment position="end">원</InputAdornment>,
@@ -214,7 +241,7 @@ const BasicInfo = ({
             }}
             onChange={(e) => {
               const { value } = e.target;
-              setValue("projectTargetPrice", formatCurrency(value));
+              setValue("projectTargetPrice", value);
             }}
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -234,9 +261,9 @@ const BasicInfo = ({
                       color: mainColor,
                     },
                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: subColor4,
-                    },
+                      {
+                        borderColor: subColor4,
+                      },
                   }}
                 />
               )}
@@ -284,12 +311,19 @@ const BasicInfo = ({
                   getOptionLabel={(option) => option.title}
                   filterSelectedOptions
                   onChange={(e, newValue) => {
-                    const newValueSet = new Set(newValue.map((option) => option.title));
-                    const newOptions = [...newValueSet].map((title) => ({ title }));
+                    const newValueSet = new Set(
+                      newValue.map((option) => option.title),
+                    );
+                    const newOptions = [...newValueSet].map((title) => ({
+                      title,
+                    }));
                     field.onChange(newOptions);
-                    if (e.type === 'change' && e.target.value.trim().endsWith(',')) {
+                    if (
+                      e.type === "change" &&
+                      e.target.value.trim().endsWith(",")
+                    ) {
                       setTimeout(() => {
-                        e.target.value = '';
+                        e.target.value = "";
                       }, 0);
                     }
                   }}
@@ -300,13 +334,16 @@ const BasicInfo = ({
                       placeholder="키워드와 반점을 같이 입력해주세요."
                       onChange={(e) => {
                         const { value } = e.target;
-                        if (value.trim().endsWith(',')) {
+                        if (value.trim().endsWith(",")) {
                           const trimmedValue = value.slice(0, -1).trim();
                           if (trimmedValue) {
-                            const newData = [...field.value, { title: trimmedValue }];
+                            const newData = [
+                              ...field.value,
+                              { title: trimmedValue },
+                            ];
                             field.onChange(newData);
                             setTimeout(() => {
-                              e.target.value = '';
+                              e.target.value = "";
                             }, 0);
                           }
                         }
@@ -316,20 +353,30 @@ const BasicInfo = ({
                           e.preventDefault();
                           const trimmedValue = params.inputProps.value.trim();
                           if (trimmedValue) {
-                            const newData = [...field.value, { title: trimmedValue }];
+                            const newData = [
+                              ...field.value,
+                              { title: trimmedValue },
+                            ];
                             field.onChange(newData);
                             setTimeout(() => {
-                              params.inputProps.onChange({ target: { value: '' } });
+                              params.inputProps.onChange({
+                                target: { value: "" },
+                              });
                             }, 0);
                           }
                         } else if (e.key === "Enter") {
                           e.preventDefault(); // 엔터 키 기본 동작 막기
                           const trimmedValue = params.inputProps.value.trim();
                           if (trimmedValue) {
-                            const newData = [...field.value, { title: trimmedValue }];
+                            const newData = [
+                              ...field.value,
+                              { title: trimmedValue },
+                            ];
                             setTimeout(() => {
                               field.onChange(newData);
-                              params.inputProps.onChange({ target: { value: '' } });
+                              params.inputProps.onChange({
+                                target: { value: "" },
+                              });
                             }, 0);
                           }
                         }
@@ -341,15 +388,15 @@ const BasicInfo = ({
                     "& .MuiInputLabel-root.MuiInputLabel-shrink": {
                       color: mainColor,
                     },
-                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: subColor4,
-                    },
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: subColor4,
+                      },
                   }}
                 />
               )}
             />
           </Stack>
-
         </div>
 
         <Button

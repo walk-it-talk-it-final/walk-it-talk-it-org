@@ -16,7 +16,6 @@ const AddMaker = () => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
-
   // useForm 폼 초기화
   const {
     register,
@@ -24,7 +23,14 @@ const AddMaker = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      managerName: "가나다",
+      managerEmail: "abcd@gmail.com",
+      managerPhone: "01012345678",
+      managerAccount: "01234567890",
+    },
+  });
 
   const navigate = useNavigate();
   // 핸드폰 인증(하는 척..) 구현
@@ -79,24 +85,27 @@ const AddMaker = () => {
     setIsVerifyButtonEnabled(false); // 확인 버튼 비활성화
   };
 
+  const [selectedBank, setSelectedBank] = useState(null);
   // 은행 목록
   const bank = [
-    { label: "KEB하나은행", id: 1 },
-    { label: "SC제일은행", id: 2 },
-    { label: "국민은행", id: 3 },
-    { label: "신한은행", id: 4 },
-    { label: "외환은행", id: 5 },
-    { label: "우리은행", id: 6 },
-    { label: "기업은행", id: 7 },
-    { label: "농협", id: 8 },
+    { label: "KEB하나은행", id: "KEB하나" },
+    { label: "SC제일은행", id: "SC제일" },
+    { label: "국민은행", id: "국민" },
+    { label: "신한은행", id: "신한" },
+    { label: "외환은행", id: "외환" },
+    { label: "우리은행", id: "우리" },
+    { label: "기업은행", id: "기업" },
+    { label: "농협", id: "농협" },
   ];
 
   // 등록 버튼 클릭 핸들러
   // 프로젝트 등록
   const handleRegisterButtonClick = (data) => {
     try {
+      data.managerBank = selectedBank;
+      console.log(data);
       // data vaildate
-      navigate("/AddProject", { state: data });
+      navigate("/addproject", { state: data });
     } catch (error) {
       console.error(error);
     }
@@ -310,6 +319,7 @@ const AddMaker = () => {
             renderInput={(params) => (
               <TextField {...params} label="은행 선택" />
             )}
+            onChange={(e) => setSelectedBank(e.target.textContent)}
           />
         </div>
         <Button
