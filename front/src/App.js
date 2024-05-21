@@ -25,6 +25,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/searchlist" element={<SearchList />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/Home" element={<Home />} />
         </Routes>
       </Layout>
     </LoginContext.Provider>
