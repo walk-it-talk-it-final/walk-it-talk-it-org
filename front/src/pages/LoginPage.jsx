@@ -24,7 +24,7 @@ const Home = () => {
 
   const navigate = useNavigate();
   const goSignupPage = () => {
-    navigate("/signUp");
+    navigate("/signup");
   };
 
   const Toast = Swal.mixin({

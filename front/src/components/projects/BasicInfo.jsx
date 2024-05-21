@@ -9,6 +9,7 @@ import {
   InputLabel,
   FormControl,
   Input,
+  styled,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -19,8 +20,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Stack from "@mui/material/Stack";
 import "react-quill/dist/quill.snow.css";
+import ImageIcon from '@mui/icons-material/Image';
 
-const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
+const BasicInfo = ({
+  formatCurrency,
+  inputs,
+  setInputs,
+  setBasicInfoSaved,
+  options,
+}) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
@@ -35,15 +43,52 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
     ref,
     reset,
     control,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      projectTitle: "Aaaa",
+      projectTargetPrice: "11111",
+    },
+  });
+
+  // 미리보기 이미지를 저장할 상태
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
   // 등록 버튼 클릭 핸들러 (프로젝트 기본 정보 버튼)
   const basicInfoSaveBtnClick = (data) => {
     alert("기본 정보 저장 완료");
     setBasicInfoSaved(true);
-    const input = { ...maker, ...data };
-    console.log(input); // 들어간 값 확인
+    console.log({ ...inputs, ...data });
+    setInputs({ ...inputs, ...data }); // 들어간 값 확인
   };
+
+  // 썸네일 업로드 이벤트 핸들러
+  const handleThumbnailUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+
+        // 이것은 ... 이미지도 객체에 전달하려고 한 것인데..... 뭔가 아닌 것 같읍니다 ....
+        console.log("썸네일 이미지 Base64 문자열:", base64String);
+        setThumbnailPreview(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // 썸네일 업로드 버튼
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
   return (
     <div className="basicInfo">
@@ -72,6 +117,53 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
           프로젝트를 대표할 주요 기본 정보를 입력하세요.
         </Typography>
         <div style={{ width: "100%" }}>
+
+          {/* 썸네일 등록 부분 추가 */}
+          <Typography
+            sx={{
+              variant: "body1",
+              color: "initial",
+              fontWeight: "medium",
+              mb: "2%"
+            }}
+          >
+            프로젝트 썸네일 등록
+          </Typography>
+          <Typography
+            sx={{
+              variant: "body1",
+              color: "grey",
+              mb: "5%",
+            }}
+          >
+            2MB 이하의 JPEG, JPG, PNG <br/> 파일 사이즈 : 최소 150X150 픽셀 이상
+          </Typography>
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<ImageIcon />}
+            sx={{
+              mb: "13%"
+            }}
+          >
+            이미지 업로드
+            <VisuallyHiddenInput type="file" onChange={handleThumbnailUpload} />
+          </Button>
+
+          {/* 썸네일 미리보기 */}
+          {thumbnailPreview && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <img
+                src={thumbnailPreview}
+                alt="Thumbnail Preview"
+                style={{ maxWidth: "100%", maxHeight: "200px", marginBottom: "8%" }}
+              />
+            </div>
+          )}
+
+
           <TextField
             required
             {...register("projectTitle", { required: true })}
@@ -90,9 +182,9 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
               width: "100%",
               mb: "8%",
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: subColor4,
-                },
+              {
+                borderColor: subColor4,
+              },
             }}
           />
           <TextField
@@ -105,9 +197,9 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
               mb: "6%",
               width: "100%",
               "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: subColor4,
-                },
+              {
+                borderColor: subColor4,
+              },
             }}
             InputProps={{
               endAdornment: <InputAdornment position="end">원</InputAdornment>,
@@ -142,9 +234,9 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
                       color: mainColor,
                     },
                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: subColor4,
-                      },
+                    {
+                      borderColor: subColor4,
+                    },
                   }}
                 />
               )}
@@ -186,33 +278,80 @@ const BasicInfo = ({ formatCurrency, maker, setBasicInfoSaved, options }) => {
                 <Autocomplete
                   {...field}
                   multiple
+                  freeSolo
                   id="hashtag"
                   options={options}
                   getOptionLabel={(option) => option.title}
                   filterSelectedOptions
+                  onChange={(e, newValue) => {
+                    const newValueSet = new Set(newValue.map((option) => option.title));
+                    const newOptions = [...newValueSet].map((title) => ({ title }));
+                    field.onChange(newOptions);
+                    if (e.type === 'change' && e.target.value.trim().endsWith(',')) {
+                      setTimeout(() => {
+                        e.target.value = '';
+                      }, 0);
+                    }
+                  }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="상세 옵션 설정"
-                      placeholder="옵션 선택"
+                      label="해시태그"
+                      placeholder="키워드와 반점을 같이 입력해주세요."
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        if (value.trim().endsWith(',')) {
+                          const trimmedValue = value.slice(0, -1).trim();
+                          if (trimmedValue) {
+                            const newData = [...field.value, { title: trimmedValue }];
+                            field.onChange(newData);
+                            setTimeout(() => {
+                              e.target.value = '';
+                            }, 0);
+                          }
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === ",") {
+                          e.preventDefault();
+                          const trimmedValue = params.inputProps.value.trim();
+                          if (trimmedValue) {
+                            const newData = [...field.value, { title: trimmedValue }];
+                            field.onChange(newData);
+                            setTimeout(() => {
+                              params.inputProps.onChange({ target: { value: '' } });
+                            }, 0);
+                          }
+                        } else if (e.key === "Enter") {
+                          e.preventDefault(); // 엔터 키 기본 동작 막기
+                          const trimmedValue = params.inputProps.value.trim();
+                          if (trimmedValue) {
+                            const newData = [...field.value, { title: trimmedValue }];
+                            setTimeout(() => {
+                              field.onChange(newData);
+                              params.inputProps.onChange({ target: { value: '' } });
+                            }, 0);
+                          }
+                        }
+                      }}
                     />
                   )}
-                  onChange={(_, data) => field.onChange(data)}
                   sx={{
                     width: "100%",
                     "& .MuiInputLabel-root.MuiInputLabel-shrink": {
-                      color: "mainColor",
+                      color: mainColor,
                     },
-                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "subColor4",
-                      },
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: subColor4,
+                    },
                   }}
                 />
               )}
             />
           </Stack>
+
         </div>
+
         <Button
           type="submit"
           variant="outlined"

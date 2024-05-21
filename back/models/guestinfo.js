@@ -28,6 +28,7 @@ class Guestinfo extends Sequelize.Model {
   static associate(db) {
     db.Guestinfo.belongsTo(db.Project);
     db.Guestinfo.belongsTo(db.User);
+    db.Guestinfo.belongsTo(db.Reward);
   }
 }
 
