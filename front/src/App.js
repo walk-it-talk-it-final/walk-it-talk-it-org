@@ -23,7 +23,7 @@ function App() {
           <Route path="/addproject" element={<AddProject />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/Home" element={<Home />} />
+          <Route path="/Home" element={<Home />} /> 
         </Routes>
       </Layout>
     </LoginContext.Provider>
