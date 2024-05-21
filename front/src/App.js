@@ -7,7 +7,6 @@ import { LoginContext } from "./contexts/LoginContext";
 import { useProvideAuth } from "./hooks/useProvideAuth";
 import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
-import SearchList from "./pages/SearchList";
 import Search from "./pages/Search";
 import Home from "./pages/Home";
 
@@ -23,7 +22,6 @@ function App() {
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/searchlist" element={<SearchList />} />
           <Route path="/search" element={<Search />} />
           <Route path="/Home" element={<Home />} />
         </Routes>
