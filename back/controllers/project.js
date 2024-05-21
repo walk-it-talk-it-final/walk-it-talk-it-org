@@ -53,16 +53,15 @@ exports.uploadProject = async (req, res, next) => {
     console.log(projectInput);
     // 프로젝트 생성
     const project = await Project.create(projectInput);
-
     // 요청 바디에서 해시태그 배열 가져오기
     const hashtagArr = req.body.hashtags;
-    console.log(hashtagArr);
+    // console.log(hashtagArr);
     // 해시태그 있으면 hashtag 테이블에 추가
     if (hashtagArr) {
       const result = await Promise.all(
         hashtagArr.map((tag) => {
           return Hashtag.findOrCreate({
-            where: { hashtagTitle: tag.toLowerCase() },
+            where: { hashtagTitle: tag.title.toLowerCase() },
           });
         })
       );
@@ -70,7 +69,7 @@ exports.uploadProject = async (req, res, next) => {
     }
 
     const rewards = req.body.rewards;
-    console.log(rewards);
+    // console.log(rewards);
 
     if (rewards) {
       await Promise.all(
@@ -78,13 +77,19 @@ exports.uploadProject = async (req, res, next) => {
           return Reward.create({
             rewardOption: reward.rewardOption,
             rewardPrice: reward.rewardPrice,
-            rewardEa: reward.limitedQuantity || 0,
+            rewardEa: reward.limitedQuantity,
             rewardSellCount: 0,
-            ProjectProjectId: project.id,
+            ProjectProjectId: project.projectId,
           });
         })
       );
     }
+
+    // 이미지 경로 업데이트
+    if (req.body.project_thumb_img) {
+      await project.update({ project_thumb_img: req.body.project_thumb_img });
+    }
+
     res.json({
       code: 200,
       payload: project,
