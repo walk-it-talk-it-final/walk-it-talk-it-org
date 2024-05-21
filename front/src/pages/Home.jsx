@@ -6,7 +6,7 @@ import { Carousel } from "react-responsive-carousel";
 import CardList from '../components/layouts/CardList';
 
 
-// 슬라이드에 사용되는 이미지들
+// 슬라이드에 사용되는 이미지들 
 const slideImages = [
     {
         label: "Image 1",
