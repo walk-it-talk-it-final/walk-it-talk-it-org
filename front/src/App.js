@@ -9,6 +9,7 @@ import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
 import SearchList from "./pages/SearchList";
 import Search from "./pages/Search";
+import Home from "./pages/Home";
 
 function App() {
   const auth = useProvideAuth();
