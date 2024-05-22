@@ -8,10 +8,6 @@ class Hashtag extends Sequelize.Model {
           type: Sequelize.STRING(20),
           allowNull: false,
         },
-        hashtagContext: {
-          type: Sequelize.STRING(20),
-          allowNull: true,
-        },
       },
       {
         sequelize,
@@ -23,7 +19,6 @@ class Hashtag extends Sequelize.Model {
   static associate(db) {
     db.Hashtag.belongsToMany(db.Project, {
       through: "ProjectHashtag",
-      as: "Hashtaged",
       timestamps: false,
     });
   }

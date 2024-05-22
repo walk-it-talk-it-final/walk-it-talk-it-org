@@ -14,7 +14,7 @@ class Reward extends Sequelize.Model {
         },
         rewardEa: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          allowNull: true,
         },
         rewardSellCount: {
           type: Sequelize.INTEGER,
@@ -35,6 +35,7 @@ class Reward extends Sequelize.Model {
   }
   static associate(db) {
     db.Reward.belongsTo(db.Project);
+    db.Reward.hasMany(db.Guestinfo);
   }
 }
 

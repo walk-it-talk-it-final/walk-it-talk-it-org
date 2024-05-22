@@ -5,12 +5,12 @@ class User extends Sequelize.Model {
     User.init(
       {
         email: {
-          type: Sequelize.STRING(40),
+          type: Sequelize.STRING(400),
           allowNull: true,
           unique: true,
         },
         nickname: {
-          type: Sequelize.STRING(15),
+          type: Sequelize.STRING(150),
           allowNull: false,
         },
         password: {
@@ -18,12 +18,12 @@ class User extends Sequelize.Model {
           allowNull: true,
         },
         provider: {
-          type: Sequelize.ENUM("local", "kakao"),
+          type: Sequelize.ENUM("local", "kakao", "naver", "google"),
           allowNull: false,
           defaultValue: "local",
         },
         snsId: {
-          type: Sequelize.STRING(50),
+          type: Sequelize.STRING(500),
           allowNull: true,
         },
         profileImage: {

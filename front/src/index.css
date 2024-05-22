@@ -166,3 +166,15 @@
     7px 7px 20px 0px #0002,
     4px 4px 5px 0px #0001;
 }
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  height: 60vh;
+  width: 70vw;
+  margin-top: 40px;
+}
+
+.sendbird-theme--light .sendbird-text-message-item-body.outgoing {
+  background-color: #ff7237;
+}
