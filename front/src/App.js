@@ -7,8 +7,13 @@ import { LoginContext } from "./contexts/LoginContext";
 import { useProvideAuth } from "./hooks/useProvideAuth";
 import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
-import Search from "./pages/Search";
+// import Search from "./pages/Search";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import MyFunding from "./pages/MyFunding";
+import LikeProject from "./pages/LikeProject";
+import MyProject from "./pages/MyProject";
+import SponsorList from "./pages/SponsorList";
 
 function App() {
   const auth = useProvideAuth();
@@ -22,8 +27,13 @@ function App() {
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/home" element={<Home />} /> 
+          {/* <Route path="/search" element={<Search />} /> */}
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/myfunding" element={<MyFunding />} />
+          <Route path="/profile/likeproject" element={<LikeProject />} />
+          <Route path="/profile/myproject" element={<MyProject />} />
+          <Route path="/sponsors" element={<SponsorList />} />
         </Routes>
       </Layout>
     </LoginContext.Provider>
