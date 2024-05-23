@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { LoginContext } from "../contexts/LoginContext";
+import { SignInContext } from "../contexts/SignInContext";
 
 export const useAuth = () => {
-  return useContext(LoginContext);
+  return useContext(SignInContext);
 };

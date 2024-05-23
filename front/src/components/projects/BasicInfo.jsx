@@ -398,7 +398,6 @@ const BasicInfo = ({
             />
           </Stack>
         </div>
-
         <Button
           type="submit"
           variant="outlined"

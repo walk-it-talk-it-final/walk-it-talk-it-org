@@ -1,5 +1,7 @@
 .App {
+  font-family: sans-serif;
   text-align: center;
+  height: 100vh;
 }
 
 .App-logo {
@@ -35,4 +37,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.sendbird-theme--light .sendbird-text-message-item-body.outgoing {
+  background-color: #ff7237;
 }
