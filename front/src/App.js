@@ -25,9 +25,10 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/singin" element={<SingIn />} />
           <Route path="/searchlist" element={<SearchList />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
       </Layout>
     </LoginContext.Provider>

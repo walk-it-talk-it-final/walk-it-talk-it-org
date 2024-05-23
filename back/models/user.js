@@ -51,6 +51,7 @@ class User extends Sequelize.Model {
     db.User.hasMany(db.Review);
     db.User.hasMany(db.Community);
     db.User.hasMany(db.Reply);
+    db.User.hasMany(db.Project);
     db.User.belongsToMany(db.Project, {
       through: "Like",
       as: "Liked",

@@ -14,7 +14,7 @@ class Project extends Sequelize.Model {
           allowNull: false,
         },
         projectTargetPrice: {
-          type: Sequelize.BIGINT,
+          type: Sequelize.INTEGER,
           allowNull: false,
         },
         projectContent: {
@@ -58,6 +58,10 @@ class Project extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: true,
         },
+        projectFinishAt: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
       },
       {
         sequelize,
@@ -77,6 +81,7 @@ class Project extends Sequelize.Model {
     db.Project.hasMany(db.Projectnotice);
     db.Project.hasMany(db.Reward);
     db.Project.hasMany(db.ChatRoom);
+    db.Project.hasMany(db.User);
     db.Project.belongsToMany(db.User, {
       through: "Like",
       as: "Likers",
