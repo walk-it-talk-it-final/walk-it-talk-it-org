@@ -63,6 +63,7 @@ exports.createToken = async (req, res, next) => {
           message: "토큰이 발급되었습니다.",
           accessToken,
           userId: user.id,
+          nickname: user.nickname,
         });
       });
     })(req, res, next);

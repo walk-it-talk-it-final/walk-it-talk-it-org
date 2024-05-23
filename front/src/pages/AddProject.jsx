@@ -30,10 +30,7 @@ const AddProject = () => {
   const [rewardInfoSaved, setRewardInfoSaved] = useState(false); // 리워드 정보 저장 여부 상태
   const [inputs, setInputs] = useState(location.state);
 
-
-  const options = [
-
-  ];
+  const options = [];
 
   // 금액 입력 필드에 반점 추가하는 함수
   const formatCurrency = (value) => {
