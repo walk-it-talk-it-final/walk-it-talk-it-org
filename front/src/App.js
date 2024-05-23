@@ -11,17 +11,17 @@ import Chat from "./pages/Chat";
 import SearchList from "./pages/SearchList";
 import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
-import Search from "./pages/Search";
+import Search from "./pages/SearchList";
 import Home from "./pages/Home";
 
 function App() {
   const auth = useProvideAuth();
 
   return (
-    <LoginContext.Provider value={auth}>
+    <SignInContext.Provider value={auth}>
       <Layout>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<SingIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
@@ -31,7 +31,7 @@ function App() {
           <Route path="/chat" element={<Chat />} />
         </Routes>
       </Layout>
-    </LoginContext.Provider>
+    </SignInContext.Provider>
   );
 }
 
