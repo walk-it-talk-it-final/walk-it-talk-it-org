@@ -246,13 +246,14 @@ const BasicInfo = ({
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Controller
-              name="projectEndDate"
+              name="projectFinishAt"
               control={control}
               defaultValue={null}
               render={({ field }) => (
                 <DatePicker
                   {...field}
                   required
+                  id="projectFinishAt"
                   label="프로젝트 종료일 *"
                   disablePast // 오늘 이전의 날짜 비활성화
                   sx={{

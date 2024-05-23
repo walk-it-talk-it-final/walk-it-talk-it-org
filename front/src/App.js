@@ -18,6 +18,7 @@ import MyFunding from "./pages/MyFunding";
 import LikeProject from "./pages/LikeProject";
 import MyProject from "./pages/MyProject";
 import SponsorList from "./pages/SponsorList";
+import FundingComplete from "./pages/FundingComplete";
 
 function App() {
   const auth = useProvideAuth();
@@ -38,6 +39,7 @@ function App() {
           <Route path="/profile/myproject" element={<MyProject />} />
           <Route path="/sponsors" element={<SponsorList />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/success" element={<FundingComplete />} />
         </Routes>
       </Layout>
     </SignInContext.Provider>

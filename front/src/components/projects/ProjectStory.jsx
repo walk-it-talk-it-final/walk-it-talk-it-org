@@ -4,6 +4,7 @@ import { Typography, Button, Box } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 // Quill 사용
 const formats = [
@@ -26,6 +27,7 @@ const formats = [
 ];
 
 const ProjectStory = ({ inputs, setInputs }) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
@@ -52,6 +54,9 @@ const ProjectStory = ({ inputs, setInputs }) => {
         },
       );
       alert("등록이 완료되었습니다."); // 모든 필드값이 존재하면 등록이 완료되었다는 alert 창을 띄움
+
+      // FundingComplete 페이지로 이동
+      navigate("/success");
     } catch (error) {
       console.error(error);
     }
