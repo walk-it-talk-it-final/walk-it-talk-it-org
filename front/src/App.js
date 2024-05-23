@@ -11,8 +11,13 @@ import Chat from "./pages/Chat";
 import SearchList from "./pages/SearchList";
 import AddMaker from "./pages/AddMaker";
 import AddProject from "./pages/AddProject";
-import Search from "./pages/SearchList";
+import Search from "./pages/Search";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import MyFunding from "./pages/MyFunding";
+import LikeProject from "./pages/LikeProject";
+import MyProject from "./pages/MyProject";
+import SponsorList from "./pages/SponsorList";
 
 function App() {
   const auth = useProvideAuth();
@@ -21,10 +26,15 @@ function App() {
     <SignInContext.Provider value={auth}>
       <Layout>
         <Routes>
-          <Route path="/" element={<SingIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/myfunding" element={<MyFunding />} />
+          <Route path="/profile/likeproject" element={<LikeProject />} />
+          <Route path="/profile/myproject" element={<MyProject />} />
+          <Route path="/sponsors" element={<SponsorList />} />
           <Route path="/singin" element={<SingIn />} />
           <Route path="/searchlist" element={<SearchList />} />
           <Route path="/search" element={<Search />} />
