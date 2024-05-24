@@ -1,6 +1,8 @@
 import React from 'react';
 import { Avatar, Typography } from '@mui/material';
 
+// 후원자 컴포넌트
+
 const Sponsor = ({ profileImage, guestName, rewardOption, subColor4 }) => {
     return (
         <div style={{ width: "100%", height: "auto", marginTop: 10 }}>
