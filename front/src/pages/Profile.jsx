@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
     const theme = useTheme();
     const mainColor = theme.palette.mainColor.main;
-
     const navigate = useNavigate();
 
     // 각 페이지로 이동하는 함수
