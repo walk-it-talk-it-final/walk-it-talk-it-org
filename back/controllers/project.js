@@ -6,20 +6,13 @@ exports.getProjects = async (req, res, next) => {
   try {
     // 게시물 저장할 배열 초기화
     let projects = [];
-    // 해시태그 조회라면,
+    // 해시태그 조회라면, (해시태그 검색이라면)
     if (req.query.hashtag) {
       const hashtag = await Hashtag.findOne({
         where: { hashtagTitle: req.query.hashtag },
       });
       if (hashtag) {
-        projects = await hashtag.getProjects({
-          include: [
-            {
-              model: User,
-              attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
-            },
-          ],
-        });
+        projects = await hashtag.getProjects();
       }
     } else {
       // 사용자 id로 게시물 조회
@@ -28,7 +21,7 @@ exports.getProjects = async (req, res, next) => {
         where: { userId: req.query.userId || { [op.ne]: null } },
         include: {
           model: User,
-          attributes: ["id", "nickname"],
+          attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
         },
         // 작성 시간 기준 내림차순 정렬
         order: [["createdAt", "DESC"]],

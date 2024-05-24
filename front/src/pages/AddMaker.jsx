@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AddMaker = () => {
   const theme = useTheme();
@@ -102,9 +103,17 @@ const AddMaker = () => {
   // 프로젝트 등록
   const handleRegisterButtonClick = (data) => {
     try {
+      // 토큰에서 사용자 ID 가져오기
+      const token = localStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
       data.managerBank = selectedBank;
+      data.userId = userId;
+
       console.log(data);
-      // data vaildate
+
+      // data vaildate 유효성 검사
       navigate("/addproject", { state: data });
     } catch (error) {
       console.error(error);

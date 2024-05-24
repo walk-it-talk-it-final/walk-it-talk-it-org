@@ -3,7 +3,7 @@ import "./App.css";
 import Layout from "./components/layouts/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp";
-import SingIn from "./pages/SingIn";
+import SignIn from "./pages/SignIn";
 import { SignInContext } from "./contexts/SignInContext";
 import { useProvideAuth } from "./hooks/useProvideAuth";
 import Chat from "./pages/Chat";
@@ -20,6 +20,8 @@ import MyProject from "./pages/MyProject";
 import SponsorList from "./pages/SponsorList";
 import Following from "./pages/Following";
 import Follower from './pages/Follower';
+import FundingComplete from "./pages/FundingComplete";
+
 
 function App() {
   const auth = useProvideAuth();
@@ -29,9 +31,11 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/addmaker" element={<AddMaker />} />
           <Route path="/addproject" element={<AddProject />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/myfunding" element={<MyFunding />} />
           <Route path="/profile/likeproject" element={<LikeProject />} />
@@ -43,6 +47,7 @@ function App() {
           <Route path="/searchlist" element={<SearchList />} />
           <Route path="/search" element={<Search />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/success" element={<FundingComplete />} />
         </Routes>
       </Layout>
     </SignInContext.Provider>
