@@ -3,6 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
+// 팔로우/팔로잉 컴포넌트
+
 const Follow = ({ id, name, avatarUrl, initiallyFollowing, onToggleFollow }) => {
     const [isFollowing, setIsFollowing] = useState(initiallyFollowing);
 
