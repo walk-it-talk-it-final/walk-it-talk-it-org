@@ -155,3 +155,20 @@ exports.deleteProject = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.saveLikeStatus = async (req, res, next) => {
+  try {
+    // 게시글이 존재하는지부터 검사
+    const project = await Project.findOne({
+      where: { project_id: req.params.id },
+    });
+    if (!project) {
+      return res.status(404).send("프로젝트를 찾지 못했습니다.");
+    }
+    await project.addLiker(req.user.id);
+    res.json({ userId: req.user.id });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
