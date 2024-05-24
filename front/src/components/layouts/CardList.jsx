@@ -3,6 +3,8 @@ import { Card, CardMedia, CardContent, IconButton, Typography, Box } from "@mui/
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
+// 카드형 프로젝트 리스트 컴포넌트
+
 const ProjectList = ({ mainColor, title, creator, progress, amount, remainingDays, image, initiallyLiked  }) => {
     const [liked, setLiked] = useState(initiallyLiked);
 
