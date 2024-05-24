@@ -9,12 +9,37 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
 
 const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
+  const { loginUser } = useAuth();
+
   const [liked, setLiked] = useState(initiallyLiked);
 
-  const handleLikeClick = () => {
-    setLiked(!liked);
+  const handleLikeClick = async () => {
+    const newLikedStatus = !liked;
+    setLiked(newLikedStatus);
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/projects/like/${project.projectId}`,
+        {
+          userId: project.userId,
+          projectId: project.projectId,
+          liked: newLikedStatus,
+        },
+        {
+          headers: {
+            Authorization: loginUser.token,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      // 서버 요청이 실패하면 liked 상태를 다시 원래대로 돌림
+      setLiked(!newLikedStatus);
+    }
   };
 
   const [daysLeft, setDaysLeft] = useState(null);
