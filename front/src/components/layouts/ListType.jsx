@@ -4,6 +4,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from "react-router-dom";
 
+
+// 일반적인 리스트형 
+
 const ListType = ({ mainColor, title, creator, progress, amount, remainingDays, image, initiallyLiked }) => {
     const [liked, setLiked] = useState(initiallyLiked);
 
