@@ -163,7 +163,7 @@ const ProjectScroll = ({ mainColor, sections }) => (
   <Sticky enabled={true} top={64} innerZ={1000} activeClass="sticky">
     <Box sx={{ mb: 4, backgroundColor: 'white', padding: '8px 0' }}>
       {sections.map(section => (
-        <Button key={section.id} onClick={() => scrollToSection(section.id)} sx={{ border: `1px solid ${mainColor}`, borderRadius: '18px', color: mainColor, padding: '4px 8px', mr: '14px' }}>
+        <Button key={section.id} onClick={() => scrollToSection(section.id)} sx={{ border: `1px solid ${mainColor}`, borderRadius: '18px', color: mainColor, padding: '4px 8px', mr: '10px' }}>
           {section.label}
         </Button>
       ))}
