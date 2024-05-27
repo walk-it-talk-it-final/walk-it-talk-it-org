@@ -62,7 +62,7 @@ const RewardAdd = ({
   });
 
   return (
-    <div className="rewardInfo" style={{ marginTop: "15%" }}>
+    <div className="rewardInfo" style={{ marginTop: "20%", marginBottom : 70}}>
       <Typography variant="h4" color="initial" fontWeight="medium">
         리워드 추가
       </Typography>
