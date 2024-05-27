@@ -172,3 +172,19 @@ exports.saveLikeStatus = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getRewards = async (req, res, next) => {
+  try {
+    const ProjectProjectId = req.params.id;
+    const rewards = await Reward.findAll({
+      // where: { project_id: req.params.id },
+      where: { ProjectProjectId },
+      attributes: ["rewardPrice"],
+    });
+
+    res.json(rewards);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
