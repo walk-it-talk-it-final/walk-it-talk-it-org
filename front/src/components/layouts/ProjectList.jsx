@@ -17,6 +17,7 @@ const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
 
   const [liked, setLiked] = useState(initiallyLiked);
 
+  // 좋아요 버튼 누르기
   const handleLikeClick = async () => {
     const newLikedStatus = !liked;
     setLiked(newLikedStatus);
@@ -41,6 +42,31 @@ const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
       setLiked(!newLikedStatus);
     }
   };
+
+  const [minRewardPrice, setMinRewardPrice] = useState(null);
+
+  useEffect(() => {
+    const projectRewards = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/projects/rewards/${project.projectId}`,
+        );
+        const rewards = response.data;
+        console.log(rewards);
+
+        if (rewards && rewards.length > 0) {
+          const minPrice = Math.min(
+            ...rewards.map((reward) => reward.rewardPrice),
+          );
+          setMinRewardPrice(Math.floor(minPrice / 10000) + "만원 +");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    projectRewards();
+  }, [project.projectId]);
 
   const [daysLeft, setDaysLeft] = useState(null);
 
@@ -161,7 +187,8 @@ const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
                 fontSize: "0.75rem !important",
               }}
             >
-              {project.projectTargetPrice}
+              {/* 리워드 최소금액 */}
+              {minRewardPrice !== null ? minRewardPrice : "로딩 중..."}
             </Typography>
             <Typography
               variant="body2"
