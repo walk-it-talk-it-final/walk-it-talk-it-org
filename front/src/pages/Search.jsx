@@ -54,10 +54,23 @@ const Search = () => {
 
   // 검색 api 호출
   const getProjects = useCallback(async () => {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/projects`, {
-      params: { hashtag: searchTerm }, // 쿼리 파라미터로 hashtag 전달
-    });
-    setProjects(res.data.payload);
+    if (searchTerm.trim()) {
+      try {
+        console.log(searchTerm);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/projects`,
+          {
+            params: { hashtag: searchTerm }, // 쿼리 파라미터로 hashtag 전달
+          },
+        );
+        setProjects(res.data.payload);
+        setShowResults(true);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.warn("searchTerm is empty");
+    }
   }, [searchTerm]); // 해시태그가 변경될 때만 함수가 재생성
 
   // 최근 검색어 가져오기
@@ -83,8 +96,27 @@ const Search = () => {
         JSON.stringify(updatedSearchTerms),
       );
       getProjects();
-      setShowResults((prevShowResults) => !prevShowResults);
+      // setShowResults((prevShowResults) => !prevShowResults);
+      setShowResults(true);
     }
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      getProjects();
+    }
+  }, [searchTerm, getProjects]);
+
+  // 최근 검색어 클릭하여 재검색
+  const handleRecentSearchClick = (term) => {
+    setSearchTerm(term);
+    let updatedSearchTerms = recentSearchTerms.filter((t) => t !== term);
+    updatedSearchTerms = [term, ...updatedSearchTerms];
+    setRecentSearchTerms(updatedSearchTerms);
+    localStorage.setItem(
+      "recentSearchTerms",
+      JSON.stringify(updatedSearchTerms),
+    );
   };
 
   // 검색 기록 삭제
@@ -187,7 +219,9 @@ const Search = () => {
                       backgroundColor: subColor1,
                       padding: "5px 0 5px 10px",
                       margin: "5px",
+                      cursor: "pointer",
                     }}
+                    onClick={() => handleRecentSearchClick(term)}
                   >
                     <Typography
                       variant="body2"
@@ -197,11 +231,12 @@ const Search = () => {
                     </Typography>
                     <IconButton
                       size="small"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setRecentSearchTerms(
                           recentSearchTerms.filter((_, i) => i !== index),
-                        )
-                      }
+                        );
+                      }}
                       sx={{ marginLeft: "5px" }}
                     >
                       <CloseIcon fontSize="small" sx={{ color: mainColor }} />
@@ -243,7 +278,14 @@ const Search = () => {
       ) : (
         // 검색 결과 표시
         // 한 줄에 두 개씩 오게 만들고 싶은데 안됨..
-        <div className="wrap" style={{ display: "block" }}>
+        <div
+          className="wrap"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
           <Box
             component="form"
             p={2}
