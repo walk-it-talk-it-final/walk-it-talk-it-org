@@ -17,7 +17,19 @@ class Project extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        projectContent: {
+        storyContent: {
+          type: Sequelize.STRING(2000),
+          allowNull: false,
+        },
+        budgetContent: {
+          type: Sequelize.STRING(2000),
+          allowNull: false,
+        },
+        scheduleContent: {
+          type: Sequelize.STRING(2000),
+          allowNull: false,
+        },
+        creatorContent: {
           type: Sequelize.STRING(2000),
           allowNull: false,
         },

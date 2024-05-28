@@ -18,7 +18,10 @@ import MyFunding from "./pages/MyFunding";
 import LikeProject from "./pages/LikeProject";
 import MyProject from "./pages/MyProject";
 import SponsorList from "./pages/SponsorList";
+import Following from "./pages/Following";
+import Follower from "./pages/Follower";
 import FundingComplete from "./pages/FundingComplete";
+import Settings from "./pages/Settings";
 
 function App() {
   const auth = useProvideAuth();
@@ -38,6 +41,9 @@ function App() {
           <Route path="/profile/likeproject" element={<LikeProject />} />
           <Route path="/profile/myproject" element={<MyProject />} />
           <Route path="/sponsors" element={<SponsorList />} />
+          <Route path="/profile/following" element={<Following />} />
+          <Route path="/profile/follower" element={<Follower />} />
+          <Route path="/profile/settings" element={<Settings />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/success" element={<FundingComplete />} />
         </Routes>

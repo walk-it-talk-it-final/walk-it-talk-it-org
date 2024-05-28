@@ -7,6 +7,8 @@ const {
   uploadImg,
   modifyProject,
   deleteProject,
+  saveLikeStatus,
+  getRewards,
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -44,5 +46,11 @@ router.put("/:id", verifyToken, modifyProject);
 
 // DELETE /api/projects/:id - 특정 게시물 삭제
 router.delete("/:id", verifyToken, deleteProject);
+
+// POST /api/projects/like/:id - 게시글 좋아요 추가
+router.post("/like/:id", verifyToken, saveLikeStatus);
+
+// GET /api/projects/reward/:id - 해당 프로젝트의 전체 리워드 조회
+router.get("/rewards/:id", getRewards);
 
 module.exports = router;
