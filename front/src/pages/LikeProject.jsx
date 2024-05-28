@@ -4,7 +4,8 @@ import {
     Typography,
     Box,
 } from "@mui/material";
-import CardList from '../components/layouts/CardList';
+import ListType from './../components/layouts/ListType';
+
 
 
 const LikeProject = () => {
@@ -72,7 +73,7 @@ const LikeProject = () => {
                     </div>
                     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
                         {projects.map((project) => (
-                            <CardList
+                            <ListType
                                 key={project.id}
                                 mainColor={mainColor}
                                 title={project.title}
@@ -81,7 +82,6 @@ const LikeProject = () => {
                                 amount={project.amount}
                                 remainingDays={project.remainingDays}
                                 image={project.image}
-                                initiallyLiked={true} // 항상 찜한 상태로 설정
                             />
                         ))}
                     </div>
