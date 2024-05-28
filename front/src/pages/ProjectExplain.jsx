@@ -294,7 +294,7 @@ const ProjectScroll = ({ mainColor, sections }) => (
             borderRadius: "18px",
             color: mainColor,
             padding: "4px 8px",
-            mr: "14px",
+            mr: "10px",
           }}
         >
           {section.label}
