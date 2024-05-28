@@ -19,10 +19,9 @@ import LikeProject from "./pages/LikeProject";
 import MyProject from "./pages/MyProject";
 import SponsorList from "./pages/SponsorList";
 import Following from "./pages/Following";
-import Follower from './pages/Follower';
+import Follower from "./pages/Follower";
 import FundingComplete from "./pages/FundingComplete";
 import Settings from "./pages/Settings";
-
 
 function App() {
   const auth = useProvideAuth();

@@ -16,13 +16,21 @@ exports.getProjects = async (req, res, next) => {
       }
     } else {
       // 사용자 id로 게시물 조회
+      const whereCondition = req.query.userId
+        ? { userId: req.query.userId }
+        : null;
       projects = await Project.findAll({
         // 사용자 id가 없는 경우 모든 게시물 조회
-        where: { userId: req.query.userId || { [op.ne]: null } },
-        include: {
-          model: User,
-          attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
-        },
+        whereCondition,
+        include: [
+          {
+            model: User,
+            attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
+          },
+          {
+            model: Reward,
+          },
+        ],
         // 작성 시간 기준 내림차순 정렬
         order: [["createdAt", "DESC"]],
       });
@@ -150,6 +158,39 @@ exports.deleteProject = async (req, res, next) => {
       code: 200,
       message: "게시글이 삭제되었습니다.",
     });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+exports.saveLikeStatus = async (req, res, next) => {
+  try {
+    // 게시글이 존재하는지부터 검사
+    const project = await Project.findOne({
+      where: { project_id: req.params.id },
+    });
+    if (!project) {
+      return res.status(404).send("프로젝트를 찾지 못했습니다.");
+    }
+    await project.addLiker(req.user.id);
+    res.json({ userId: req.user.id });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+exports.getRewards = async (req, res, next) => {
+  try {
+    const ProjectProjectId = req.params.id;
+    const rewards = await Reward.findAll({
+      // where: { project_id: req.params.id },
+      where: { ProjectProjectId },
+      attributes: ["rewardPrice", "rewardSellCount"],
+    });
+
+    res.json(rewards);
   } catch (err) {
     console.error(err);
     next(err);
