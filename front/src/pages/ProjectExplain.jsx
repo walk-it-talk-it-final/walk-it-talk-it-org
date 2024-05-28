@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Tabs, Tab, useTheme, IconButton, Avatar } from '@mui/material';
+import { Box, Button, Typography, Tabs, Tab, useTheme, IconButton, Avatar, Divider, MenuItem, Select } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { Element, scroller } from 'react-scroll';
 import Sticky from 'react-stickynode';
-
-
-
+import Announcements from './Announcements.jsx'; 
 
 //프로젝트 이미지
 const ProjectImage = () => (
@@ -94,11 +92,6 @@ const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
 
   };
 
-
-
- 
-
-
   return (
     <Box sx={{ border: '1px solid #ccc', p: 2, mb: 4, borderRadius: '10px', mx: 'auto', width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -181,7 +174,6 @@ const IntroContent = () => (
     <p>대법원장과 대법관이 아닌 법관은 대법관회의의 동의를 얻어 대법원장이 임명한다. 제3항의 승인을 얻지 못한 때에는 그 처분 또는 명령은 그때부터 효력을 상실한다. 이 경우 그 명령에 의하여 개정 또는 폐지되었던 법률은 그 명령이 승인을 얻지 못한 때부터 당연히 효력을 회복한다.</p>
     <p>대통령은 국가의 독립·영토의 보전·국가의 계속성과 헌법을 수호할 책무를 진다. 모든 국민은 종교의 자유를 가진다. 일반사면을 명하려면 국회의 동의를 얻어야 한다.</p>
 
-
   </Box>
 );
 //예산 내용
@@ -209,7 +201,6 @@ const CreatorContent = () => (
     <p>감사원은 세입·세출의 결산을 매년 검사하여 대통령과 차년도국회에 그 결과를 보고하여야 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.</p>
     <p>대한민국은 통일을 지향하며, 자유민주적 기본질서에 입각한 평화적 통일 정책을 수립하고 이를 추진한다. 형사피고인은 유죄의 판결이 확정될 때까지는 무죄로 추정된다.</p>
 
-
   </Box>
 );
 // 신뢰와 안전 내용
@@ -227,7 +218,6 @@ const TrustContent = () => (
   </Box>
 );
 
-
 const App = () => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
@@ -236,12 +226,17 @@ const App = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(326);
+  const [sortOrder, setSortOrder] = useState('newest');
 
   const handleTabChange = (event, newValue) => setSelectedTab(newValue);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
     setLikes(isLiked ? likes - 1 : likes + 1);
+  };
+
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
   };
 
   const sections = [
@@ -253,7 +248,6 @@ const App = () => {
   ];
 
   return (
-    // 수정된 maxWidth 설정
 <Box sx={{ fontFamily: 'Arial, sans-serif', maxWidth: '480px', m: '0 auto', p: 3, paddingTop: '64px' }}>
       <Tabs value={selectedTab} onChange={handleTabChange} textColor="black" sx={{ mb: 4, justifyContent: 'center' }} TabIndicatorProps={{ style: { background: mainColor, height: 3 } }}>
         <Tab label="프로젝트 스토리" sx={{ flexGrow: 1 }} />
@@ -261,7 +255,9 @@ const App = () => {
         <Tab label="커뮤니티" sx={{ flexGrow: 1 }} />
         <Tab label="후기" sx={{ flexGrow: 1 }} />
       </Tabs>
-      <ProjectImage />
+      {selectedTab === 0 && (
+        <>
+        <ProjectImage />
       <ProjectHeader
         title="투샷 에스프레소를 버튼 하나로 만드는 51mm 휴대용 에스프레소 머신"
         description="캠핑, 여행, 출장에서 신선한 투샷 에스프레소를 버튼 하나로 손쉽게 만들어주는 에스프레소 머신. 저가는 물론 공압으로 기존 추출보다 많은 양을 추출하며 클린한 기능"
@@ -283,7 +279,7 @@ const App = () => {
         reviewCount="10" 
         mainColor={mainColor} 
       />
-      {selectedTab === 0 && (
+      
         <Box>
           <ProjectScroll mainColor={mainColor} sections={sections} />
           {sections.map(section => (
@@ -291,12 +287,7 @@ const App = () => {
               {section.content}
             </ProjectSection>
           ))}
-        </Box>
-      )}
-      {selectedTab === 1 && <Box>공지사항 내용</Box>}
-      {selectedTab === 2 && <Box>커뮤니티 내용</Box>}
-      {selectedTab === 3 && <Box>후기 내용</Box>}
-      <Button
+          <Button
       variant="contained"
       //onClick={}
       sx={{
@@ -312,6 +303,31 @@ const App = () => {
 >
   프로젝트 후원하기
 </Button>
+        </Box>
+        </>
+      )}
+      {selectedTab === 1 && (
+        <>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+              공지사항
+            </Typography>
+            <Select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              displayEmpty
+              sx={{ minWidth: 100, maxHeight: 40 }}
+            >
+              <MenuItem value="newest">최신순</MenuItem>
+              <MenuItem value="oldest">오래된 순</MenuItem>
+            </Select>
+          </Box>
+          <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
+          <Announcements subColor4={subColor4} sortOrder={sortOrder} />
+        </>
+      )}
+      {selectedTab === 2 && <Box>커뮤니티 내용</Box>}
+      {selectedTab === 3 && <Box>후기 내용</Box>}
     </Box>
   );
 };
