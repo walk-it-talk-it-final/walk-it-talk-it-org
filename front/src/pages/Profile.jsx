@@ -16,7 +16,6 @@ const Profile = () => {
     const navigate = useNavigate();
 
     // 각 페이지로 이동하는 함수
-    const goToProfileSetting = () => navigate("/profile/profilesettings");
     const goTofundingProjectList = () => navigate("/profile/myfunding");
     const goToFollowingList = () => navigate("/profile/following");
     const goToFollowerList = () => navigate("/profile/follower");
@@ -81,9 +80,6 @@ const Profile = () => {
                             <Avatar alt="프로필 이미지" src="https://i.namu.wiki/i/-vq_BrSekQ9__KSOwEbm1Hkb4QG4rDT-VSIDPjMtplPgaZNB8iLhD-xDki_QLocTfQPqsoy2b97-a5RLkdGHjcSscFuioHXLWb7OEsyX0u73rma5QkCySrJlycPzlgAELgzWOBcsugC-19xaqXTUOQ.webp" sx={{ width: 70, height: 70, border: "1px solid grey" }} />
                             <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }} id="profileName">우사기</Typography>
                         </div>
-                        <IconButton sx={{ color: "grey", marginBottom: 10 }} onClick={goToProfileSetting}>
-                            <SettingsIcon sx={{ width: 30, height: 30 }} />
-                        </IconButton>
                     </div>
 
                     {/* 후원한 프로젝트. 팔로잉, 팔로워 wrap div */}
@@ -194,7 +190,7 @@ const Profile = () => {
                             >
                                 <SettingsIcon sx={{ width: 40, height: 40 }} />
                             </IconButton>
-                            <Typography sx={{ marginTop: 1 }}>설정</Typography>
+                            <Typography sx={{ marginTop: 1 }}>프로필 수정</Typography>
                         </div>
                     </div>
                     <div className="recentView" style={{ marginTop: 50, padding: 10 }}>
