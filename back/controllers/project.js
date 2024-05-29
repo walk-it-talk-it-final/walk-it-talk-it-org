@@ -1,6 +1,8 @@
 const { Project, Hashtag, User, Reward } = require("../models");
+const Ongoingproject = require("../models/ongoingproject");
 const op = require("sequelize").Op;
 
+// 프로젝트 검색
 exports.getProjects = async (req, res, next) => {
   // query string은 req.query에 있다
   try {
@@ -46,14 +48,26 @@ exports.getProjects = async (req, res, next) => {
   }
 };
 
+// 프로젝트 등록
 exports.uploadProject = async (req, res, next) => {
   try {
     // 요청 바디에서 프로젝트 데이터 가져오기
     const projectInput = req.body;
-    projectInput["userId"] = req.user.id;
-    console.log(projectInput);
+    projectInput.UserId = req.user.id;
+
     // 프로젝트 생성
     const project = await Project.create(projectInput);
+
+    // 프로젝트 ID를 사용하여 thumbnailLink 생성
+    const thumbnailLink = `${req.protocol}://${req.get("host")}/project/${project.projectId}`;
+
+    // ongoinprojects 테이블에 추가
+    await Ongoingproject.create({
+      ProjectProjectId: project.projectId,
+      UserId: req.user.id,
+      thumbnailLink: thumbnailLink,
+    });
+
     // 요청 바디에서 해시태그 배열 가져오기
     const hashtagArr = req.body.hashtags;
     // console.log(hashtagArr);
@@ -69,6 +83,7 @@ exports.uploadProject = async (req, res, next) => {
       await project.addHashtags(result.map((r) => r[0]));
     }
 
+    // 리워드 db에 추가
     const rewards = req.body.rewards;
     // console.log(rewards);
 
@@ -78,7 +93,7 @@ exports.uploadProject = async (req, res, next) => {
           return Reward.create({
             rewardOption: reward.rewardOption,
             rewardPrice: reward.rewardPrice,
-            rewardEa: reward.limitedQuantity,
+            rewardEa: reward.limitedQuantity || null,
             rewardSellCount: 0,
             ProjectProjectId: project.projectId,
           });
@@ -101,6 +116,7 @@ exports.uploadProject = async (req, res, next) => {
   }
 };
 
+// 이미지 등록
 exports.uploadImg = (req, res) => {
   res.json({
     code: 200,
@@ -108,6 +124,7 @@ exports.uploadImg = (req, res) => {
   });
 };
 
+// 프로젝트 수정
 exports.modifyProject = async (req, res, next) => {
   try {
     await Project.update(
@@ -149,6 +166,7 @@ exports.modifyProject = async (req, res, next) => {
   }
 };
 
+// 프로젝트 삭제
 exports.deleteProject = async (req, res, next) => {
   try {
     await Project.destroy({
@@ -164,6 +182,7 @@ exports.deleteProject = async (req, res, next) => {
   }
 };
 
+// 좋아요 누르기
 exports.saveLikeStatus = async (req, res, next) => {
   try {
     // 게시글이 존재하는지부터 검사
@@ -181,6 +200,34 @@ exports.saveLikeStatus = async (req, res, next) => {
   }
 };
 
+// 좋아요 상태 조회
+exports.getLikedProjects = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const likedProjects = await Project.findAll({
+      include: [
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+      ],
+      where: {
+        "$Likers.id$": userId,
+      },
+      order: [["createdAt", "DESC"]],
+    });
+    res.json({
+      code: 200,
+      payload: likedProjects,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 리워드 검색
 exports.getRewards = async (req, res, next) => {
   try {
     const ProjectProjectId = req.params.id;

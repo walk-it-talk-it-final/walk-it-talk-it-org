@@ -67,7 +67,7 @@ class Project extends Sequelize.Model {
           allowNull: true,
         },
         managerAccount: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING(20),
           allowNull: true,
         },
         projectFinishAt: {
@@ -93,7 +93,7 @@ class Project extends Sequelize.Model {
     db.Project.hasMany(db.Projectnotice);
     db.Project.hasMany(db.Reward);
     db.Project.hasMany(db.ChatRoom);
-    db.Project.hasMany(db.User);
+    db.Project.belongsTo(db.User);
     db.Project.belongsToMany(db.User, {
       through: "Like",
       as: "Likers",
