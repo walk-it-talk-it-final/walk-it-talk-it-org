@@ -12,14 +12,38 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "@emotion/react";
+import { jwtDecode } from "jwt-decode";
 
-const ProjectList = ({ initiallyLiked, project }) => {
+const ProjectList = ({ project }) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const { loginUser } = useAuth();
   const [progress, setProgress] = useState(0);
+
   // 좋아요 버튼 누르기
-  const [liked, setLiked] = useState(initiallyLiked);
+  const [liked, setLiked] = useState(false);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    // 사용자 아이디 추출
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.sub;
+      // 좋아요 상태 받아오기
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/projects/like/${userId}`)
+        .then((response) => {
+          const likedProjects = response.data.payload;
+          const isLiked = likedProjects.some(
+            (p) => p.projectId === project.projectId,
+          );
+          setLiked(isLiked);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [token, project.projectId]);
 
   const handleLikeClick = async () => {
     const newLikedStatus = !liked;
