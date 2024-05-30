@@ -14,16 +14,27 @@ exports.getProjects = async (req, res, next) => {
         where: { hashtagTitle: req.query.hashtag },
       });
       if (hashtag) {
-        projects = await hashtag.getProjects();
+        projects = await hashtag.getProjects({
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
+            },
+            {
+              model: Reward,
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
       }
     } else {
       // 사용자 id로 게시물 조회
       const whereCondition = req.query.userId
-        ? { userId: req.query.userId }
-        : null;
+        ? { UserId: req.query.userId }
+        : {};
       projects = await Project.findAll({
         // 사용자 id가 없는 경우 모든 게시물 조회
-        whereCondition,
+        where: whereCondition,
         include: [
           {
             model: User,
@@ -192,7 +203,11 @@ exports.saveLikeStatus = async (req, res, next) => {
     if (!project) {
       return res.status(404).send("프로젝트를 찾지 못했습니다.");
     }
-    await project.addLiker(req.user.id);
+    if (req.body.liked) {
+      await project.addLiker(req.user.id);
+    } else {
+      await project.removeLiker(req.user.id);
+    }
     res.json({ userId: req.user.id });
   } catch (err) {
     console.error(err);
