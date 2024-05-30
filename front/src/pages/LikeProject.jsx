@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Typography, Box } from "@mui/material";
-import ProjectList from "./../components/layouts/ProjectList";
+import ProjectList from "../components/layouts/ProjectList";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
