@@ -22,6 +22,15 @@ import Following from "./pages/Following";
 import Follower from "./pages/Follower";
 import FundingComplete from "./pages/FundingComplete";
 import Settings from "./pages/Settings";
+import ProjectExplain from "./pages/ProjectExplain";
+import FundingProgress from './pages/FundingProgress';
+import CommuPostWirte from "./components/communities/CommuPostWirte";
+import AnnouncePostWrite from "./components/communities/AnnouncePostWrite";
+import ReviewWrite from "./components/communities/ReviewWrite";
+import { CheckoutPage } from "./components/toss/Checkout";
+import { SuccessPage } from "./components/toss/Success";
+import { FailPage } from "./components/toss/Fail";
+
 
 function App() {
   const auth = useProvideAuth();
@@ -46,6 +55,14 @@ function App() {
           <Route path="/profile/settings" element={<Settings />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/success" element={<FundingComplete />} />
+          <Route path="/projectdetail" element={<ProjectExplain />} />
+          <Route path="/projectdetail/announcements/write" element={<AnnouncePostWrite />} />
+          <Route path="/projectdetail/community/write" element={<CommuPostWirte />} />
+          <Route path="/projectdetail/review/write" element={<ReviewWrite />} />
+          <Route path="/funding" element={<FundingProgress />} />
+          <Route path="/funding/checkout" element={<CheckoutPage />} />
+          <Route path="/funding/success" element={<SuccessPage />} />
+          <Route path="/funding/fail" element={<FailPage />} />
         </Routes>
       </Layout>
     </SignInContext.Provider>
