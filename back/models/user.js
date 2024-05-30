@@ -44,7 +44,7 @@ class User extends Sequelize.Model {
   static associate(db) {
     db.User.hasMany(db.Ingproject);
     db.User.hasMany(db.Ongoingproject);
-    db.User.hasOne(db.Guestinfo);
+    db.User.hasMany(db.Guestinfo);
     db.User.hasMany(db.ChatRoom);
     db.User.hasMany(db.Message);
     db.User.hasMany(db.Projectnotice);

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Typography, IconButton, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import ListType from "../components/layouts/ListType";
 import Sponsor from "../components/profiles/Sponsor";
 

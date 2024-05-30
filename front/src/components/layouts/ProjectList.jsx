@@ -9,17 +9,81 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "@emotion/react";
 
-const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
+const ProjectList = ({ initiallyLiked, project }) => {
+  const theme = useTheme();
+  const mainColor = theme.palette.mainColor.main;
+  const { loginUser } = useAuth();
+  const [progress, setProgress] = useState(0);
+  // 좋아요 버튼 누르기
   const [liked, setLiked] = useState(initiallyLiked);
 
-  const handleLikeClick = () => {
-    setLiked(!liked);
+  const handleLikeClick = async () => {
+    const newLikedStatus = !liked;
+    setLiked(newLikedStatus);
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/projects/like/${project.projectId}`,
+        {
+          userId: project.userId,
+          projectId: project.projectId,
+          liked: newLikedStatus,
+        },
+        {
+          headers: {
+            Authorization: loginUser.token,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      // 서버 요청이 실패하면 liked 상태를 다시 원래대로 돌림
+      setLiked(!newLikedStatus);
+    }
   };
 
-  const [daysLeft, setDaysLeft] = useState(null);
+  // 리워드 최소 요금 표시하기
+  const [minRewardPrice, setMinRewardPrice] = useState(null);
+
+  useEffect(() => {
+    const projectRewards = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/projects/rewards/${project.projectId}`,
+        );
+        const rewards = response.data;
+        console.log(rewards);
+
+        if (rewards && rewards.length > 0) {
+          const minPrice = Math.min(
+            ...rewards.map((reward) => reward.rewardPrice),
+          );
+          // 프로젝트 달성률 표시하기
+          let sum = 0;
+          rewards.map((r) => {
+            sum += r.rewardPrice * r.rewardSellCount;
+          });
+          setProgress(
+            Math.ceil((sum / project.projectTargetPrice) * 100).toFixed(0) +
+              "%",
+          );
+          setMinRewardPrice(Math.floor(minPrice / 10000) + "만원 +");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    projectRewards();
+  }, [project.projectId]);
 
   // 남은 일수 계산
+  const [daysLeft, setDaysLeft] = useState(null);
+
   useEffect(() => {
     if (!project || !project.projectFinishAt) return;
 
@@ -136,7 +200,8 @@ const ProjectList = ({ mainColor, progress, initiallyLiked, project }) => {
                 fontSize: "0.75rem !important",
               }}
             >
-              {project.projectTargetPrice}
+              {/* 리워드 최소금액 */}
+              {minRewardPrice !== null ? minRewardPrice : "로딩 중..."}
             </Typography>
             <Typography
               variant="body2"
