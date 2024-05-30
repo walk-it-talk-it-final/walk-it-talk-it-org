@@ -9,6 +9,7 @@ const {
   deleteProject,
   saveLikeStatus,
   getRewards,
+  getLikedProjects,
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -49,6 +50,9 @@ router.delete("/:id", verifyToken, deleteProject);
 
 // POST /api/projects/like/:id - 게시글 좋아요 추가
 router.post("/like/:id", verifyToken, saveLikeStatus);
+
+// GET /api/projects/like/:id - 좋아요 누른 게시글 조회.
+router.get("/like/:id", verifyToken, getLikedProjects);
 
 // GET /api/projects/reward/:id - 해당 프로젝트의 전체 리워드 조회
 router.get("/rewards/:id", getRewards);

@@ -13,9 +13,7 @@ import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "@emotion/react";
 
-// 일반적인 리스트형
-
-const ProjectList = ({ project }) => {
+const ProjectCard = ({ project }) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const { loginUser } = useAuth();
@@ -132,17 +130,14 @@ const ProjectList = ({ project }) => {
     <div
       className="listWrap"
       style={{
+        width: "calc(50% - 10px)",
         marginBottom: "10px",
         boxSizing: "border-box",
         marginTop: "10px",
-        maxHeight: "130px",
-        minWidth: "380px",
-        display: "flex",
-        flexDirection: "row",
       }}
     >
-      <Card sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-        <Box sx={{ position: "relative", flex: "0 0 30%", minWidth: "130px" }}>
+      <Card sx={{ width: "100%" }}>
+        <Box sx={{ position: "relative" }}>
           <CardMedia
             component="img"
             image={
@@ -150,9 +145,10 @@ const ProjectList = ({ project }) => {
                 ? `http://localhost:8000/${project.projectThumbImg}`
                 : `http://localhost:8000/public/uploads/noImage.jpg`
             }
+            // image={project.projectThumbImg}
             alt={project.projectThumbImg}
             height="130"
-            width="130" // 이미지를 카드의 너비에 맞춤
+            width="100%" // 이미지를 카드의 너비에 맞춤
           />
           <IconButton
             sx={{
@@ -172,7 +168,16 @@ const ProjectList = ({ project }) => {
           </IconButton>
         </Box>
 
-        <CardContent sx={{ padding: "10px", overflow: "hidden", flex: "1" }}>
+        <CardContent
+          sx={{
+            padding: "10px",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flexGrow: 1,
+          }}
+        >
           <Typography
             variant="h6"
             sx={{
@@ -181,6 +186,7 @@ const ProjectList = ({ project }) => {
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
+              marginBottom: "8px",
               minHeight: "50px",
             }}
           >
@@ -196,62 +202,54 @@ const ProjectList = ({ project }) => {
             {project.managerName}
           </Typography>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "space-between",
+          <Typography
+            variant="body2"
+            sx={{
+              color: mainColor,
+              fontWeight: "bold",
+              fontSize: "0.75rem !important",
             }}
           >
+            {progress}
+          </Typography>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
             <Typography
               variant="body2"
               sx={{
-                color: mainColor,
-                fontWeight: "bold",
+                color: "#404040",
+                fontWeight: "medium",
+                backgroundColor: "#F1F1F1",
+                padding: "3px",
+                borderRadius: "5px",
                 fontSize: "0.75rem !important",
               }}
             >
-              {progress}
+              {/* 리워드 최소금액 */}
+              {minRewardPrice !== null ? minRewardPrice : "로딩 중..."}
             </Typography>
-            <div style={{ display: "flex", gap: "10px" }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#404040",
-                  fontWeight: "medium",
-                  backgroundColor: "#F1F1F1",
-                  padding: "3px",
-                  borderRadius: "5px",
-                  fontSize: "0.75rem !important",
-                }}
-              >
-                {/* 리워드 최소금액 */}
-                {minRewardPrice !== null ? minRewardPrice : "로딩 중..."}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#404040",
-                  fontWeight: "medium",
-                  backgroundColor: "#F1F1F1",
-                  padding: "3px",
-                  borderRadius: "5px",
-                  fontSize: "0.75rem !important",
-                }}
-              >
-                <div>
-                  {daysLeft !== null ? (
-                    daysLeft === 1 ? (
-                      <span>하루 남음</span>
-                    ) : (
-                      <span>{daysLeft}일 남음</span>
-                    )
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#404040",
+                fontWeight: "medium",
+                backgroundColor: "#F1F1F1",
+                padding: "3px",
+                borderRadius: "5px",
+                fontSize: "0.75rem !important",
+              }}
+            >
+              <div>
+                {daysLeft !== null ? (
+                  daysLeft === 1 ? (
+                    <span>하루 남음</span>
                   ) : (
-                    <span>로딩 중...</span>
-                  )}
-                </div>
-              </Typography>
-            </div>
+                    <span>{daysLeft}일 남음</span>
+                  )
+                ) : (
+                  <span>로딩 중...</span>
+                )}
+              </div>
+            </Typography>
           </div>
         </CardContent>
       </Card>
@@ -259,4 +257,4 @@ const ProjectList = ({ project }) => {
   );
 };
 
-export default ProjectList;
+export default ProjectCard;
