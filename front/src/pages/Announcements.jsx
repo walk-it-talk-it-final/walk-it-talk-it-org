@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Divider, Button, useTheme, IconButton, Select, MenuItem } from '@mui/material';
 import { FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const announcementsData = [
   { id: 1, title: "최신 공지", date: '2024-05-01', content: '가장 최신 공지사항 내용입니다.' },
@@ -31,6 +33,12 @@ const Announcements = ({ sortOrder, handleSortOrderChange }) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
+  const navigate = useNavigate();
+
+  // 공지사항 작성 페이지로 이동 (동그란 펜 버튼)
+  const handleButtonClick = () => {
+      navigate('/projectdetail/announcements/write');
+  };
 
   const handleAnnouncementClick = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -123,6 +131,22 @@ const Announcements = ({ sortOrder, handleSortOrderChange }) => {
               <Divider sx={{ borderColor: '#e0e0e0' }} />
             </Box>
           ))}
+
+          <Box sx={{ position: 'absolute', bottom: 120, marginLeft: 43, zIndex: 1000 }}>
+                        <Button
+                            variant='contained'
+                            color='mainColor'
+                            sx={{
+                                color: 'white',
+                                width: 40,
+                                height: 60,
+                                borderRadius: 100,
+                            }}
+                            onClick={handleButtonClick}
+                        >
+                            <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
+                        </Button>
+                    </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <IconButton 
               onClick={() => handlePageChange(1)} 

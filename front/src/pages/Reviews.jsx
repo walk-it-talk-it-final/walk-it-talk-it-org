@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Avatar, Select, MenuItem, Divider, Button } from '@mui/material';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const reviewsData = [
   { id: 1, name: "김철수", date: '2024-05-01', content: '제품을 사용해보니 아주 만족스럽습니다. 추천합니다!', option: '프리미엄 PKG', photo: 'https://via.placeholder.com/150' },
@@ -15,6 +17,13 @@ const reviewsData = [
 ];
 
 const Reviews = ({ mainColor, subColor4, sortOrder, filterOption, handleSortOrderChange, handleFilterOptionChange }) => {
+  const navigate = useNavigate();
+
+  // 리뷰 작성 페이지로 이동 (동그란 펜 버튼)
+  const handleButtonClick = () => {
+      navigate('/projectdetail/review/write');
+  };
+
   const [showAll, setShowAll] = useState(false);
 
   const filteredReviews = reviewsData.filter(review => filterOption === 'all' || review.option === filterOption);
@@ -75,13 +84,12 @@ const Reviews = ({ mainColor, subColor4, sortOrder, filterOption, handleSortOrde
       ))}
       {!showAll && sortedReviews.length > 5 && (
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={handleShowAllClick}
           sx={{
             color: mainColor,
             borderColor: mainColor,
             backgroundColor: '#fff',
-            border: '1px solid',
             '&:hover': {
               backgroundColor: mainColor,
               borderColor: mainColor,
@@ -95,6 +103,22 @@ const Reviews = ({ mainColor, subColor4, sortOrder, filterOption, handleSortOrde
           후기 전체보기
         </Button>
       )}
+      <Box sx={{ position: 'sticky', bottom: 50, marginLeft: 43, zIndex: 1000 }}>
+                        <Button
+                            variant='contained'
+                            color='mainColor'
+                            sx={{
+                                color: 'white',
+                                width: 40,
+                                height: 60,
+                                borderRadius: 100,
+                            }}
+                            onClick={handleButtonClick}
+                        >
+                            <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
+                        </Button>
+                    </Box>
+
     </Box>
   );
 };
