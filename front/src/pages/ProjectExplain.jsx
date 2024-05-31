@@ -158,19 +158,9 @@ const scrollToSection = (section) => {
 //스크롤 기능
 const ProjectScroll = ({ mainColor, sections }) => (
   <Sticky enabled={true} top={64} innerZ={1000} activeClass="sticky">
-    <Box sx={{ mb: 4, backgroundColor: "white", padding: "8px 0" }}>
-      {sections.map((section) => (
-        <Button
-          key={section.id}
-          onClick={() => scrollToSection(section.id)}
-          sx={{
-            border: `1px solid ${mainColor}`,
-            borderRadius: "18px",
-            color: mainColor,
-            padding: "4px 8px",
-            mr: "10px",
-          }}
-        >
+    <Box sx={{ mb: 4, backgroundColor: 'white', padding: '8px 0' }}>
+      {sections.map(section => (
+        <Button key={section.id} onClick={() => scrollToSection(section.id)} sx={{ border: `1px solid ${mainColor}`, borderRadius: '18px', color: mainColor, padding: '4px 8px', mr: '10px' }}>
           {section.label}
         </Button>
       ))}
@@ -243,8 +233,6 @@ const App = () => {
   const [likes, setLikes] = useState(326);
   const [sortOrder, setSortOrder] = useState('newest');
   const [filterOption, setFilterOption] = useState('all');
-
-
 
   useEffect(() => {
     // location.state가 null이 아니고, selectedTab이 undefined가 아니면 해당 값으로 설정하고, 그렇지 않으면 기본값 0으로 설정
@@ -325,6 +313,7 @@ const App = () => {
               variant="contained"
               // onClick={}
               onClick={handleDonateClick}
+
               sx={{
                 backgroundColor: mainColor,
                 padding: '15px',

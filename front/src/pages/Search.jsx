@@ -17,7 +17,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTheme } from "@emotion/react";
-import ProjectList from "../components/layouts/ProjectList";
+import ProjectCard from "../components/layouts/ProjectCard";
 
 const Search = () => {
   const theme = useTheme(); // 테마 접근
@@ -301,7 +301,7 @@ const Search = () => {
             }}
           >
             {projects &&
-              projects.map((project) => <ProjectList project={project} />)}
+              projects.map((project) => <ProjectCard project={project} />)}
           </Box>
         </div>
       )}
