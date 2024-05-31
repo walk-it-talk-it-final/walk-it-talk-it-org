@@ -120,4 +120,4 @@ const CommuPostWrite = () => {
     );
 };
 
-export default CommuPostWrite;
+export default CommuPostWrite; 
