@@ -1,5 +1,4 @@
-// read-only
-const service = require('./payments.service');
+const service = require('./toss');
 
 async function confirmPayment(req, res, next) {
     const confirmResponse = await service.confirmPayment(req.query);

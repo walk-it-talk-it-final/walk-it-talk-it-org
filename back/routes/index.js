@@ -1,8 +1,10 @@
+require('./toss.js')
 const express = require("express");
 const router = express.Router();
 const projectRouter = require("./project");
 const { verifyToken } = require("../middlewares");
 const passport = require("passport");
+const controller = require('../controllers/payments.controller.js');
 const {
   createToken,
   join,
@@ -28,6 +30,8 @@ router.get(
   passport.authenticate("google", { scope: ["profile"] })
 );
 router.get("/auth/google/callback", googleLogin);
+
+router.route('/confirm').get(controller.confirmPayment);
 
 router.post("/auth/refresh", refreshToken);
 
