@@ -160,7 +160,6 @@ const FundingProgress = () => {
                                     </div>
                                 </div>
                                 <Typography>* 위 연락처와 이메일로 후원 관련 소식이 전달됩니다.</Typography>
-                                <Typography>* 연락처 및 이메일 변경은 프로필 &gt; 설정 에서 가능합니다.</Typography>
                             </div>
 
                             <Button
