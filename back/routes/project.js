@@ -10,6 +10,7 @@ const {
   saveLikeStatus,
   getRewards,
   getLikedProjects,
+  getProjectDetail,
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -41,6 +42,9 @@ router.post("/", verifyToken, uploadProject);
 
 // POST /api/projects/image - 게시물 이미지 업로드
 router.post("/image", verifyToken, imgUpload.single("img"), uploadImg);
+
+// GET /api/projects/:id - 특정 게시물 상세 정보 조회
+router.get("/:id", getProjectDetail);
 
 // PUT /api/projects/:id - 특정 게시물 수정
 router.put("/:id", verifyToken, modifyProject);

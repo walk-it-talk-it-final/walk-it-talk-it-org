@@ -23,14 +23,14 @@ import Follower from "./pages/Follower";
 import FundingComplete from "./pages/FundingComplete";
 import Settings from "./pages/Settings";
 import ProjectExplain from "./pages/ProjectExplain";
-import FundingProgress from './pages/FundingProgress';
+import FundingProgress from "./pages/FundingProgress";
 import CommuPostWirte from "./components/write/CommuPostWirte";
 import AnnouncePostWrite from "./components/write/AnnouncePostWrite";
 import ReviewWrite from "./components/write/ReviewWrite";
 import { CheckoutPage } from "./components/toss/Checkout";
 import { SuccessPage } from "./components/toss/Success";
 import { FailPage } from "./components/toss/Fail";
-
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
   const auth = useProvideAuth();
@@ -55,9 +55,16 @@ function App() {
           <Route path="/profile/settings" element={<Settings />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/success" element={<FundingComplete />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/projectdetail" element={<ProjectExplain />} />
-          <Route path="/projectdetail/announcements/write" element={<AnnouncePostWrite />} />
-          <Route path="/projectdetail/community/write" element={<CommuPostWirte />} />
+          <Route
+            path="/projectdetail/announcements/write"
+            element={<AnnouncePostWrite />}
+          />
+          <Route
+            path="/projectdetail/community/write"
+            element={<CommuPostWirte />}
+          />
           <Route path="/projectdetail/review/write" element={<ReviewWrite />} />
           <Route path="/funding" element={<FundingProgress />} />
           <Route path="/funding/checkout" element={<CheckoutPage />} />

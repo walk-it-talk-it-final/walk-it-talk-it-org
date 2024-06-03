@@ -1,6 +1,8 @@
 const { Project, Hashtag, User, Reward } = require("../models");
+const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
 const op = require("sequelize").Op;
+const sequelize = require("sequelize");
 
 // 프로젝트 검색
 exports.getProjects = async (req, res, next) => {
@@ -133,6 +135,83 @@ exports.uploadImg = (req, res) => {
     code: 200,
     img: `/uploads/${req.file.filename}`,
   });
+};
+
+// 프로젝트 상세 검색
+exports.getProjectDetail = async (req, res, next) => {
+  try {
+    // 프로젝트 ID는 req.params.id에 있다
+    const projectId = req.params.id;
+    // 프로젝트 정보 쿼리
+    const project = await Project.findOne({
+      where: { projectId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
+        },
+      ],
+    });
+
+    // 참가자 수 세기
+    const guestCount = await Guestinfo.count({
+      where: { ProjectProjectId: projectId },
+    });
+
+    // 리워드 정보 쿼리
+    const rewards = await Reward.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    // 총 리워드 금액 계산
+    const totalRewardAmount = rewards.reduce((sum, reward) => {
+      return sum + reward.rewardPrice * reward.rewardSellCount;
+    }, 0);
+
+    // 달성률 계산
+    const achievementRate =
+      project.projectTargetPrice > 0
+        ? Math.ceil((totalRewardAmount / project.projectTargetPrice) * 100)
+        : 0;
+
+    // 남은 일수 계산
+    const calculateDaysLeft = (finishDate) => {
+      const finishTime = new Date(finishDate).getTime();
+      const currentTime = new Date().getTime();
+      const differenceInDays = Math.ceil(
+        (finishTime - currentTime) / (1000 * 60 * 60 * 24)
+      );
+      return differenceInDays < 0 ? "종료" : differenceInDays;
+    };
+
+    const daysLeft = calculateDaysLeft(project.projectFinishAt);
+
+    // 좋아요 수 세기
+    const likers = await project.getLikers();
+    const likeCount = likers.length;
+
+    // const likeCount = await like.count({
+    //   where: { ProjectProjectId: projectId },
+    // });
+
+    // 넘겨줄 정보 정리
+    const projectDetail = {
+      ...project.toJSON(),
+      guestCount,
+      totalRewardAmount,
+      achievementRate,
+      daysLeft,
+      likeCount,
+    };
+
+    res.json({
+      code: 200,
+      payload: projectDetail,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 };
 
 // 프로젝트 수정
