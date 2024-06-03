@@ -12,6 +12,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 // 일반적인 리스트형
 
@@ -20,6 +21,11 @@ const ProjectList = ({ project }) => {
   const mainColor = theme.palette.mainColor.main;
   const { loginUser } = useAuth();
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/projects/${project.projectId}`, { state: { project } });
+  };
 
   // 좋아요 버튼 누르기
   const [liked, setLiked] = useState(false);
@@ -130,6 +136,7 @@ const ProjectList = ({ project }) => {
 
   return (
     <div
+      onClick={handleClick}
       className="listWrap"
       style={{
         marginBottom: "10px",
@@ -139,6 +146,7 @@ const ProjectList = ({ project }) => {
         minWidth: "380px",
         display: "flex",
         flexDirection: "row",
+        cursor: "pointer",
       }}
     >
       <Card sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
