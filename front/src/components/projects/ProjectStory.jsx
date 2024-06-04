@@ -79,7 +79,7 @@ const ProjectStory = ({ inputs, setInputs }) => {
       alert("등록이 완료되었습니다."); // 모든 필드값이 존재하면 등록이 완료되었다는 alert 창을 띄움
 
       // FundingComplete 페이지로 이동
-      navigate("/success");
+      navigate("/success?source=addproject");
     } catch (error) {
       console.error(error);
     }
