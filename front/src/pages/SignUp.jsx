@@ -57,7 +57,7 @@ const SignUp = () => {
             text: res.data.message,
             icon: "success",
           });
-          navigate("/");
+          navigate("/success?source=signup");
         } else {
           throw new Error(res.data.message);
         }
