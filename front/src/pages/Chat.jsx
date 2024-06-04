@@ -1,10 +1,10 @@
 import React from "react";
-import { App as SendbirdApp } from "sendbird-uikit";
-import "sendbird-uikit/dist/index.css";
-
-const APP_ID = "1DACBD41-B076-4701-8874-E1F041400D66";
+import SendbirdApp from "@sendbird/uikit-react/App";
+import "@sendbird/uikit-react/dist/index.css";
 
 const Chat = () => {
+  const APP_ID = "1DACBD41-B076-4701-8874-E1F041400D66";
+
   const USER_ID = localStorage.getItem("userId") || "익명";
   const USER_NIC = localStorage.getItem("nickname") || "익명";
   const colorSet = {

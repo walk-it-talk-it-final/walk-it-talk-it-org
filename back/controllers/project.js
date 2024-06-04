@@ -260,7 +260,7 @@ exports.modifyProject = async (req, res, next) => {
 exports.deleteProject = async (req, res, next) => {
   try {
     await Project.destroy({
-      where: { id: req.params.id },
+      where: { projectId: req.params.id },
     });
     res.json({
       code: 200,

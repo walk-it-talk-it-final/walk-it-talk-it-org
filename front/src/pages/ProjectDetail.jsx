@@ -24,6 +24,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Community from "./Community.jsx";
 import axios from "axios";
+import { projectApi } from "../api/services/project.js";
 
 //프로젝트 이미지
 const ProjectImage = ({ content }) => {
@@ -62,13 +63,21 @@ const ProjectTitle = ({ title }) => (
 
 //프로젝트 참여율 및 달성률
 const ProjectStats = ({
+  id,
   participants,
   goalAmount,
   mainColor,
   subColor4,
   remainingDays,
   achievementRate,
-}) => (
+  maker
+}) => {
+  const loginUserId = localStorage.getItem('userId');
+  const handleDelete = async () => {
+    await projectApi.deleteProject(id);
+  }
+
+  return (
   <Box
     sx={{
       display: "flex-start",
@@ -109,8 +118,27 @@ const ProjectStats = ({
         </Typography>
       </Box>
     </Box>
+    {
+      maker == loginUserId && 
+      <Box>
+          <Button
+            variant={"contained"}
+            sx={{
+              backgroundColor: mainColor,
+              color: 'white',
+              fontWeight: 'bold',
+              ml: 'auto',
+              borderColor: mainColor,
+              ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+            }}
+            onClick={() => handleDelete()}
+          >
+            삭제 
+          </Button>
+      </Box>
+    }
   </Box>
-);
+)};
 
 //프로젝트 좋아요 및 공유 수
 const ProjectActions = ({ likes, shares, subColor4, handleLike, isLiked }) => (
@@ -140,6 +168,7 @@ const ProjectActions = ({ likes, shares, subColor4, handleLike, isLiked }) => (
 
 // 프로젝트 상단 모음
 const ProjectHeader = ({
+  id,
   title,
   participants,
   goalAmount,
@@ -151,6 +180,7 @@ const ProjectHeader = ({
   isLiked,
   remainingDays,
   achievementRate,
+  maker
 }) => (
   <Box sx={{ textAlign: "left", mb: 4 }}>
     <ProjectTitle title={title} />
@@ -163,12 +193,14 @@ const ProjectHeader = ({
       }}
     >
       <ProjectStats
+        id={id}
         participants={participants}
         goalAmount={goalAmount}
         mainColor={mainColor}
         subColor4={subColor4}
         remainingDays={remainingDays}
         achievementRate={achievementRate}
+        maker={maker}
       />
       <ProjectActions
         likes={likes}
@@ -378,6 +410,7 @@ const ProjectDetail = () => {
           `${process.env.REACT_APP_API_URL}/projects/${id}`,
         );
         setProject(response.data.payload);
+        console.log(response.data.payload);
       } catch (err) {
         console.error(err);
       }
@@ -466,6 +499,7 @@ const ProjectDetail = () => {
           <>
             <ProjectImage content={project.projectThumbImg} />
             <ProjectHeader
+              id={project.projectId}
               title={project.projectTitle}
               participants={project.guestCount}
               goalAmount={project.totalRewardAmount}
@@ -477,6 +511,7 @@ const ProjectDetail = () => {
               isLiked={isLiked}
               remainingDays={project.daysLeft}
               achievementRate={project.achievementRate}
+              maker={project.UserId}
             />
             <UserProfile
               nickname={project?.User.nickname}

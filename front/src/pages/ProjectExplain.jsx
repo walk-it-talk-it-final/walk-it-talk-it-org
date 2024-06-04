@@ -52,6 +52,33 @@ const ProjectStats = ({ participants, goalAmount, mainColor, subColor4, remainin
         <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '15px', color: subColor4 }}>{achievementRate}% 달성</Typography>
       </Box>
     </Box>
+    <Button
+          variant={"contained"}
+          sx={{
+            backgroundColor: mainColor,
+            color: 'white',
+            fontWeight: 'bold',
+            ml: 'auto',
+            borderColor: mainColor,
+            ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+          }}
+        >
+          수정
+        </Button>
+        <Button
+          variant={"contained"}
+          sx={{
+            backgroundColor: mainColor,
+            color: 'white',
+            fontWeight: 'bold',
+            ml: 'auto',
+            borderColor: mainColor,
+            ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+          }}
+          // onClick={() => handleDelete()}
+        >
+          삭제 
+        </Button>
   </Box>
 );
 
