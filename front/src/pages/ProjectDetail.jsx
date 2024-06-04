@@ -24,6 +24,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Community from "./Community.jsx";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth.jsx";
 
 //프로젝트 이미지
 const ProjectImage = ({ content }) => {
@@ -112,28 +113,20 @@ const ProjectStats = ({
   </Box>
 );
 
-//프로젝트 좋아요 및 공유 수
-const ProjectActions = ({ likes, shares, subColor4, handleLike, isLiked }) => (
+//프로젝트 좋아요 수
+const ProjectActions = ({ likes, subColor4, handleLike, liked }) => (
   <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <IconButton onClick={handleLike}>
-        {isLiked ? (
+        {liked ? (
           <FavoriteIcon sx={{ color: "red" }} />
         ) : (
           <FavoriteBorderIcon sx={{ color: subColor4 }} />
         )}
       </IconButton>
       <Typography>{likes}</Typography>
-    </Box>
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <IconButton>
-        <ShareIcon sx={{ color: subColor4 }} />
-      </IconButton>
-      <Typography>{shares}</Typography>
     </Box>
   </Box>
 );
@@ -144,43 +137,43 @@ const ProjectHeader = ({
   participants,
   goalAmount,
   likes,
-  shares,
-  mainColor,
-  subColor4,
   handleLike,
-  isLiked,
+  liked,
   remainingDays,
   achievementRate,
-}) => (
-  <Box sx={{ textAlign: "left", mb: 4 }}>
-    <ProjectTitle title={title} />
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mt: 2,
-      }}
-    >
-      <ProjectStats
-        participants={participants}
-        goalAmount={goalAmount}
-        mainColor={mainColor}
-        subColor4={subColor4}
-        remainingDays={remainingDays}
-        achievementRate={achievementRate}
-      />
-      <ProjectActions
-        likes={likes}
-        shares={shares}
-        subColor4={subColor4}
-        handleLike={handleLike}
-        isLiked={isLiked}
-      />
+}) => {
+  const theme = useTheme();
+  const mainColor = theme.palette.mainColor.main;
+  const subColor4 = theme.palette.subColor4.main;
+  return (
+    <Box sx={{ textAlign: "left", mb: 4 }}>
+      <ProjectTitle title={title} />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
+        <ProjectStats
+          participants={participants}
+          goalAmount={goalAmount}
+          mainColor={mainColor}
+          subColor4={subColor4}
+          remainingDays={remainingDays}
+          achievementRate={achievementRate}
+        />
+        <ProjectActions
+          likes={likes}
+          subColor4={subColor4}
+          handleLike={handleLike}
+          liked={liked}
+        />
+      </Box>
     </Box>
-  </Box>
-);
-
+  );
+};
 // 프로젝트 제작자
 const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -359,6 +352,7 @@ const TrustContent = () => (
 const ProjectDetail = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
+  const { loginUser } = useAuth();
 
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
@@ -366,7 +360,6 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
   // const [likes, setLikes] = useState();
   const [sortOrder, setSortOrder] = useState("newest");
   const [filterOption, setFilterOption] = useState("all");
@@ -397,10 +390,55 @@ const ProjectDetail = () => {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+  // 좋아요 버튼 누르기
+  const [liked, setLiked] = useState(false);
+  const token = localStorage.getItem("token");
 
-  const handleLike = () => {
-    // setIsLiked(!isLiked);
-    // setLikes(isLiked ? likes - 1 : likes + 1);
+  useEffect(() => {
+    if (loginUser?.id) {
+      // 좋아요 상태 받아오기
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/projects/like/${loginUser.id}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((response) => {
+          const likedProjects = response.data.payload;
+          const isLiked = likedProjects.some(
+            (p) => p.projectId === project.projectId,
+          );
+          setLiked(isLiked);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [project]);
+
+  const handleLike = async () => {
+    const newLikedStatus = !liked;
+    setLiked(newLikedStatus);
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/projects/like/${project.projectId}`,
+        {
+          userId: project.userId,
+          projectId: project.projectId,
+          liked: newLikedStatus,
+        },
+        {
+          headers: {
+            Authorization: loginUser.token,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      // 서버 요청이 실패하면 liked 상태를 다시 원래대로 돌림
+      setLiked(!newLikedStatus);
+    }
   };
 
   const handleSortOrderChange = (event) => {
@@ -469,12 +507,9 @@ const ProjectDetail = () => {
               title={project.projectTitle}
               participants={project.guestCount}
               goalAmount={project.totalRewardAmount}
-              likes={project?.likeCount}
-              shares="18"
-              mainColor={mainColor}
-              subColor4={subColor4}
+              likes={project.likeCount}
               handleLike={handleLike}
-              isLiked={isLiked}
+              liked={liked}
               remainingDays={project.daysLeft}
               achievementRate={project.achievementRate}
             />

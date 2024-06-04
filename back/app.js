@@ -57,8 +57,6 @@ app.use(
   passport.session()
 );
 
-
-
 app.use("/api", apiRouter);
 
 // 일부러 에러 발생시키기 TEST용 (not found)
