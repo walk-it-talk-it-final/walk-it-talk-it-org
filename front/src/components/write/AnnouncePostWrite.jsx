@@ -3,8 +3,10 @@ import { Typography, Button, Box, TextField } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
+
 
 const modules = {
     toolbar: [
@@ -39,7 +41,7 @@ const formats = [
     "background",
 ];
 
-const AnnouncePostWrite = () => {
+const AnnouncePostWrite = ({ inputs, setInputs }) => {
 
     const theme = useTheme();
     const mainColor = theme.palette.mainColor.main;
@@ -49,30 +51,48 @@ const AnnouncePostWrite = () => {
     const [noticeTitle, setNoticeTitle] = useState(""); // 공지사항 제목
     const [noticeContent, setNoticeContent] = useState(""); // 공지사항 포스트 내용
 
+    const params = useParams();
+    const projectId = params.id;
+    
     // 등록 버튼 클릭 핸들러 (프로젝트 등록 버튼)
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
         // React Quill에서 HTML 태그를 제거하고 공백을 트리밍 
         const strippedPost = noticeContent.replace(/<(.|\n)*?>/g, '').trim();
 
         if (strippedPost !== '') {
-            alert('공지사항이 등록되었습니다!');
             console.log({
+                ...inputs,
                 noticeTitle, // 공지사항 제목 출력
                 noticeContent, // 공지사항 내용 출력
             });
-
-            setNoticeTitle('');
-            setNoticeContent('');
-
-            navigate('/projectdetail', {
-                // selectedTab 스테이트를 넘겨준다.
-                state: { selectedTab: 1 },
-            });
+            try {
+                // 서버로 데이터 전송
+                const response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/projects/${projectId}/notices`,
+                    {
+                        ...inputs,
+                        noticeTitle,
+                        noticeContent
+                    }, // 각각의 내용 전송
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token"),
+                        },
+                    },
+                );
+                alert('공지사항이 등록되었습니다!');
+                console.log(response.data);
+                navigate('/projectdetail', {
+                    // selectedTab 스테이트를 넘겨준다.
+                    state: { selectedTab: 1 },
+                });
+            } catch (err) {
+                console.error(err);
+            }
         } else {
             alert('내용을 입력해주세요!');
         }
-
     };
 
     const handleGoBack = () => {
@@ -118,15 +138,15 @@ const AnnouncePostWrite = () => {
                     id="noticeTitle"
                     label="공지 제목"
                     variant="filled"
-                    value={noticeTitle} 
-                    onChange={(e) => setNoticeTitle(e.target.value)} 
+                    value={noticeTitle}
+                    onChange={(e) => setNoticeTitle(e.target.value)}
                     sx={{
                         '& label.Mui-focused': {
-                            color: mainColor, 
+                            color: mainColor,
                         },
                         '& .MuiFilledInput-root': {
                             '&:after': {
-                                borderBottomColor: mainColor, 
+                                borderBottomColor: mainColor,
                             },
                         },
                     }}
