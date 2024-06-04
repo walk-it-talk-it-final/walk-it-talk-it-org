@@ -1,6 +1,7 @@
 const { Project, Hashtag, User, Reward } = require("../models");
 const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
+const Projectnotice = require("../models/projectnotice");
 const op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
@@ -337,3 +338,51 @@ exports.getRewards = async (req, res, next) => {
     next(err);
   }
 };
+
+
+// 공지사항 등록
+exports.uploadNotice = async (req, res, next) => {
+  try {
+    const noticeInput = req.body;
+    
+    noticeInput.ProjectProjectId = req.params.id;
+    noticeInput.UserId = req.user.id;
+    
+    // 공지사항 생성
+    const notice = await Projectnotice.create(
+      noticeInput
+    );
+
+    res.json({
+      code: 200,
+      payload: notice,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 공지사항 조회
+exports.getNotices = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 공지사항 목록을 불러옴
+    const notices = await Projectnotice.findAll({ 
+      where: { ProjectProjectId: projectId },
+      include: [
+        { model: Project }, // 공지사항이 속한 프로젝트 정보도 포함
+        { model: User } // 공지사항 작성자 정보도 포함
+      ]
+    });
+    
+    res.json({
+      code: 200,
+      payload: notices,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+

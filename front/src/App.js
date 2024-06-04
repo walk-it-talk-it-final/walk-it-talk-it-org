@@ -58,7 +58,7 @@ function App() {
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/projectdetail" element={<ProjectExplain />} />
           <Route
-            path="/projectdetail/announcements/write"
+            path="/projectdetail/announcements/write/:id"
             element={<AnnouncePostWrite />}
           />
           <Route

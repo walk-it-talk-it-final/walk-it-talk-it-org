@@ -520,30 +520,27 @@ const ProjectDetail = () => {
         {selectedTab === 1 && (
           <>
             <Announcements
-              mainColor={mainColor}
-              subColor4={subColor4}
               sortOrder={sortOrder}
               handleSortOrderChange={handleSortOrderChange}
+              projectId={project.projectId}
             />
           </>
         )}
         {selectedTab === 2 && (
           <>
             <Community
-              mainColor={mainColor}
-              subColor4={subColor4}
               sortOrder={sortOrder}
               handleSortOrderChange={handleSortOrderChange}
+              projectId={project.projectId}
             />
           </>
         )}
         {selectedTab === 3 && (
           <Reviews
-            mainColor={mainColor}
-            sortOrder={sortOrder}
             filterOption={filterOption}
             handleSortOrderChange={handleSortOrderChange}
             handleFilterOptionChange={handleFilterOptionChange}
+            projectId={project.projectId}
           />
         )}
       </Box>
