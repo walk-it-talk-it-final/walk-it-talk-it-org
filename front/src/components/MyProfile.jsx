@@ -26,14 +26,12 @@ export const MyProfile = ({ user }) => {
         const id = user.id;
         const res = await userApi.getFollowers(id);
         setFollowerList(res.payload);
-        setFollowerNum(res.payload.length);
     };
 
     const getFollowingList = async() => {
         const id = user.id;
         const res = await userApi.getFollowings(id);
         setFollowingList(res.payload);
-        setFollowingNum(res.payload.length);
     }
 
     useEffect(()=>{
@@ -117,7 +115,7 @@ export const MyProfile = ({ user }) => {
                                 "&:hover": {
                                     cursor: "pointer"
                                 }
-                            }} id="myFundingNum" onClick={goTofundingProjectList} >5</Typography>    {/* 펀딩한 프로젝트 수 */}
+                            }} id="myFundingNum" onClick={goTofundingProjectList} >3</Typography>    {/* 펀딩한 프로젝트 수 */}
                             <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold" }} >후원한 프로젝트</Typography>
                         </div>
 
@@ -127,7 +125,7 @@ export const MyProfile = ({ user }) => {
                                 "&:hover": {
                                     cursor: "pointer"
                                 }
-                            }} id="following" onClick={goToFollowingList}  num={followingNum}>{followingNum}</Typography>    {/* 팔로잉 수 */}
+                            }} id="following" onClick={goToFollowingList}  num={followingNum}>5</Typography>    {/* 팔로잉 수 */}
                             <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold" }} >팔로잉</Typography>
                         </div>
 
@@ -137,7 +135,7 @@ export const MyProfile = ({ user }) => {
                                 "&:hover": {
                                     cursor: "pointer"
                                 }
-                            }} id="follower" onClick={goToFollowerList} num={followerNum}>{followerNum}</Typography>      {/* 팔로워 수 */}
+                            }} id="follower" onClick={goToFollowerList} num={followerNum}>7</Typography>      {/* 팔로워 수 */}
                             <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold" }} >팔로워</Typography>
                         </div>
 
