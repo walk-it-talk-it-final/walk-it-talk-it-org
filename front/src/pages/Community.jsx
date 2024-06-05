@@ -1,22 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Select, MenuItem, Divider } from '@mui/material';
 import PostDetail from './../components/communities/PostDetail';
 import PostLists from './../components/communities/PostLists';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
+import axios from 'axios';
 
 
-const Community = ({ sortOrder, handleSortOrderChange }) => {
+
+const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
 
     const theme = useTheme();
     const mainColor = theme.palette.mainColor.main;
-
     const navigate = useNavigate();
+
+    const [commuPosts, setCommuPosts] = useState();
+
+    const getCommuPostsData = async () => {
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_API_URL}/projects/${projectId}/communities`,
+            );
+            console.log(res.data.payload);
+            setCommuPosts(res.data.payload);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        getCommuPostsData();
+    }, []);
 
     // 포스트 작성 페이지로 이동 (동그란 펜 버튼)
     const handleButtonClick = () => {
-        navigate('/projectdetail/community/write');
+        navigate(`/projectdetail/communities/write/${projectId}`);
     };
 
     const [selectedPost, setSelectedPost] = useState(null);
