@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Divider,
-  Button,
-  useTheme,
-  IconButton,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import {
-  FirstPage,
-  LastPage,
-  NavigateBefore,
-  NavigateNext,
-} from "@mui/icons-material";
-import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Box, Typography, Divider, Button, useTheme, IconButton, Select, MenuItem } from '@mui/material';
+import { FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
 
-const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
+const announcementsData = [
+  { id: 1, title: "최신 공지", date: '2024-05-01', content: '가장 최신 공지사항 내용입니다.' },
+  { id: 2, title: "2", date: '2024-04-25', content: '두 번째 공지사항 내용입니다.' },
+  { id: 3, title: "3", date: '2024-04-01', content: '세 번째 공지사항 내용입니다.' },
+  { id: 4, title: "4", date: '2024-03-25', content: '네 번째 공지사항 내용입니다.' },
+  { id: 5, title: "5", date: '2024-03-10', content: '다섯 번째 공지사항 내용입니다.' },
+  { id: 6, title: "6", date: '2024-02-28', content: '여섯 번째 공지사항 내용입니다.' },
+  { id: 7, title: "7", date: '2024-02-15', content: '일곱 번째 공지사항 내용입니다.' },
+  { id: 8, title: '8', date: '2024-02-01', content: '여덟 번째 공지사항 내용입니다.' },
+  { id: 9, title: '9', date: '2024-01-25', content: '아홉 번째 공지사항 내용입니다.' },
+  { id: 10, title: '10', date: '2024-01-10', content: '열 번째 공지사항 내용입니다.' },
+  { id: 11, title: '11', date: '2023-05-01', content: '열한 번째 공지사항 내용입니다.' },
+  { id: 12, title: '12', date: '2023-04-25', content: '열두 번째 공지사항 내용입니다.' },
+  { id: 13, title: '13', date: '2023-04-01', content: '열세 번째 공지사항 내용입니다.' },
+  { id: 14, title: '14', date: '2023-03-25', content: '열네 번째 공지사항 내용입니다.' },
+  { id: 15, title: '15', date: '2023-03-10', content: '열다섯 번째 공지사항 내용입니다.' },
+  { id: 16, title: '16', date: '2023-02-28', content: '열여섯 번째 공지사항 내용입니다.' },
+  { id: 17, title: '17', date: '2023-02-15', content: '열일곱 번째 공지사항 내용입니다.' },
+  { id: 20, title: '첫 공지', date: '2023-01-10', content: '가장 처음 게시된 공지사항 내용입니다.' },
+];
+
+const Announcements = ({ sortOrder, handleSortOrderChange }) => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const announcementsPerPage = 6;
@@ -27,30 +31,6 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
-  const navigate = useNavigate();
-
-  const [notices, setNotices] = useState();
-
-  const getAnnouncementsData = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/projects/${projectId}/notices`,
-      );
-      console.log(res.data.payload);
-      setNotices(res.data.payload);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    getAnnouncementsData();
-  }, []);
-
-  // 공지사항 작성 페이지로 이동 (동그란 펜 버튼)
-  const handleButtonClick = () => {
-    navigate(`/projectdetail/announcements/write/${projectId}`);
-  };
 
   const handleAnnouncementClick = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -64,30 +44,18 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
     setCurrentPage(newPage);
   };
 
-  const sortedAnnouncements = () => {
-    const arr = [...notices];
-    arr.sort((a, b) => {
-      if (sortOrder === "newest") {
-        return new Date(b.date) - new Date(a.date);
-      } else {
-        return new Date(a.date) - new Date(b.date);
-      }
-    });
-    setNotices([...arr]);
-  };
+  const sortedAnnouncements = [...announcementsData].sort((a, b) => {
+    if (sortOrder === 'newest') {
+      return new Date(b.date) - new Date(a.date);
+    } else {
+      return new Date(a.date) - new Date(b.date);
+    }
+  });
 
   const startIndex = (currentPage - 1) * announcementsPerPage;
-  const currentAnnouncements = notices?.slice(
-    startIndex,
-    startIndex + announcementsPerPage,
-  );
+  const currentAnnouncements = sortedAnnouncements.slice(startIndex, startIndex + announcementsPerPage);
 
-  const totalPages = Math.ceil(notices?.length / announcementsPerPage);
-
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  const totalPages = Math.ceil(sortedAnnouncements.length / announcementsPerPage);
 
   return (
     <Box>
@@ -132,10 +100,10 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 }
               }}
             >
-              <MenuItem value="newest">최신순</MenuItem>
-              <MenuItem value="oldest">오래된 순</MenuItem>
-            </Select>
-          )}
+              뒤로 가기
+            </Button>
+          </Box>
+          <Divider sx={{ borderColor: '#e0e0e0', mt: 2 }} />
         </Box>
       ) : (
         <Box>
@@ -145,7 +113,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 onClick={() => handleAnnouncementClick(announcement)}
                 sx={{ cursor: 'pointer' }}
               >
-               <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
+              <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
                   {announcement.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#888', mb: 1 }}>
@@ -180,156 +148,55 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 }
               }}
             >
-              {selectedAnnouncement?.noticeTitle}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#888", mb: 2 }}>
-              {formatDate(selectedAnnouncement?.noticeUploadDate)}
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: selectedAnnouncement?.noticeContent,
-                }}
-              />
-            </Typography>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                onClick={handleBackClick}
-                sx={{
-                  color: mainColor,
-                  borderColor: mainColor,
-                  border: "1px solid",
-                  "&:hover": {
-                    backgroundColor: mainColor,
-                    color: "#fff",
-                  },
+              <NavigateBefore />
+            </IconButton>
+            {[...Array(totalPages)].map((_, index) => (
+              <Button 
+                key={index} 
+                onClick={() => handlePageChange(index + 1)} 
+                sx={{ 
+                  color: currentPage === index + 1 ? mainColor : subColor4, 
+                  mx: 1, 
+                  minWidth: 'auto', 
+                  padding: '4px 8px',
+                  '&:hover': {
+                    color: mainColor
+                  }
                 }}
               >
-                뒤로 가기
+                {index + 1}
               </Button>
-            </Box>
-            <Divider sx={{ borderColor: "#e0e0e0", mt: 2 }} />
-          </Box>
-        ) : (
-          <Box>
-            {currentAnnouncements.map((announcement) => (
-              <Box key={announcement.id} sx={{ mb: 2 }}>
-                <Box
-                  onClick={() => handleAnnouncementClick(announcement)}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    {announcement?.noticeTitle}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "#888", mb: 1 }}>
-                    {formatDate(announcement?.noticeUploadDate)}
-                  </Typography>
-                </Box>
-                <Divider sx={{ borderColor: "#e0e0e0" }} />
-              </Box>
             ))}
-
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 120,
-                marginLeft: 43,
-                zIndex: 1000,
+            <IconButton 
+              onClick={() => handlePageChange(currentPage + 1)} 
+              disabled={currentPage === totalPages}
+              sx={{ 
+                color: subColor4, 
+                mx: 1, 
+                '&:hover': {
+                  color: mainColor
+                }
               }}
             >
-              <Button
-                variant="contained"
-                color="mainColor"
-                sx={{
-                  color: "white",
-                  width: 40,
-                  height: 60,
-                  borderRadius: 100,
-                }}
-                onClick={() => handleButtonClick()}
-              >
-                <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
-              </Button>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <IconButton
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <FirstPage />
-              </IconButton>
-              <IconButton
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <NavigateBefore />
-              </IconButton>
-              {[...Array(totalPages)].map((_, index) => (
-                <Button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  sx={{
-                    color: currentPage === index + 1 ? mainColor : subColor4,
-                    mx: 1,
-                    minWidth: "auto",
-                    padding: "4px 8px",
-                    "&:hover": {
-                      color: mainColor,
-                    },
-                  }}
-                >
-                  {index + 1}
-                </Button>
-              ))}
-              <IconButton
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <NavigateNext />
-              </IconButton>
-              <IconButton
-                onClick={() => handlePageChange(totalPages)}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <LastPage />
-              </IconButton>
-            </Box>
+              <NavigateNext />
+            </IconButton>
+            <IconButton 
+              onClick={() => handlePageChange(totalPages)} 
+              disabled={currentPage === totalPages}
+              sx={{ 
+                color: subColor4, 
+                mx: 1, 
+                '&:hover': {
+                  color: mainColor
+                }
+              }}
+            >
+              <LastPage />
+            </IconButton>
           </Box>
-        )}
-      </Box>
-    )
+        </Box>
+      )}
+    </Box>
   );
 };
 
