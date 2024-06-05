@@ -38,15 +38,6 @@ exports.getProjects = async (req, res, next) => {
       projects = await Project.findAll({
         // 사용자 id가 없는 경우 모든 게시물 조회
         where: whereCondition,
-        include: [
-          {
-            model: User,
-            attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
-          },
-          {
-            model: Reward,
-          },
-        ],
         // 작성 시간 기준 내림차순 정렬
         order: [["createdAt", "DESC"]],
       });
@@ -339,19 +330,16 @@ exports.getRewards = async (req, res, next) => {
   }
 };
 
-
 // 공지사항 등록
 exports.uploadNotice = async (req, res, next) => {
   try {
     const noticeInput = req.body;
-    
+
     noticeInput.ProjectProjectId = req.params.id;
     noticeInput.UserId = req.user.id;
-    
+
     // 공지사항 생성
-    const notice = await Projectnotice.create(
-      noticeInput
-    );
+    const notice = await Projectnotice.create(noticeInput);
 
     res.json({
       code: 200,
@@ -368,14 +356,10 @@ exports.getNotices = async (req, res, next) => {
   try {
     const projectId = req.params.id;
     // 해당 프로젝트의 공지사항 목록을 불러옴
-    const notices = await Projectnotice.findAll({ 
+    const notices = await Projectnotice.findAll({
       where: { ProjectProjectId: projectId },
-      include: [
-        { model: Project }, // 공지사항이 속한 프로젝트 정보도 포함
-        { model: User } // 공지사항 작성자 정보도 포함
-      ]
     });
-    
+
     res.json({
       code: 200,
       payload: notices,
@@ -385,4 +369,3 @@ exports.getNotices = async (req, res, next) => {
     next(err);
   }
 };
-

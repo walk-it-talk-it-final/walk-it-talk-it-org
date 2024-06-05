@@ -4,10 +4,6 @@ class Community extends Sequelize.Model {
   static initiate(sequelize) {
     Community.init(
       {
-        commuTitle: {
-          type: Sequelize.TEXT,
-          allowNull: false,
-        },
         commuContent: {
           type: Sequelize.TEXT,
           allowNull: false,
