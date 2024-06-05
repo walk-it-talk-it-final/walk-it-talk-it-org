@@ -39,6 +39,7 @@ function App() {
     <SignInContext.Provider value={auth}>
       <Layout>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/addmaker" element={<AddMaker />} />

@@ -46,10 +46,6 @@ class Project extends Sequelize.Model {
           allowNull: false,
           defaultValue: 0,
         },
-        hashtag: {
-          type: Sequelize.STRING(40),
-          allowNull: true,
-        },
         managerName: {
           type: Sequelize.STRING(15),
           allowNull: false,
