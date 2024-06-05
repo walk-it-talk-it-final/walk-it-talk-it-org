@@ -2,6 +2,8 @@ const { Project, Hashtag, User, Reward } = require("../models");
 const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
 const Projectnotice = require("../models/projectnotice");
+const Community = require("../models/community");
+const Review = require("../models/review");
 const op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
@@ -363,6 +365,86 @@ exports.getNotices = async (req, res, next) => {
     res.json({
       code: 200,
       payload: notices,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 커뮤니티 게시글 등록
+exports.uploadPost = async (req, res, next) => {
+  try {
+    const postInput = req.body;
+
+    postInput.ProjectProjectId = req.params.id;
+    postInput.UserId = req.user.id;
+
+    // 게시글 생성
+    const post = await Community.create(postInput);
+
+    res.json({
+      code: 200,
+      payload: post,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 커뮤니티 게시글 조회
+exports.getPosts = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 공지사항 목록을 불러옴
+    const posts = await Community.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    res.json({
+      code: 200,
+      payload: posts,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 후기 등록
+exports.uploadReview = async (req, res, next) => {
+  try {
+    const reviewInput = req.body;
+
+    reviewInput.ProjectProjectId = req.params.id;
+    reviewInput.UserId = req.user.id;
+
+    // 후기 생성
+    const review = await Review.create(reviewInput);
+
+    res.json({
+      code: 200,
+      payload: review,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 후기 조회
+exports.getReviews = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 공지사항 목록을 불러옴
+    const reviews = await Community.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    res.json({
+      code: 200,
+      payload: reviews,
     });
   } catch (err) {
     console.error(err);
