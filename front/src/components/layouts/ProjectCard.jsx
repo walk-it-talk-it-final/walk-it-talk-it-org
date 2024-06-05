@@ -49,7 +49,7 @@ const ProjectCard = ({ project }) => {
           console.error(error);
         });
     }
-  }, [project]);
+  }, [project.projectId]);
 
   const handleLikeClick = async () => {
     const newLikedStatus = !liked;
