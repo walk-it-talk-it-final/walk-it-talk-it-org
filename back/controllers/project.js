@@ -437,8 +437,8 @@ exports.uploadReview = async (req, res, next) => {
 exports.getReviews = async (req, res, next) => {
   try {
     const projectId = req.params.id;
-    // 해당 프로젝트의 공지사항 목록을 불러옴
-    const reviews = await Community.findAll({
+    // 해당 프로젝트의 후기 목록을 불러옴
+    const reviews = await Review.findAll({
       where: { ProjectProjectId: projectId },
     });
 
