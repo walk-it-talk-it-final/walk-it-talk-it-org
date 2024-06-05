@@ -20,11 +20,8 @@ const FundingComplete = () => {
   } else if (source === "addproject") {
     title = "프로젝트 생성 완료";
     message = "프로젝트 생성이 완료되었습니다.<br>프로젝트가 성공적으로 마무리 되길 기원합니다.";
-  } else if (source === "fundingsuccess") {
-    title = "펀딩 완료";
-    message = "펀딩이 완료되었습니다. 채팅을 통해 창작자 및 후원자들과 소통해보세요.";
-  }
-
+  } 
+  
   return (
     <div
       style={{
