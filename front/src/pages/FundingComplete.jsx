@@ -20,8 +20,8 @@ const FundingComplete = () => {
   } else if (source === "addproject") {
     title = "프로젝트 생성 완료";
     message = "프로젝트 생성이 완료되었습니다.<br>프로젝트가 성공적으로 마무리 되길 기원합니다.";
-  } 
-  
+  }
+
   return (
     <div
       style={{
@@ -29,6 +29,8 @@ const FundingComplete = () => {
         backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
+        alignItems: "center", 
+        justifyContent: "center", 
         padding: "20px 0",
       }}
     >
@@ -74,6 +76,7 @@ const FundingComplete = () => {
           fontSize: "20px",
           borderRadius: "7px",
           padding: "0 20px",
+          marginTop: "20px" 
         }}
         variant="contained"
       >
