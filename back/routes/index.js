@@ -1,8 +1,11 @@
+require('./toss.js')
 const express = require("express");
 const router = express.Router();
 const projectRouter = require("./project");
+const userRouter = require("./user");
 const { verifyToken } = require("../middlewares");
 const passport = require("passport");
+const controller = require('../controllers/payments.controller.js');
 const {
   createToken,
   join,
@@ -17,6 +20,7 @@ router.post("/auth/join", join);
 
 // POST /api/projects
 router.use("/projects", projectRouter);
+router.use("/users", userRouter);
 router.post("/auth/login", createToken);
 
 router.get("/auth/kakao", passport.authenticate("kakao"));
@@ -28,6 +32,8 @@ router.get(
   passport.authenticate("google", { scope: ["profile"] })
 );
 router.get("/auth/google/callback", googleLogin);
+
+router.route('/confirm').get(controller.confirmPayment);
 
 router.post("/auth/refresh", refreshToken);
 

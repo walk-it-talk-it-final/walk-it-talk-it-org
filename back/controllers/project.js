@@ -1,6 +1,9 @@
 const { Project, Hashtag, User, Reward } = require("../models");
+const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
+const Projectnotice = require("../models/projectnotice");
 const op = require("sequelize").Op;
+const sequelize = require("sequelize");
 
 // 프로젝트 검색
 exports.getProjects = async (req, res, next) => {
@@ -35,15 +38,6 @@ exports.getProjects = async (req, res, next) => {
       projects = await Project.findAll({
         // 사용자 id가 없는 경우 모든 게시물 조회
         where: whereCondition,
-        include: [
-          {
-            model: User,
-            attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
-          },
-          {
-            model: Reward,
-          },
-        ],
         // 작성 시간 기준 내림차순 정렬
         order: [["createdAt", "DESC"]],
       });
@@ -135,6 +129,83 @@ exports.uploadImg = (req, res) => {
   });
 };
 
+// 프로젝트 상세 검색
+exports.getProjectDetail = async (req, res, next) => {
+  try {
+    // 프로젝트 ID는 req.params.id에 있다
+    const projectId = req.params.id;
+    // 프로젝트 정보 쿼리
+    const project = await Project.findOne({
+      where: { projectId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
+        },
+      ],
+    });
+
+    // 참가자 수 세기
+    const guestCount = await Guestinfo.count({
+      where: { ProjectProjectId: projectId },
+    });
+
+    // 리워드 정보 쿼리
+    const rewards = await Reward.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    // 총 리워드 금액 계산
+    const totalRewardAmount = rewards.reduce((sum, reward) => {
+      return sum + reward.rewardPrice * reward.rewardSellCount;
+    }, 0);
+
+    // 달성률 계산
+    const achievementRate =
+      project.projectTargetPrice > 0
+        ? Math.ceil((totalRewardAmount / project.projectTargetPrice) * 100)
+        : 0;
+
+    // 남은 일수 계산
+    const calculateDaysLeft = (finishDate) => {
+      const finishTime = new Date(finishDate).getTime();
+      const currentTime = new Date().getTime();
+      const differenceInDays = Math.ceil(
+        (finishTime - currentTime) / (1000 * 60 * 60 * 24)
+      );
+      return differenceInDays < 0 ? "종료" : differenceInDays;
+    };
+
+    const daysLeft = calculateDaysLeft(project.projectFinishAt);
+
+    // 좋아요 수 세기
+    const likers = await project.getLikers();
+    const likeCount = likers.length;
+
+    // const likeCount = await like.count({
+    //   where: { ProjectProjectId: projectId },
+    // });
+
+    // 넘겨줄 정보 정리
+    const projectDetail = {
+      ...project.toJSON(),
+      guestCount,
+      totalRewardAmount,
+      achievementRate,
+      daysLeft,
+      likeCount,
+    };
+
+    res.json({
+      code: 200,
+      payload: projectDetail,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 // 프로젝트 수정
 exports.modifyProject = async (req, res, next) => {
   try {
@@ -181,7 +252,7 @@ exports.modifyProject = async (req, res, next) => {
 exports.deleteProject = async (req, res, next) => {
   try {
     await Project.destroy({
-      where: { id: req.params.id },
+      where: { projectId: req.params.id },
     });
     res.json({
       code: 200,
@@ -253,6 +324,46 @@ exports.getRewards = async (req, res, next) => {
     });
 
     res.json(rewards);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 공지사항 등록
+exports.uploadNotice = async (req, res, next) => {
+  try {
+    const noticeInput = req.body;
+
+    noticeInput.ProjectProjectId = req.params.id;
+    noticeInput.UserId = req.user.id;
+
+    // 공지사항 생성
+    const notice = await Projectnotice.create(noticeInput);
+
+    res.json({
+      code: 200,
+      payload: notice,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 공지사항 조회
+exports.getNotices = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 공지사항 목록을 불러옴
+    const notices = await Projectnotice.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    res.json({
+      code: 200,
+      payload: notices,
+    });
   } catch (err) {
     console.error(err);
     next(err);

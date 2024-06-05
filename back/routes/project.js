@@ -10,6 +10,9 @@ const {
   saveLikeStatus,
   getRewards,
   getLikedProjects,
+  getProjectDetail,
+  uploadNotice,
+  getNotices,
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -42,6 +45,9 @@ router.post("/", verifyToken, uploadProject);
 // POST /api/projects/image - 게시물 이미지 업로드
 router.post("/image", verifyToken, imgUpload.single("img"), uploadImg);
 
+// GET /api/projects/:id - 특정 게시물 상세 정보 조회
+router.get("/:id", getProjectDetail);
+
 // PUT /api/projects/:id - 특정 게시물 수정
 router.put("/:id", verifyToken, modifyProject);
 
@@ -56,5 +62,12 @@ router.get("/like/:id", verifyToken, getLikedProjects);
 
 // GET /api/projects/reward/:id - 해당 프로젝트의 전체 리워드 조회
 router.get("/rewards/:id", getRewards);
+
+
+// GET /api/projects/:id/notices - 특정 게시물의 공지사항 조회
+router.get('/:id/notices', getNotices);
+
+// GET /api/projects/:id/notices - 특정 게시물의 공지사항 등록
+router.post('/:id/notices', verifyToken, uploadNotice);
 
 module.exports = router;

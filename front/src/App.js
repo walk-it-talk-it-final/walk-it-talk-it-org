@@ -23,6 +23,14 @@ import Follower from "./pages/Follower";
 import FundingComplete from "./pages/FundingComplete";
 import Settings from "./pages/Settings";
 import ProjectExplain from "./pages/ProjectExplain";
+import FundingProgress from "./pages/FundingProgress";
+import CommuPostWirte from "./components/write/CommuPostWirte";
+import AnnouncePostWrite from "./components/write/AnnouncePostWrite";
+import ReviewWrite from "./components/write/ReviewWrite";
+import { CheckoutPage } from "./components/toss/Checkout";
+import { SuccessPage } from "./components/toss/Success";
+import { FailPage } from "./components/toss/Fail";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
   const auth = useProvideAuth();
@@ -31,6 +39,7 @@ function App() {
     <SignInContext.Provider value={auth}>
       <Layout>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/addmaker" element={<AddMaker />} />
@@ -47,7 +56,21 @@ function App() {
           <Route path="/profile/settings" element={<Settings />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/success" element={<FundingComplete />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/projectdetail" element={<ProjectExplain />} />
+          <Route
+            path="/projectdetail/announcements/write/:id"
+            element={<AnnouncePostWrite />}
+          />
+          <Route
+            path="/projectdetail/community/write"
+            element={<CommuPostWirte />}
+          />
+          <Route path="/projectdetail/review/write" element={<ReviewWrite />} />
+          <Route path="/funding" element={<FundingProgress />} />
+          <Route path="/funding/checkout" element={<CheckoutPage />} />
+          <Route path="/funding/success" element={<SuccessPage />} />
+          <Route path="/funding/fail" element={<FailPage />} />
         </Routes>
       </Layout>
     </SignInContext.Provider>

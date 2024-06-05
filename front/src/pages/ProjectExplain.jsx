@@ -6,8 +6,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { Element, scroller } from 'react-scroll';
 import Sticky from 'react-stickynode';
-import Announcements from './Announcements.jsx'; 
 import Reviews from './Reviews.jsx'
+import Announcements from './Announcements.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Community from './Community.jsx';
 
 //프로젝트 이미지
 const ProjectImage = () => (
@@ -35,21 +38,48 @@ const ProjectDescription = ({ description }) => (
 const ProjectStats = ({ participants, goalAmount, mainColor, subColor4, remainingDays, achievementRate }) => (
   <Box sx={{ display: 'flex-start', flexDirection: 'column', alignItems: 'center', mr: 4 }}>
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography sx={{color : mainColor}}>
+      <Typography sx={{ color: mainColor }}>
         <span style={{ fontWeight: 'bold', fontSize: '25px' }}>{participants}</span>명 참여
       </Typography>
       <Box sx={{ backgroundColor: '#FFDED1', borderRadius: 1, px: 1 }}>
-        <Typography variant="caption" sx={{fontWeight: 'bold', fontSize: '15px', color: mainColor }}>{remainingDays}일 남음</Typography>
+        <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '15px', color: mainColor }}>{remainingDays}일 남음</Typography>
       </Box>
     </Box>
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-    <Typography>
-      <span style={{ fontWeight: 'bold', fontSize: '25px' }}>{goalAmount}</span>원 달성
-    </Typography>
+      <Typography>
+        <span style={{ fontWeight: 'bold', fontSize: '25px' }}>{goalAmount}</span>원 달성
+      </Typography>
       <Box sx={{ backgroundColor: '#E8e8e8', borderRadius: 1, px: 1 }}>
-        <Typography variant="caption" sx={{fontWeight: 'bold', fontSize: '15px', color: subColor4 }}>{achievementRate}% 달성</Typography>
+        <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '15px', color: subColor4 }}>{achievementRate}% 달성</Typography>
       </Box>
     </Box>
+    <Button
+          variant={"contained"}
+          sx={{
+            backgroundColor: mainColor,
+            color: 'white',
+            fontWeight: 'bold',
+            ml: 'auto',
+            borderColor: mainColor,
+            ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+          }}
+        >
+          수정
+        </Button>
+        <Button
+          variant={"contained"}
+          sx={{
+            backgroundColor: mainColor,
+            color: 'white',
+            fontWeight: 'bold',
+            ml: 'auto',
+            borderColor: mainColor,
+            ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+          }}
+          // onClick={() => handleDelete()}
+        >
+          삭제 
+        </Button>
   </Box>
 );
 
@@ -72,13 +102,13 @@ const ProjectActions = ({ likes, shares, subColor4, handleLike, isLiked }) => (
 );
 
 // 프로젝트 상단 모음
-const ProjectHeader = ({ title, description, participants, goalAmount, likes, shares, mainColor, subColor4, handleLike, isLiked, remainingDays,achievementRate }) => (
-  <Box sx={{ textAlign: 'center', mb: 4 }}>
+const ProjectHeader = ({ title, description, participants, goalAmount, likes, shares, mainColor, subColor4, handleLike, isLiked, remainingDays, achievementRate }) => (
+  <Box sx={{ textAlign: 'left', mb: 4 }}>
     <ProjectTitle title={title} />
     <ProjectDescription description={description} />
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-      <ProjectStats participants={participants} goalAmount={goalAmount} mainColor={mainColor} subColor4={subColor4} remainingDays={remainingDays} achievementRate = {achievementRate} />
-    <ProjectActions likes={likes} shares={shares} subColor4={subColor4} handleLike={handleLike} isLiked={isLiked} />
+      <ProjectStats participants={participants} goalAmount={goalAmount} mainColor={mainColor} subColor4={subColor4} remainingDays={remainingDays} achievementRate={achievementRate} />
+      <ProjectActions likes={likes} shares={shares} subColor4={subColor4} handleLike={handleLike} isLiked={isLiked} />
     </Box>
   </Box>
 );
@@ -224,14 +254,23 @@ const App = () => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const subColor4 = theme.palette.subColor4.main;
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(326);
   const [sortOrder, setSortOrder] = useState('newest');
   const [filterOption, setFilterOption] = useState('all');
 
-  const handleTabChange = (event, newValue) => setSelectedTab(newValue);
+  useEffect(() => {
+    // location.state가 null이 아니고, selectedTab이 undefined가 아니면 해당 값으로 설정하고, 그렇지 않으면 기본값 0으로 설정
+    const initialTab = location.state && location.state.selectedTab !== undefined ? location.state.selectedTab : 0;
+    setSelectedTab(initialTab);
+  }, [location.state]);
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  }
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -253,6 +292,10 @@ const App = () => {
     { id: 'creator', label: '창작자 소개', content: <CreatorContent /> },
     { id: 'trust', label: '신뢰와 안전', content: <TrustContent /> },
   ];
+
+  const handleDonateClick = () => {
+    navigate('/funding');
+  };
 
   return (
     <Box sx={{ fontFamily: 'Arial, sans-serif', maxWidth: '480px', m: '0 auto', p: 3, paddingTop: '64px' }}>
@@ -281,10 +324,12 @@ const App = () => {
           />
           <UserProfile
             nickname="사용자 닉네임"
+            followers="357"
             satisfaction="5.0"
             reviewCount="10"
             mainColor={mainColor}
           />
+
           <Box>
             <ProjectScroll mainColor={mainColor} sections={sections} />
             {sections.map(section => (
@@ -295,6 +340,8 @@ const App = () => {
             <Button
               variant="contained"
               // onClick={}
+              onClick={handleDonateClick}
+
               sx={{
                 backgroundColor: mainColor,
                 padding: '15px',
@@ -320,7 +367,15 @@ const App = () => {
             handleSortOrderChange={handleSortOrderChange} />
         </>
       )}
-      {selectedTab === 2 && <Box>커뮤니티 내용</Box>}
+      {selectedTab === 2 && (
+        <>
+          <Community
+            mainColor={mainColor}
+            subColor4={subColor4}
+            sortOrder={sortOrder}
+            handleSortOrderChange={handleSortOrderChange} />
+        </>
+      )}
       {selectedTab === 3 && (
         <Reviews
           mainColor={mainColor}

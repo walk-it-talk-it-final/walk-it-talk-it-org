@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField, Button, Divider } from "@mui/material";
 import ListType from "../components/layouts/ListType";
+import { useNavigate } from 'react-router-dom';
+import './../components/toss/style.css';
 
 const FundingProgress = () => {
     const theme = useTheme();
     const mainColor = theme.palette.mainColor.main;
+    const navigate = useNavigate();
+
 
     const projects = [
         {
@@ -36,6 +40,10 @@ const FundingProgress = () => {
     const handleSaveRewardOption = () => {
         setShowRewardInfo(true);
     };
+
+    const handleGoPayments = () => {
+        navigate('/funding/checkout');
+    }
 
     return (
         <div className="wrap" style={{ display: "flex", justifyContent: "center" }}>
@@ -69,7 +77,7 @@ const FundingProgress = () => {
 
 
                     <div className="rewardSelectWrap">
-                        <Typography variant="h5" fontWeight="bold" sx={{ marginTop: 10, width: "100%" }}>리워드 옵션 선택</Typography>
+                        <Typography variant="h5" fontWeight="bold" sx={{ marginTop: 7, width: "100%" }}>리워드 옵션 선택</Typography>
                         <div style={{ width: "100%" }}>
                             <FormControl sx={{ marginBottom: 2, marginTop: 3, width: "103%" }}>
                                 <InputLabel>리워드 옵션</InputLabel>
@@ -98,9 +106,9 @@ const FundingProgress = () => {
                             </FormControl>
 
                             <Button
-                                variant="contained"
+                                variant="outlined"
                                 color="mainColor"
-                                sx={{ color: "white", width: "103%", marginTop: 5, height: 50 }}
+                                sx={{ color: "mainColor", width: "103%", marginTop: 5, height: 50 }}
                                 onClick={handleSaveRewardOption}
                             >
                                 리워드 옵션 저장
@@ -152,10 +160,16 @@ const FundingProgress = () => {
                                     </div>
                                 </div>
                                 <Typography>* 위 연락처와 이메일로 후원 관련 소식이 전달됩니다.</Typography>
-                                <Typography>* 연락처 및 이메일 변경은 프로필 &gt; 설정 에서 가능합니다.</Typography>
                             </div>
 
-                            <Divider sx={{ my: 4 }} />      {/* 구분선 */}
+                            <Button
+                                variant="contained"
+                                color="mainColor"
+                                sx={{ color: "white", width: "103%", marginTop: 5, height: 50 }}
+                                onClick={handleGoPayments}
+                            >
+                                결제창으로 이동하기
+                            </Button>
 
                         </>
                     )}

@@ -12,12 +12,18 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ project }) => {
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
   const { loginUser } = useAuth();
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/projects/${project.projectId}`, { state: { project } });
+  };
 
   // 좋아요 버튼 누르기
   const [liked, setLiked] = useState(false);
@@ -43,7 +49,7 @@ const ProjectCard = ({ project }) => {
           console.error(error);
         });
     }
-  }, [project.projectId]);
+  }, [project]);
 
   const handleLikeClick = async () => {
     const newLikedStatus = !liked;
@@ -128,12 +134,14 @@ const ProjectCard = ({ project }) => {
 
   return (
     <div
+      onClick={handleClick}
       className="listWrap"
       style={{
         width: "calc(50% - 10px)",
         marginBottom: "10px",
         boxSizing: "border-box",
         marginTop: "10px",
+        cursor: "pointer",
       }}
     >
       <Card sx={{ width: "100%" }}>
