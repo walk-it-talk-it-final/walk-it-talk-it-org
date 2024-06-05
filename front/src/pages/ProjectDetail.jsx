@@ -171,7 +171,7 @@ const ProjectHeader = ({
   goalAmount,
   likes,
   handleLike,
-  isLiked,
+  liked,
   remainingDays,
   achievementRate,
 }) => {
@@ -201,7 +201,7 @@ const ProjectHeader = ({
           likes={likes}
           subColor4={subColor4}
           handleLike={handleLike}
-          isLiked={isLiked}
+          liked={liked}
         />
       </Box>
     </Box>
@@ -545,9 +545,6 @@ const ProjectDetail = () => {
               participants={project.guestCount}
               goalAmount={project.totalRewardAmount}
               likes={project.likeCount}
-              shares="18"
-              mainColor={mainColor}
-              subColor4={subColor4}
               handleLike={handleLike}
               liked={liked}
               remainingDays={project.daysLeft}
