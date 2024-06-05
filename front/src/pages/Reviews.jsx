@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Select, MenuItem, Divider, Button } from '@mui/material';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const reviewsData = [
   { id: 1, name: "김철수", date: '2024-05-01', content: '제품을 사용해보니 아주 만족스럽습니다. 추천합니다!', option: '프리미엄 PKG', photo: 'https://via.placeholder.com/150' },
@@ -16,12 +17,33 @@ const reviewsData = [
   { id: 10, name: "최유진", date: '2024-02-15', content: '매우 만족하며 사용하고 있습니다.', option: '프리미엄 PKG', photo: 'https://via.placeholder.com/150' }
 ];
 
-const Reviews = ({ mainColor, subColor4, sortOrder, filterOption, handleSortOrderChange, handleFilterOptionChange }) => {
+const Reviews = ({ mainColor, subColor4, sortOrder, filterOption, handleSortOrderChange, handleFilterOptionChange}) => {
   const navigate = useNavigate();
+
+  const params = useParams();
+  const projectId = params.id;
+
+  const [reviews, setReviews] = useState();
+
+    const getReviewsData = async () => {
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_API_URL}/projects/${projectId}/reviews`,
+            );
+            console.log(res.data.payload);
+            setReviews(res.data.payload);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+      getReviewsData();
+    }, []);
 
   // 리뷰 작성 페이지로 이동 (동그란 펜 버튼)
   const handleButtonClick = () => {
-      navigate('/projectdetail/review/write');
+      navigate(`/projectdetail/reviews/write/${projectId}`);
   };
 
   const [showAll, setShowAll] = useState(false);
