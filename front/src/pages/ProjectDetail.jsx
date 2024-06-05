@@ -70,75 +70,79 @@ const ProjectStats = ({
   subColor4,
   remainingDays,
   achievementRate,
-  maker
+  maker,
 }) => {
-  const loginUserId = localStorage.getItem('userId');
+  const loginUserId = localStorage.getItem("userId");
   const handleDelete = async () => {
     await projectApi.deleteProject(id);
-  }
+  };
 
   return (
-  <Box
-    sx={{
-      display: "flex-start",
-      flexDirection: "column",
-      alignItems: "center",
-      mr: 4,
-    }}
-  >
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Typography sx={{ color: mainColor }}>
-        <span style={{ fontWeight: "bold", fontSize: "25px" }}>
-          {participants}
-        </span>
-        명 참여
-      </Typography>
-      <Box sx={{ backgroundColor: "#FFDED1", borderRadius: 1, px: 1 }}>
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: "bold", fontSize: "15px", color: mainColor }}
-        >
-          {remainingDays}일 남음
+    <Box
+      sx={{
+        display: "flex-start",
+        flexDirection: "column",
+        alignItems: "center",
+        mr: 4,
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography sx={{ color: mainColor }}>
+          <span style={{ fontWeight: "bold", fontSize: "25px" }}>
+            {participants}
+          </span>
+          명 참여
         </Typography>
+        <Box sx={{ backgroundColor: "#FFDED1", borderRadius: 1, px: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", fontSize: "15px", color: mainColor }}
+          >
+            {remainingDays}일 남음
+          </Typography>
+        </Box>
       </Box>
-    </Box>
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Typography>
-        <span style={{ fontWeight: "bold", fontSize: "25px" }}>
-          {goalAmount}
-        </span>
-        원 달성
-      </Typography>
-      <Box sx={{ backgroundColor: "#E8e8e8", borderRadius: 1, px: 1 }}>
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: "bold", fontSize: "15px", color: subColor4 }}
-        >
-          {achievementRate}% 달성
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography>
+          <span style={{ fontWeight: "bold", fontSize: "25px" }}>
+            {goalAmount}
+          </span>
+          원 달성
         </Typography>
+        <Box sx={{ backgroundColor: "#E8e8e8", borderRadius: 1, px: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", fontSize: "15px", color: subColor4 }}
+          >
+            {achievementRate}% 달성
+          </Typography>
+        </Box>
       </Box>
-    </Box>
-    {
-      maker == loginUserId && 
-      <Box>
+      {maker == loginUserId && (
+        <Box>
           <Button
             variant={"contained"}
             sx={{
               backgroundColor: mainColor,
-              color: 'white',
-              fontWeight: 'bold',
-              ml: 'auto',
+              color: "white",
+              fontWeight: "bold",
+              ml: "auto",
               borderColor: mainColor,
-              ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+              ":hover": {
+                backgroundColor: mainColor,
+                color: "white",
+                borderColor: mainColor,
+              },
             }}
             onClick={() => handleDelete()}
           >
-            삭제 
+            삭제
           </Button>
-      </Box>
-    }
-  </Box>
-)};
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 //프로젝트 좋아요 및 공유 수
 const ProjectActions = ({ likes, shares, subColor4, handleLike, isLiked }) => (
@@ -180,38 +184,39 @@ const ProjectHeader = ({
   isLiked,
   remainingDays,
   achievementRate,
-  maker
-}) => (
-  <Box sx={{ textAlign: "left", mb: 4 }}>
-    <ProjectTitle title={title} />
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mt: 2,
-      }}
-    >
-      <ProjectStats
-        id={id}
-        participants={participants}
-        goalAmount={goalAmount}
-        mainColor={mainColor}
-        subColor4={subColor4}
-        remainingDays={remainingDays}
-        achievementRate={achievementRate}
-        maker={maker}
-      />
-      <ProjectActions
-        likes={likes}
-        shares={shares}
-        subColor4={subColor4}
-        handleLike={handleLike}
-        isLiked={isLiked}
-      />
+}) => {
+  const theme = useTheme();
+  const mainColor = theme.palette.mainColor.main;
+  const subColor4 = theme.palette.subColor4.main;
+  return (
+    <Box sx={{ textAlign: "left", mb: 4 }}>
+      <ProjectTitle title={title} />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
+        <ProjectStats
+          participants={participants}
+          goalAmount={goalAmount}
+          mainColor={mainColor}
+          subColor4={subColor4}
+          remainingDays={remainingDays}
+          achievementRate={achievementRate}
+        />
+        <ProjectActions
+          likes={likes}
+          subColor4={subColor4}
+          handleLike={handleLike}
+          liked={liked}
+        />
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 // 프로젝트 제작자
 const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
