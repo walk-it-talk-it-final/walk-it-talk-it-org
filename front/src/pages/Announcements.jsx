@@ -90,38 +90,95 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   };
 
   return (
-    notices && (
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
-          <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-            공지사항
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+          공지사항
+        </Typography>
+        {!selectedAnnouncement && (
+          <Select
+            value={sortOrder}
+            onChange={handleSortOrderChange}
+            displayEmpty
+            sx={{ minWidth: 100, maxHeight: 40 }}
+          >
+            <MenuItem value="newest">최신순</MenuItem>
+            <MenuItem value="oldest">오래된 순</MenuItem>
+          </Select>
+        )}
+      </Box>
+      <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
+      {selectedAnnouncement ? (
+        <Box>
+          <Typography variant="h5" component="h2" sx={{  wordBreak: 'keep-all', overflowWrap: 'break-word', fontWeight: 'bold', mb: 2 }}>
+            {selectedAnnouncement.title}
           </Typography>
-          {!selectedAnnouncement && (
-            <Select
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              displayEmpty
-              sx={{ minWidth: 100, maxHeight: 40 }}
+          <Typography variant="body2" sx={{ color: '#888', mb: 2 }}>
+            {selectedAnnouncement.date}
+          </Typography>
+          <Typography variant="body1" sx={{ wordBreak: 'keep-all', overflowWrap: 'break-word' , mb: 2 }}>
+            {selectedAnnouncement.content}
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button 
+              onClick={handleBackClick} 
+              sx={{ 
+                color: mainColor, 
+                borderColor: mainColor, 
+                border: '1px solid', 
+                '&:hover': {
+                  backgroundColor: mainColor, 
+                  color: '#fff'
+                }
+              }}
             >
               <MenuItem value="newest">최신순</MenuItem>
               <MenuItem value="oldest">오래된 순</MenuItem>
             </Select>
           )}
         </Box>
-        <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
-        {selectedAnnouncement ? (
-          <Box>
-            <Typography
-              variant="h5"
-              component="h2"
-              sx={{ fontWeight: "bold", mb: 2 }}
+      ) : (
+        <Box>
+          {currentAnnouncements.map((announcement) => (
+            <Box key={announcement.id} sx={{ mb: 2 }}>
+              <Box
+                onClick={() => handleAnnouncementClick(announcement)}
+                sx={{ cursor: 'pointer' }}
+              >
+               <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
+                  {announcement.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#888', mb: 1 }}>
+                  {announcement.date}
+                </Typography>
+              </Box>
+              <Divider sx={{ borderColor: '#e0e0e0' }} />
+            </Box>
+          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <IconButton 
+              onClick={() => handlePageChange(1)} 
+              disabled={currentPage === 1}
+              sx={{ 
+                color: subColor4, 
+                mx: 1,
+                '&:hover': {
+                  color: mainColor
+                }
+              }}
+            >
+              <FirstPage />
+            </IconButton>
+            <IconButton 
+              onClick={() => handlePageChange(currentPage - 1)} 
+              disabled={currentPage === 1}
+              sx={{ 
+                color: subColor4, 
+                mx: 1, 
+                '&:hover': {
+                  color: mainColor
+                }
+              }}
             >
               {selectedAnnouncement?.noticeTitle}
             </Typography>
