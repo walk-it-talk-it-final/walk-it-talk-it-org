@@ -51,7 +51,7 @@ const ProjectList = ({ project }) => {
           console.error(error);
         });
     }
-  }, [project.projectId]);
+  }, [project]);
 
   const handleLikeClick = async () => {
     const newLikedStatus = !liked;
