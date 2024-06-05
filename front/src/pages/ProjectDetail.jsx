@@ -164,11 +164,15 @@ const ProjectHeader = ({
   id,
   title,
   participants,
+  mainColor,
   goalAmount,
   likes,
+  shares,
   handleLike,
+  subColor4,
   liked,
   remainingDays,
+  isLiked,
   achievementRate,
   maker
 }) => (
