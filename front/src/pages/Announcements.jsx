@@ -78,13 +78,13 @@ const Announcements = ({ sortOrder, handleSortOrderChange }) => {
       <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
       {selectedAnnouncement ? (
         <Box>
-          <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
+          <Typography variant="h5" component="h2" sx={{  wordBreak: 'keep-all', overflowWrap: 'break-word', fontWeight: 'bold', mb: 2 }}>
             {selectedAnnouncement.title}
           </Typography>
           <Typography variant="body2" sx={{ color: '#888', mb: 2 }}>
             {selectedAnnouncement.date}
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
+          <Typography variant="body1" sx={{ wordBreak: 'keep-all', overflowWrap: 'break-word' , mb: 2 }}>
             {selectedAnnouncement.content}
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -113,7 +113,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange }) => {
                 onClick={() => handleAnnouncementClick(announcement)}
                 sx={{ cursor: 'pointer' }}
               >
-                <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold' }}>
+               <Typography variant="h6" component="h3" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
                   {announcement.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#888', mb: 1 }}>
