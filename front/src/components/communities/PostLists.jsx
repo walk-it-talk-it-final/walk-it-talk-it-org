@@ -3,10 +3,6 @@ import { Box, Typography, Avatar, IconButton } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
 
 const PostLists = ({ post, onClick }) => {
-    const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-        return new Date(dateString).toLocaleDateString(undefined, options);
-    };
     return (
         <Box key={post.id} sx={{ mb: 2, maxWidth: "407px" }}>
             <Box
@@ -26,7 +22,7 @@ const PostLists = ({ post, onClick }) => {
                                     {post.User.nickname}
                                 </Typography>
                                 <Typography variant="body1" sx={{ color: 'text.secondary' }} id="commuUploadDate">
-                                    {formatDate(post.commuUploadDate)}
+                                    {new Date(post.commuUploadDate).toLocaleString()}
                                 </Typography>
                             </div>
                         </div>
