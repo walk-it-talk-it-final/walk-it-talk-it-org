@@ -3,6 +3,7 @@ const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
 const Projectnotice = require("../models/projectnotice");
 const Community = require("../models/community");
+const Reply = require("../models/reply");
 const Review = require("../models/review");
 const op = require("sequelize").Op;
 const sequelize = require("sequelize");
@@ -400,6 +401,10 @@ exports.getPosts = async (req, res, next) => {
     // 해당 프로젝트의 공지사항 목록을 불러옴
     const posts = await Community.findAll({
       where: { ProjectProjectId: projectId },
+      include: [{
+        model: User,
+        attributes: ['nickname', 'profileImage'], // 필요한 유저 정보 선택
+      }],
     });
 
     res.json({
@@ -451,3 +456,4 @@ exports.getReviews = async (req, res, next) => {
     next(err);
   }
 };
+
