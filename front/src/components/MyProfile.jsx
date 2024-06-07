@@ -116,7 +116,7 @@ export const MyProfile = ({ user }) => {
             >
               <Avatar
                 alt="프로필 이미지"
-                src={user.profileImage || null}
+                src={`http://localhost:8000/${user.profileImage}`}
                 sx={{ width: 70, height: 70, border: "1px solid grey" }}
               />
               <Typography
