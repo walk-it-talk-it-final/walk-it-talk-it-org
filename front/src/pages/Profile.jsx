@@ -15,7 +15,7 @@ const Profile = () => {
           `${process.env.REACT_APP_API_URL}/users/${loginUser.id}`,
           {
             headers: {
-              Authorization: localStorage.getItem("token"),
+              Authorization: loginUser.token,
             },
           },
         );

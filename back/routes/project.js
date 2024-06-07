@@ -60,14 +60,13 @@ router.post("/like/:id", verifyToken, saveLikeStatus);
 // GET /api/projects/like/:id - 좋아요 누른 게시글 조회.
 router.get("/like/:id", verifyToken, getLikedProjects);
 
-// GET /api/projects/reward/:id - 해당 프로젝트의 전체 리워드 조회
+// GET /api/projects/rewards/:id - 해당 프로젝트의 전체 리워드 조회
 router.get("/rewards/:id", getRewards);
 
-
 // GET /api/projects/:id/notices - 특정 게시물의 공지사항 조회
-router.get('/:id/notices', getNotices);
+router.get("/:id/notices", getNotices);
 
 // GET /api/projects/:id/notices - 특정 게시물의 공지사항 등록
-router.post('/:id/notices', verifyToken, uploadNotice);
+router.post("/:id/notices", verifyToken, uploadNotice);
 
 module.exports = router;

@@ -71,75 +71,79 @@ const ProjectStats = ({
   subColor4,
   remainingDays,
   achievementRate,
-  maker
+  maker,
 }) => {
-  const loginUserId = localStorage.getItem('userId');
+  const loginUserId = localStorage.getItem("userId");
   const handleDelete = async () => {
     await projectApi.deleteProject(id);
-  }
+  };
 
   return (
-  <Box
-    sx={{
-      display: "flex-start",
-      flexDirection: "column",
-      alignItems: "center",
-      mr: 4,
-    }}
-  >
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Typography sx={{ color: mainColor }}>
-        <span style={{ fontWeight: "bold", fontSize: "25px" }}>
-          {participants}
-        </span>
-        명 참여
-      </Typography>
-      <Box sx={{ backgroundColor: "#FFDED1", borderRadius: 1, px: 1 }}>
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: "bold", fontSize: "15px", color: mainColor }}
-        >
-          {remainingDays}일 남음
+    <Box
+      sx={{
+        display: "flex-start",
+        flexDirection: "column",
+        alignItems: "center",
+        mr: 4,
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography sx={{ color: mainColor }}>
+          <span style={{ fontWeight: "bold", fontSize: "25px" }}>
+            {participants}
+          </span>
+          명 참여
         </Typography>
+        <Box sx={{ backgroundColor: "#FFDED1", borderRadius: 1, px: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", fontSize: "15px", color: mainColor }}
+          >
+            {remainingDays}일 남음
+          </Typography>
+        </Box>
       </Box>
-    </Box>
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Typography>
-        <span style={{ fontWeight: "bold", fontSize: "25px" }}>
-          {goalAmount}
-        </span>
-        원 달성
-      </Typography>
-      <Box sx={{ backgroundColor: "#E8e8e8", borderRadius: 1, px: 1 }}>
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: "bold", fontSize: "15px", color: subColor4 }}
-        >
-          {achievementRate}% 달성
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography>
+          <span style={{ fontWeight: "bold", fontSize: "25px" }}>
+            {goalAmount}
+          </span>
+          원 달성
         </Typography>
+        <Box sx={{ backgroundColor: "#E8e8e8", borderRadius: 1, px: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: "bold", fontSize: "15px", color: subColor4 }}
+          >
+            {achievementRate}% 달성
+          </Typography>
+        </Box>
       </Box>
-    </Box>
-    {
-      maker == loginUserId && 
-      <Box>
+      {maker == loginUserId && (
+        <Box>
           <Button
             variant={"contained"}
             sx={{
               backgroundColor: mainColor,
-              color: 'white',
-              fontWeight: 'bold',
-              ml: 'auto',
+              color: "white",
+              fontWeight: "bold",
+              ml: "auto",
               borderColor: mainColor,
-              ":hover": { backgroundColor: mainColor, color: 'white', borderColor: mainColor },
+              ":hover": {
+                backgroundColor: mainColor,
+                color: "white",
+                borderColor: mainColor,
+              },
             }}
             onClick={() => handleDelete()}
           >
-            삭제 
+            삭제
           </Button>
-      </Box>
-    }
-  </Box>
-)};
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 //프로젝트 좋아요 수
 const ProjectActions = ({ likes, subColor4, handleLike, liked }) => (
@@ -174,7 +178,7 @@ const ProjectHeader = ({
   remainingDays,
   isLiked,
   achievementRate,
-  maker
+  maker,
 }) => (
   <Box sx={{ textAlign: "left", mb: 4 }}>
     <ProjectTitle title={title} />
@@ -393,7 +397,6 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState(0);
-  // const [likes, setLikes] = useState();
   const [sortOrder, setSortOrder] = useState("newest");
   const [filterOption, setFilterOption] = useState("all");
 
@@ -435,7 +438,7 @@ const ProjectDetail = () => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/projects/like/${loginUser.id}`, {
           headers: {
-            Authorization: token,
+            Authorization: loginUser.token,
           },
         })
         .then((response) => {

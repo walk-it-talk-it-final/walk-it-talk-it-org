@@ -17,7 +17,7 @@ const LikeProject = () => {
         `${process.env.REACT_APP_API_URL}/projects/like/${loginUser.id}`,
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: loginUser.token,
           },
         },
       );

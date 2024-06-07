@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Ingproject, Project } = require("../models");
 
 exports.getUser = async (req, res, next) => {
   try {
@@ -149,6 +149,28 @@ exports.getFollowings = async (req, res, next) => {
         message: "사용자를 찾을 수 없습니다.",
       });
     }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+exports.getIngProjects = async (req, res, next) => {
+  const userId = req.params.id;
+
+  try {
+    const project = await Ingproject.findAll({
+      where: { userId },
+      include: [
+        {
+          model: Project,
+        },
+      ],
+    });
+    res.json({
+      code: 200,
+      payload: project,
+    });
   } catch (err) {
     console.error(err);
     next(err);
