@@ -168,45 +168,48 @@ const ProjectHeader = ({
   id,
   title,
   participants,
+  mainColor,
   goalAmount,
   likes,
+  shares,
   handleLike,
-  isLiked,
+  subColor4,
+  liked,
   remainingDays,
+  isLiked,
   achievementRate,
-}) => {
-  const theme = useTheme();
-  const mainColor = theme.palette.mainColor.main;
-  const subColor4 = theme.palette.subColor4.main;
-  return (
-    <Box sx={{ textAlign: "left", mb: 4 }}>
-      <ProjectTitle title={title} />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: 2,
-        }}
-      >
-        <ProjectStats
-          participants={participants}
-          goalAmount={goalAmount}
-          mainColor={mainColor}
-          subColor4={subColor4}
-          remainingDays={remainingDays}
-          achievementRate={achievementRate}
-        />
-        <ProjectActions
-          likes={likes}
-          subColor4={subColor4}
-          handleLike={handleLike}
-          isLiked={isLiked}
-        />
-      </Box>
+  maker,
+}) => (
+  <Box sx={{ textAlign: "left", mb: 4 }}>
+    <ProjectTitle title={title} />
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mt: 2,
+      }}
+    >
+      <ProjectStats
+        id={id}
+        participants={participants}
+        goalAmount={goalAmount}
+        mainColor={mainColor}
+        subColor4={subColor4}
+        remainingDays={remainingDays}
+        achievementRate={achievementRate}
+        maker={maker}
+      />
+      <ProjectActions
+        likes={likes}
+        shares={shares}
+        subColor4={subColor4}
+        handleLike={handleLike}
+        isLiked={isLiked}
+      />
     </Box>
-  );
-};
+  </Box>
+);
 
 // 프로젝트 제작자
 const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
@@ -394,7 +397,6 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState(0);
-  // const [likes, setLikes] = useState();
   const [sortOrder, setSortOrder] = useState("newest");
   const [filterOption, setFilterOption] = useState("all");
 
@@ -436,7 +438,7 @@ const ProjectDetail = () => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/projects/like/${loginUser.id}`, {
           headers: {
-            Authorization: token,
+            Authorization: loginUser.token,
           },
         })
         .then((response) => {
@@ -545,9 +547,6 @@ const ProjectDetail = () => {
               participants={project.guestCount}
               goalAmount={project.totalRewardAmount}
               likes={project.likeCount}
-              shares="18"
-              mainColor={mainColor}
-              subColor4={subColor4}
               handleLike={handleLike}
               liked={liked}
               remainingDays={project.daysLeft}

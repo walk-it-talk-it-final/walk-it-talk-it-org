@@ -21,17 +21,18 @@ const ProjectImage = () => (
 
 //프로젝트 제목
 const ProjectTitle = ({ title }) => (
-  <Typography variant="h1" sx={{ fontSize: '24px', mb: 2 }}>
+  <Typography variant="h1" sx={{ fontSize: '24px', mb: 2, wordBreak: 'keep-all' }}>
     <b>{title}</b>
   </Typography>
 );
 
 //프로젝트 설명
 const ProjectDescription = ({ description }) => (
-  <Typography variant="body1" sx={{ fontSize: '16px', mb: 4 }}>
+  <Typography variant="body1" sx={{ fontSize: '16px', mb: 4, wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
     {description}
   </Typography>
 );
+
 
 //프로젝트 참여율 및 달성률
 const ProjectStats = ({ participants, goalAmount, mainColor, subColor4, remainingDays, achievementRate }) => (
@@ -168,7 +169,7 @@ const ProjectSection = ({ id, title, children }) => (
   <Element name={id} className="element">
     <Box sx={{ mb: 8 }}>
       <Typography variant="h2" sx={{ fontSize: '20px', mb: 2, fontWeight: 'bold' }}>{title}</Typography>
-      <Box>{children}</Box>
+      <Box sx={{ wordBreak: 'keep-all', overflowWrap: 'break-word' }}>{children}</Box>
     </Box>
   </Element>
 );

@@ -40,7 +40,7 @@ const Following = () => {
                 <div className="fundingProject" style={{ marginTop: 70, padding: 10 }}>
                     <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 3 }}>팔로잉</Typography>
                     <div className="subWrap" style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-                        <Typography sx={{ fontSize: 8 }}>총 {followingData.length}명</Typography>
+                        <Typography sx={{ fontSize: 20 }}>총 {followingData.length}명</Typography>
                     </div>
                     <div>
                         {followingData.map((user) => (

@@ -15,8 +15,8 @@ import {
   NavigateBefore,
   NavigateNext,
 } from "@mui/icons-material";
-import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { useNavigate } from "react-router-dom";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import axios from "axios";
 
 const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
@@ -71,21 +71,20 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
     setCurrentPage(newPage);
   };
 
-  const sortedAnnouncements = () => {
-    return [...notices].sort((a, b) => {
-      if (sortOrder === "newest") {
-        return new Date(b.noticeUploadDate) - new Date(a.noticeUploadDate);
-      } else {
-        return new Date(a.noticeUploadDate) - new Date(b.noticeUploadDate);
-      }
-    });
+  const sortedAnnouncements = (e) => {
+    handleSortOrderChange(e);
+    let arr = [...notices];
+    arr.reverse();
+    setNotices(arr);
   };
 
   const startIndex = (currentPage - 1) * announcementsPerPage;
-  const currentAnnouncements = sortedAnnouncements().slice(
-    startIndex,
-    startIndex + announcementsPerPage,
-  );
+  const [currentNotices, setCurrentNotices] = useState();
+  useEffect(() => {
+    setCurrentNotices(
+      notices?.slice(startIndex, startIndex + announcementsPerPage),
+    );
+  }, [notices]);
 
   const totalPages = Math.ceil(notices.length / announcementsPerPage);
 
@@ -95,22 +94,21 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   };
 
   return (
-    notices.length > 0 && (
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
-          <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-            공지사항
-          </Typography>
-          {!selectedAnnouncement && (
-            <div>
-              <Button
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
+          공지사항
+        </Typography>
+        {!selectedAnnouncement && (
+          <div>
+          <Button
                 variant="contained"
                 color="mainColor"
                 sx={{
@@ -125,59 +123,68 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
               >
                 <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
               </Button>
-              <Select
-                value={sortOrder}
-                onChange={handleSortOrderChange}
-                displayEmpty
-                sx={{ minWidth: 100, maxHeight: 40 }}
-              >
-                <MenuItem value="newest">최신순</MenuItem>
-                <MenuItem value="oldest">오래된 순</MenuItem>
-              </Select>
-            </div>
-          )}
-        </Box>
-        <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
-        {selectedAnnouncement ? (
-          <Box>
-            <Typography
-              variant="h5"
-              component="h2"
-              sx={{ fontWeight: "bold", mb: 2 }}
+          <Select
+            value={sortOrder}
+            onChange={(e) => sortedAnnouncements(e)}
+            displayEmpty
+            sx={{ minWidth: 100, maxHeight: 40 }}
+          >
+            <MenuItem value="newest">최신순</MenuItem>
+            <MenuItem value="oldest">오래된 순</MenuItem>
+          </Select>
+        </div>
+        )}
+      </Box>
+      <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
+      {selectedAnnouncement ? (
+        <Box sx={{ height: 400 }}>
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              wordBreak: "keep-all",
+              overflowWrap: "break-word",
+              fontWeight: "bold",
+              mb: 2,
+            }}
+          >
+            {selectedAnnouncement?.noticeTitle}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#888", mb: 2 }}>
+            {formatDate(selectedAnnouncement?.noticeUploadDate)}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ wordBreak: "keep-all", overflowWrap: "break-word", mb: 2 }}
+          >
+            <div
+              dangerouslySetInnerHTML={{
+                __html: selectedAnnouncement?.noticeContent,
+              }}
+            />
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={handleBackClick}
+              sx={{
+                color: mainColor,
+                borderColor: mainColor,
+                border: "1px solid",
+                "&:hover": {
+                  backgroundColor: mainColor,
+                  color: "#fff",
+                },
+              }}
             >
-              {selectedAnnouncement.noticeTitle}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#888", mb: 2 }}>
-              {formatDate(selectedAnnouncement.noticeUploadDate)}
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: selectedAnnouncement.noticeContent,
-                }}
-              />
-            </Typography>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                onClick={handleBackClick}
-                sx={{
-                  color: mainColor,
-                  borderColor: mainColor,
-                  border: "1px solid",
-                  "&:hover": {
-                    backgroundColor: mainColor,
-                    color: "#fff",
-                  },
-                }}
-              >
-                뒤로 가기
-              </Button>
-            </Box>
-            <Divider sx={{ borderColor: "#e0e0e0", mt: 2 }} />
+              뒤로 가기
+            </Button>
           </Box>
-        ) : (
-          <Box>
-            {currentAnnouncements.map((announcement) => (
+          <Divider sx={{ borderColor: "#e0e0e0", mt: 2 }} />
+        </Box>
+      ) : (
+        <Box sx={{ height: 400 }}>
+          {currentNotices ? (
+            currentNotices.map((announcement) => (
               <Box key={announcement.id} sx={{ mb: 2 }}>
                 <Box
                   onClick={() => handleAnnouncementClick(announcement)}
@@ -186,7 +193,14 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                   <Typography
                     variant="h6"
                     component="h3"
-                    sx={{ fontWeight: "bold" }}
+                    sx={{
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      wordBreak: "keep-all",
+                      overflowWrap: "break-word",
+                    }}
                   >
                     {announcement.noticeTitle}
                   </Typography>
@@ -196,82 +210,93 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 </Box>
                 <Divider sx={{ borderColor: "#e0e0e0" }} />
               </Box>
-            ))}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <IconButton
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <FirstPage />
-              </IconButton>
-              <IconButton
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <NavigateBefore />
-              </IconButton>
-              {[...Array(totalPages)].map((_, index) => (
-                <Button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  sx={{
-                    color: currentPage === index + 1 ? mainColor : subColor4,
-                    mx: 1,
-                    minWidth: "auto",
-                    padding: "4px 8px",
-                    "&:hover": {
-                      color: mainColor,
-                    },
-                  }}
-                >
-                  {index + 1}
-                </Button>
-              ))}
-              <IconButton
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <NavigateNext />
-              </IconButton>
-              <IconButton
-                onClick={() => handlePageChange(totalPages)}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: subColor4,
-                  mx: 1,
-                  "&:hover": {
-                    color: mainColor,
-                  },
-                }}
-              >
-                <LastPage />
-              </IconButton>
-            </Box>
+            ))
+          ) : (
+            <p>No Notices found</p>
+          )}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 120,
+              marginLeft: 43,
+              zIndex: 1000,
+            }}
+          >
           </Box>
-        )}
-      </Box>
-    )
+          {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <IconButton
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+              sx={{
+                color: subColor4,
+                mx: 1,
+                "&:hover": {
+                  color: mainColor,
+                },
+              }}
+            >
+              <FirstPage />
+            </IconButton>
+            <IconButton
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              sx={{
+                color: subColor4,
+                mx: 1,
+                "&:hover": {
+                  color: mainColor,
+                },
+              }}
+            >
+              <NavigateBefore />
+            </IconButton>
+            {[...Array(totalPages)].map((_, index) => (
+              <Button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                sx={{
+                  color: currentPage === index + 1 ? mainColor : subColor4,
+                  mx: 1,
+                  minWidth: "auto",
+                  padding: "4px 8px",
+                  "&:hover": {
+                    color: mainColor,
+                  },
+                }}
+              >
+                {index + 1}
+              </Button>
+            ))}
+            <IconButton
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              sx={{
+                color: subColor4,
+                mx: 1,
+                "&:hover": {
+                  color: mainColor,
+                },
+              }}
+            >
+              <NavigateNext />
+            </IconButton>
+            <IconButton
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+              sx={{
+                color: subColor4,
+                mx: 1,
+                "&:hover": {
+                  color: mainColor,
+                },
+              }}
+            >
+              <LastPage />
+            </IconButton>
+          </Box> */}
+        </Box>
+      )}
+    </Box>
   );
 };
 

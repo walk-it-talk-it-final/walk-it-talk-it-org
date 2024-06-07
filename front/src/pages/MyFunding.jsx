@@ -1,82 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import {
-    Typography,
-    Button,
-    Box,
-} from "@mui/material";
-import CardList from '../components/layouts/CardList';
-
+import { Typography, Button, Box } from "@mui/material";
+import ProjectList from "../components/layouts/ProjectList";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 const MyFunding = () => {
-    const theme = useTheme();
-    const mainColor = theme.palette.mainColor.main;
-    
-    // 카드 리스트에 담을 임시 데이터
-    const projects = [
-        {
-            id: 1,
-            title: "펀딩 프로젝트 제목 펀딩 프로젝트 제목 펀딩 프로젝트 제목 펀딩 프로젝트 제목",
-            creator: "프로젝트 생성자 1",
-            progress: "33% 달성",
-            amount: "5만원 +",
-            remainingDays: "8일 남음",
-            image: "https://via.placeholder.com/130"
-        },
-        {
-            id: 2,
-            title: "펀딩 프로젝트 제목 펀딩 프로젝트 제목 펀딩 프로젝트 제목 펀딩 프로젝트 ",
-            creator: "프로젝트 생성자 2",
-            progress: "33% 달성",
-            amount: "5만원 +",
-            remainingDays: "8일 남음",
-            image: "https://via.placeholder.com/130"
-        },
-        {
-            id: 3,
-            title: "펀딩 프로젝트 333 입니다 ",
-            creator: "프로젝트 생성자 3",
-            progress: "153% 달성",
-            amount: "17만원 +",
-            remainingDays: "15일 남음",
-            image: "https://via.placeholder.com/130"
-        }
-    ];
+  const theme = useTheme();
+  const mainColor = theme.palette.mainColor.main;
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
-    return (
-        <div className="wrap" style={{ display: "block" }}>
-            <Box
-                component="form"
-                p={2}
-                noValidate
-                autoComplete="off"
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "50ch",
-                    gap: "30px",
-                }}
-            >
-            <div className="fundingProject" style={{ marginTop: 70, padding: 10 }}>
-                        <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 2 }}>내가 후원한 프로젝트</Typography>
-                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
-                            {projects.map((project) => (
-                                <CardList
-                                    key={project.id}
-                                    mainColor={mainColor}
-                                    title={project.title}
-                                    creator={project.creator}
-                                    progress={project.progress}
-                                    amount={project.amount}
-                                    remainingDays={project.remainingDays}
-                                    image={project.image}
-                                />
-                            ))}
-                        </div>
-                    </div>
-            </Box>
+  const [projects, setProjects] = useState();
+
+  // 참여중인 프로젝트 id 찾아오기
+  const getMyFunding = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users/ingprojects/${loginUser.id}`,
+        {
+          headers: { Authorization: token },
+        },
+      );
+
+      const payloads = res.data.payload;
+      console.log(payloads);
+      setProjects(payloads);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getMyFunding();
+  }, []);
+
+  const handleCardClick = (project) => {
+    navigate(`/projects/${project.ProjectProjectId}`, { state: { project } });
+  };
+
+  return (
+    <div className="wrap" style={{ display: "block" }}>
+      <Box
+        component="form"
+        p={2}
+        noValidate
+        autoComplete="off"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "50ch",
+          gap: "30px",
+        }}
+      >
+        <div className="fundingProject" style={{ marginTop: 70, padding: 10 }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            내가 후원한 프로젝트
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {projects &&
+              projects.map((project) => (
+                <div onClick={() => handleCardClick(project)} key={project.id}>
+                  <ProjectList project={project.Project} />
+                </div>
+              ))}
+          </div>
         </div>
-    );
-}
+      </Box>
+    </div>
+  );
+};
 
 export default MyFunding;
