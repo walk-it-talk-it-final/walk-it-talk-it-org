@@ -36,6 +36,7 @@ class Reward extends Sequelize.Model {
   static associate(db) {
     db.Reward.belongsTo(db.Project);
     db.Reward.hasMany(db.Guestinfo);
+    db.Reward.hasMany(db.Review);
   }
 }
 

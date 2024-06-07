@@ -318,18 +318,33 @@ exports.getLikedProjects = async (req, res, next) => {
 
 // 리워드 검색
 exports.getRewards = async (req, res, next) => {
+  // 기존 코드
+  // try {
+  //   const ProjectProjectId = req.params.id;
+  //   const rewards = await Reward.findAll({
+  //     // where: { project_id: req.params.id },
+  //     where: { ProjectProjectId },
+  //     attributes: ["rewardPrice", "rewardSellCount"],
+  //   });
+
+  //   res.json(rewards);
+  // } catch (err) {
+  //   console.error(err);
+  //   next(err);
+  // }
   try {
     const ProjectProjectId = req.params.id;
     const rewards = await Reward.findAll({
-      // where: { project_id: req.params.id },
-      where: { ProjectProjectId },
-      attributes: ["rewardPrice", "rewardSellCount"],
+      where: { ProjectProjectId }, // 해당 프로젝트 ID와 일치하는 리워드 옵션만 가져옴
     });
 
-    res.json(rewards);
-  } catch (err) {
-    console.error(err);
-    next(err);
+    res.json({
+      code: 200,
+      payload: rewards,
+    });
+  } catch (error) {
+    console.error('Error fetching reward options:', error);
+    next(error);
   }
 };
 
@@ -421,13 +436,15 @@ exports.getPosts = async (req, res, next) => {
 // 후기 등록
 exports.uploadReview = async (req, res, next) => {
   try {
-    const reviewInput = req.body;
-
-    reviewInput.ProjectProjectId = req.params.id;
-    reviewInput.UserId = req.user.id;
+    const { rewardOption, reviewContent } = req.body;
 
     // 후기 생성
-    const review = await Review.create(reviewInput);
+    const review = await Review.create({
+      reviewContent,
+      ProjectProjectId: req.params.id,
+      UserId:  req.user.id,
+      RewardId: rewardOption
+    });
 
     res.json({
       code: 200,
@@ -446,6 +463,12 @@ exports.getReviews = async (req, res, next) => {
     // 해당 프로젝트의 후기 목록을 불러옴
     const reviews = await Review.findAll({
       where: { ProjectProjectId: projectId },
+      include: [{
+        model: User,
+        attributes: ['nickname', 'profileImage'], // 필요한 유저 정보 선택
+      },{
+        model: Reward
+      }],
     });
 
     res.json({
@@ -457,4 +480,3 @@ exports.getReviews = async (req, res, next) => {
     next(err);
   }
 };
-

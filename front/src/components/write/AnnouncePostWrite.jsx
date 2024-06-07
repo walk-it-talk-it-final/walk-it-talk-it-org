@@ -93,7 +93,7 @@ const AnnouncePostWrite = ({ inputs, setInputs }) => {
   };
 
   const handleGoBack = () => {
-    navigate("/projectdetail", {
+    navigate(`/projects/${projectId}`, {
       // selectedTab 스테이트를 넘겨준다.
       state: { selectedTab: 1 },
     });

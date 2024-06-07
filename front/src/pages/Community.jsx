@@ -34,7 +34,16 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
         getCommuPostsData();
     }, [projectId]);
 
-    // 포스트 작성 페이지로 이동 (동그란 펜 버튼)
+    const sortedCommuPosts = () => {
+        return [...commuPosts].sort((a, b) => {
+            if (sortOrder === "newest") {
+                return new Date(b.commuUploadDate) - new Date(a.commuUploadDate);
+            } else {
+                return new Date(a.commuUploadDate) - new Date(b.commuUploadDate);
+            }
+        });
+    };
+
     const handleButtonClick = () => {
         navigate(`/projectdetail/communities/write/${projectId}`);
     };
@@ -44,31 +53,16 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
     const [comments, setComments] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    // 게시물 정렬 부분 (게시글 날짜 기준)
-    const sortedCommuPosts = () => {
-        return [...commuPosts].sort((a, b) => {
-            if (sortOrder === "newest") {
-                return new Date(b.date) - new Date(a.date);
-            } else {
-                return new Date(a.date) - new Date(b.date);
-            }
-        });
-    };
-
-    // 게시글 및 댓글 상태 
     const handlePostClick = (post) => {
-        setSelectedPost(post);      // 선택된 게시물 설정
-        setComments(post.comments || []);       // 선택된 게시물의 댓글 설정. 댓글이 없을 땐 빈 배열로 설정함
+        setSelectedPost(post);
+        setComments(post.comments || []);
     };
 
-    // 뒤로가기 버튼
     const handleBackClick = () => {
         setSelectedPost(null);
     };
 
-    // 수정/삭제 메뉴 부분
     const handleActionChange = (e) => {
-        // 수정/삭제 로직 구현 (기능은 빼기로 해서 형태만 만들어놨읍니다)
         console.log(e.target.value);
     };
 
@@ -80,12 +74,10 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
         setAnchorEl(null);
     };
 
-    // 댓글 입력 부분
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
     };
 
-    // 댓글 등록
     const handleCommentSubmit = () => {
         if (newComment.trim() !== "") {
             const newComments = [...comments, { profileImage: "https://via.placeholder.com/50", guestName: "You", replyContent: newComment }];
