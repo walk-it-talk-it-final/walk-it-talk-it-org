@@ -1,6 +1,4 @@
-// ReviewWrite.jsx
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Button, Box, FormControl, Select, MenuItem } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -42,20 +40,33 @@ const formats = [
     'background',
 ];
 
-const rewardOptions = [
-    { value: '', label: '참여한 리워드 선택' },
-    { value: '리워드 1', label: '리워드 1' },
-    { value: '리워드 2', label: '리워드 2' },
-    { value: '리워드 3', label: '리워드 3' },
-];
-
 const ReviewWrite = ({ inputs, setInputs }) => {
     const navigate = useNavigate();
     const [reviewContent, setReviewContent] = useState('');
+    const [rewardOptions, setRewardOptions] = useState([]);
     const [rewardOption, setRewardOption] = useState('');
 
     const params = useParams();
     const projectId = params.id;
+
+    useEffect(() => {
+        const fetchRewardOptions = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/projects/rewards/${projectId}`);
+                const rewardOptionsData = response.data.payload; // 리워드 옵션 데이터
+                const formattedRewardOptions = rewardOptionsData.map(option => ({
+                    value: option.id,
+                    label: option.rewardOption,
+                }));
+                setRewardOptions(formattedRewardOptions);
+
+            } catch (error) {
+                console.error('Error fetching reward options:', error);
+            }
+        };
+
+        fetchRewardOptions();
+    }, []);
 
     const handleChange = (e) => {
         setRewardOption(e.target.value);
@@ -100,7 +111,7 @@ const ReviewWrite = ({ inputs, setInputs }) => {
     };
 
     const handleGoBack = () => {
-        navigate('/projectdetail', {
+        navigate(`/projects/${projectId}`, {
             state: { selectedTab: 3 },
         });
     };
@@ -136,13 +147,17 @@ const ReviewWrite = ({ inputs, setInputs }) => {
                     이용 후기를 남겨주시면 더 나은 펀딩 서비스를 제공하는 데 큰 도움이 됩니다. 감사합니다😊
                 </Typography>
 
-                <FormControl sx={{ width : "100%" }}>
+                <FormControl sx={{ width: "100%" }}>
                     <Select
                         value={rewardOption}
                         onChange={handleChange}
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
+                        placeholder='참여한 리워드를 선택해주세요'
                     >
+                        <MenuItem value="">
+                            참여한 리워드를 선택해주세요
+                        </MenuItem>
                         {rewardOptions.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}
