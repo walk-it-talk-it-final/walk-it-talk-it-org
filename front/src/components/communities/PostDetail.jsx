@@ -6,7 +6,10 @@ import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const PostDetail = ({ selectedPost, onBackClick, onCommentChange, onCommentSubmit, anchorEl, onMenuOpen, onMenuClose, onActionChange, newComment, comments, mainColor }) => {
-
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyreplyContent: 'flex-end', mt: 2, mb: 2 }}>
@@ -30,15 +33,15 @@ const PostDetail = ({ selectedPost, onBackClick, onCommentChange, onCommentSubmi
                     <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
                         <Avatar
                             alt="프로필 이미지"
-                            src={selectedPost.profileImage}
+                            src={selectedPost.User.profileImage}
                             sx={{ width: 50, height: 50, border: "1px solid grey" }}
                         />
                         <div>
                             <Typography variant="h6" sx={{ fontWeight: "bold" }} id="guestName">
-                                {selectedPost.guestName}
+                                {selectedPost.User.nickname}
                             </Typography>
                             <Typography variant="body1" sx={{ color: 'text.secondary' }} id="commuUploadDate">
-                                {selectedPost.commuUploadDate}
+                                {formatDate(selectedPost.commuUploadDate)}
                             </Typography>
                         </div>
                     </div>

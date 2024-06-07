@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const modules = {
     toolbar: [
@@ -38,23 +39,44 @@ const formats = [
     'background',
 ];
 
-const CommuPostWrite = () => {
+const CommuPostWrite = ({ inputs, setInputs }) => {
     const navigate = useNavigate();
-    const [commuContent, setCommuContent] = React.useState('');
+    const [commuContent, setCommuContent] = useState('');
 
-    const handleSubmit = () => {
+    const params = useParams();
+    const projectId = params.id;
+
+    const handleSubmit = async () => {
         const strippedPost = commuContent.replace(/<(.|\n)*?>/g, '').trim();
 
         if (strippedPost !== '') {
-            alert('게시글이 등록되었습니다!');
             console.log({
-                commuContent,
+                ...inputs,
+                commuContent: strippedPost, // HTML 태그를 제거한 내용을 전송
             });
-            setCommuContent('');
-            navigate('/projectdetail', {
-                // selectedTab 스테이트를 넘겨준다.
-                state: { selectedTab: 2 },
-            })
+            try {
+                // 서버로 데이터 전송
+                const response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/projects/${projectId}/communities`,
+                    {
+                        ...inputs,
+                        commuContent: strippedPost, // HTML 태그를 제거한 내용을 전송
+                    },
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token"),
+                        },
+                    },
+                );
+                alert('게시글이 등록되었습니다!');
+                console.log(response.data);
+                navigate(`/projects/${projectId}`, {
+                    // selectedTab 스테이트를 넘겨준다.
+                    state: { selectedTab: 2 },
+                });
+            } catch (err) {
+                console.error(err);
+            }
         } else {
             alert('내용을 입력해주세요!');
         }
@@ -64,7 +86,7 @@ const CommuPostWrite = () => {
         navigate('/projectdetail', {
             // selectedTab 스테이트를 넘겨준다.
             state: { selectedTab: 2 },
-        })
+        });
     };
 
     return (
@@ -95,7 +117,7 @@ const CommuPostWrite = () => {
                     커뮤니티 게시글 작성
                 </Typography>
                 <Typography variant="body1" color="initial">
-                    커뮤니티 글 작성 시에는 솔직하고 가볍게 작성하되, 지나친 욕설이나 비방은 지양해주세요 !
+                    커뮤니티 글 작성 시에는 솔직하고 가볍게 작성하되, 지나친 욕설이나 비방은 지양해주세요!
                 </Typography>
 
                 <ReactQuill
@@ -120,4 +142,4 @@ const CommuPostWrite = () => {
     );
 };
 
-export default CommuPostWrite; 
+export default CommuPostWrite;
