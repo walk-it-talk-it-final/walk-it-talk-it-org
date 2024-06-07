@@ -361,6 +361,7 @@ exports.getNotices = async (req, res, next) => {
     // 해당 프로젝트의 공지사항 목록을 불러옴
     const notices = await Projectnotice.findAll({
       where: { ProjectProjectId: projectId },
+      order: [["createdAt", "DESC"]],
     });
 
     res.json({
