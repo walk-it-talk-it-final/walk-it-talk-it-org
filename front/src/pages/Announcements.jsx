@@ -29,7 +29,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   const subColor4 = theme.palette.subColor4.main;
   const navigate = useNavigate();
 
-  const [notices, setNotices] = useState();
+  const [notices, setNotices] = useState([]);
 
   const getAnnouncementsData = async () => {
     try {
@@ -45,7 +45,14 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
 
   useEffect(() => {
     getAnnouncementsData();
-  }, []);
+  }, [projectId]);
+
+  useEffect(() => {
+    if (notices) {
+      const sorted = sortedAnnouncements();
+      setNotices(sorted);
+    }
+  }, [sortOrder]);
 
   // 공지사항 작성 페이지로 이동 (동그란 펜 버튼)
   const handleButtonClick = () => {
@@ -65,24 +72,22 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   };
 
   const sortedAnnouncements = () => {
-    const arr = [...notices];
-    arr.sort((a, b) => {
+    return [...notices].sort((a, b) => {
       if (sortOrder === "newest") {
-        return new Date(b.date) - new Date(a.date);
+        return new Date(b.noticeUploadDate) - new Date(a.noticeUploadDate);
       } else {
-        return new Date(a.date) - new Date(b.date);
+        return new Date(a.noticeUploadDate) - new Date(b.noticeUploadDate);
       }
     });
-    setNotices([...arr]);
   };
 
   const startIndex = (currentPage - 1) * announcementsPerPage;
-  const currentAnnouncements = notices?.slice(
+  const currentAnnouncements = sortedAnnouncements().slice(
     startIndex,
     startIndex + announcementsPerPage,
   );
 
-  const totalPages = Math.ceil(notices?.length / announcementsPerPage);
+  const totalPages = Math.ceil(notices.length / announcementsPerPage);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -90,7 +95,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   };
 
   return (
-    notices && (
+    notices.length > 0 && (
       <Box>
         <Box
           sx={{
@@ -104,15 +109,32 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
             공지사항
           </Typography>
           {!selectedAnnouncement && (
-            <Select
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              displayEmpty
-              sx={{ minWidth: 100, maxHeight: 40 }}
-            >
-              <MenuItem value="newest">최신순</MenuItem>
-              <MenuItem value="oldest">오래된 순</MenuItem>
-            </Select>
+            <div>
+              <Button
+                variant="contained"
+                color="mainColor"
+                sx={{
+                  color: "white",
+                  width: 30,
+                  maxHeight: 40,
+                  marginRight: 1,
+                  marginBottom: 0.5,
+                  padding: 1.2 
+                }}
+                onClick={() => handleButtonClick()}
+              >
+                <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
+              </Button>
+              <Select
+                value={sortOrder}
+                onChange={handleSortOrderChange}
+                displayEmpty
+                sx={{ minWidth: 100, maxHeight: 40 }}
+              >
+                <MenuItem value="newest">최신순</MenuItem>
+                <MenuItem value="oldest">오래된 순</MenuItem>
+              </Select>
+            </div>
           )}
         </Box>
         <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
@@ -123,15 +145,15 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
               component="h2"
               sx={{ fontWeight: "bold", mb: 2 }}
             >
-              {selectedAnnouncement?.noticeTitle}
+              {selectedAnnouncement.noticeTitle}
             </Typography>
             <Typography variant="body2" sx={{ color: "#888", mb: 2 }}>
-              {formatDate(selectedAnnouncement?.noticeUploadDate)}
+              {formatDate(selectedAnnouncement.noticeUploadDate)}
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: selectedAnnouncement?.noticeContent,
+                  __html: selectedAnnouncement.noticeContent,
                 }}
               />
             </Typography>
@@ -166,38 +188,15 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                     component="h3"
                     sx={{ fontWeight: "bold" }}
                   >
-                    {announcement?.noticeTitle}
+                    {announcement.noticeTitle}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#888", mb: 1 }}>
-                    {formatDate(announcement?.noticeUploadDate)}
+                    {formatDate(announcement.noticeUploadDate)}
                   </Typography>
                 </Box>
                 <Divider sx={{ borderColor: "#e0e0e0" }} />
               </Box>
             ))}
-
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 120,
-                marginLeft: 43,
-                zIndex: 1000,
-              }}
-            >
-              <Button
-                variant="contained"
-                color="mainColor"
-                sx={{
-                  color: "white",
-                  width: 40,
-                  height: 60,
-                  borderRadius: 100,
-                }}
-                onClick={() => handleButtonClick()}
-              >
-                <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
-              </Button>
-            </Box>
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <IconButton
                 onClick={() => handlePageChange(1)}
