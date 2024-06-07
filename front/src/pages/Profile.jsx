@@ -5,16 +5,31 @@ import { MyProfile } from "../components/MyProfile";
 import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
-    const token = localStorage.getItem("token");
-    const userProfile = jwtDecode(token);
+  const [userProfile, setUserProfile] = useState(null);
+  const { loginUser } = useAuth();
 
-    return (
-        <>
-            {userProfile &&
-                <MyProfile user={userProfile} />
-            }
-        </>
-    );
-}
+  useEffect(() => {
+    const updateUserProfile = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/users/${loginUser.id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          },
+        );
+        console.log(res.data);
+        setUserProfile(res.data.payload);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    updateUserProfile();
+  }, [loginUser.id]);
+
+  return <>{userProfile && <MyProfile user={userProfile} />}</>;
+};
 
 export default Profile;

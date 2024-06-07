@@ -2,6 +2,10 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+// file 업로드
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // 회원가입
 exports.join = async (req, res, next) => {
@@ -232,5 +236,37 @@ exports.googleLogin = async (req, res, next) => {
     })(req, res, next);
   } catch (err) {
     return next(err);
+  }
+};
+
+// 프로필 이미지, 닉네임 수정
+exports.modifyProfile = async (req, res, next) => {
+  const userId = req.user.id;
+  const { nickname } = req.body;
+  const profileImg = req.file.filename;
+
+  try {
+    const user = await User.findByPk(userId);
+    // user 없을 경우 404 에러 반환
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // 바뀐 값으로 수정
+    if (nickname) {
+      user.nickname = nickname;
+    }
+    if (profileImg) {
+      user.profileImage = `/uploads/${profileImg}`;
+    }
+
+    await user.save();
+    res.json({
+      code: 200,
+      message: "modify success",
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 };
