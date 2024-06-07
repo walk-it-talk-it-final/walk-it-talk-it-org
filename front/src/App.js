@@ -24,7 +24,7 @@ import FundingComplete from "./pages/FundingComplete";
 import Settings from "./pages/Settings";
 import ProjectExplain from "./pages/ProjectExplain";
 import FundingProgress from "./pages/FundingProgress";
-import CommuPostWirte from "./components/write/CommuPostWirte";
+import CommuPostWrite from "./components/write/CommuPostWrite";
 import AnnouncePostWrite from "./components/write/AnnouncePostWrite";
 import ReviewWrite from "./components/write/ReviewWrite";
 import { CheckoutPage } from "./components/toss/Checkout";
@@ -63,10 +63,12 @@ function App() {
             element={<AnnouncePostWrite />}
           />
           <Route
-            path="/projectdetail/community/write"
-            element={<CommuPostWirte />}
+            path="/projectdetail/communities/write/:id"
+            element={<CommuPostWrite />}
           />
-          <Route path="/projectdetail/review/write" element={<ReviewWrite />} />
+          <Route 
+            path="/projectdetail/reviews/write/:id" 
+            element={<ReviewWrite />} />
           <Route path="/funding" element={<FundingProgress />} />
           <Route path="/funding/checkout" element={<CheckoutPage />} />
           <Route path="/funding/success" element={<SuccessPage />} />

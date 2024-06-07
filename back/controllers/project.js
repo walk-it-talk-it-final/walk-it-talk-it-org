@@ -2,6 +2,9 @@ const { Project, Hashtag, User, Reward } = require("../models");
 const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
 const Projectnotice = require("../models/projectnotice");
+const Community = require("../models/community");
+const Reply = require("../models/reply");
+const Review = require("../models/review");
 const op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
@@ -370,3 +373,88 @@ exports.getNotices = async (req, res, next) => {
     next(err);
   }
 };
+
+// 커뮤니티 게시글 등록
+exports.uploadPost = async (req, res, next) => {
+  try {
+    const postInput = req.body;
+
+    postInput.ProjectProjectId = req.params.id;
+    postInput.UserId = req.user.id;
+
+    // 게시글 생성
+    const post = await Community.create(postInput);
+
+    res.json({
+      code: 200,
+      payload: post,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 커뮤니티 게시글 조회
+exports.getPosts = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 공지사항 목록을 불러옴
+    const posts = await Community.findAll({
+      where: { ProjectProjectId: projectId },
+      include: [{
+        model: User,
+        attributes: ['nickname', 'profileImage'], // 필요한 유저 정보 선택
+      }],
+    });
+
+    res.json({
+      code: 200,
+      payload: posts,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 후기 등록
+exports.uploadReview = async (req, res, next) => {
+  try {
+    const reviewInput = req.body;
+
+    reviewInput.ProjectProjectId = req.params.id;
+    reviewInput.UserId = req.user.id;
+
+    // 후기 생성
+    const review = await Review.create(reviewInput);
+
+    res.json({
+      code: 200,
+      payload: review,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+// 후기 조회
+exports.getReviews = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    // 해당 프로젝트의 후기 목록을 불러옴
+    const reviews = await Review.findAll({
+      where: { ProjectProjectId: projectId },
+    });
+
+    res.json({
+      code: 200,
+      payload: reviews,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
