@@ -13,6 +13,10 @@ const {
   getProjectDetail,
   uploadNotice,
   getNotices,
+  uploadPost,
+  getPosts,
+  uploadReview,
+  getReviews
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -67,7 +71,19 @@ router.get("/rewards/:id", getRewards);
 // GET /api/projects/:id/notices - 특정 게시물의 공지사항 조회
 router.get('/:id/notices', getNotices);
 
-// GET /api/projects/:id/notices - 특정 게시물의 공지사항 등록
+// POST /api/projects/:id/notices - 특정 게시물의 공지사항 등록
 router.post('/:id/notices', verifyToken, uploadNotice);
+
+// GET /api/projects/:id/communities - 특정 게시물의 커뮤니티 게시글 조회
+router.get('/:id/communities', getPosts);
+
+// POST /api/projects/:id/communities - 특정 게시물의 커뮤니티 게시글 등록
+router.post('/:id/communities', verifyToken, uploadPost);
+
+// GET /api/projects/:id/reviews - 특정 게시물의 커뮤니티 게시글 조회
+router.get('/:id/reviews', getReviews);
+
+// POST /api/projects/:id/reviews - 특정 게시물의 커뮤니티 게시글 등록
+router.post('/:id/reviews', verifyToken, uploadReview);
 
 module.exports = router;

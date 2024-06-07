@@ -4,10 +4,6 @@ class Review extends Sequelize.Model {
   static initiate(sequelize) {
     Review.init(
       {
-        reviewTitle: {
-          type: Sequelize.TEXT,
-          allowNull: false,
-        },
         reviewContent: {
           type: Sequelize.TEXT,
           allowNull: false,

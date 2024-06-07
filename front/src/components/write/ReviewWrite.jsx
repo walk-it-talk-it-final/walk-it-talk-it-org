@@ -1,9 +1,13 @@
-import React from 'react';
+// ReviewWrite.jsx
+
+import React, { useState } from 'react';
 import { Typography, Button, Box, FormControl, Select, MenuItem } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 
 const modules = {
     toolbar: [
@@ -45,29 +49,51 @@ const rewardOptions = [
     { value: '리워드 3', label: '리워드 3' },
 ];
 
-const ReviewWrite = () => {
+const ReviewWrite = ({ inputs, setInputs }) => {
     const navigate = useNavigate();
-    const [reviewContent, setReviewContent] = React.useState('');
-    const [rewardOption, setRewardOption] = React.useState('');
+    const [reviewContent, setReviewContent] = useState('');
+    const [rewardOption, setRewardOption] = useState('');
+
+    const params = useParams();
+    const projectId = params.id;
 
     const handleChange = (e) => {
         setRewardOption(e.target.value);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const strippedPost = reviewContent.replace(/<(.|\n)*?>/g, '').trim();
 
         if (strippedPost !== '') {
-            alert('게시글이 등록되었습니다!');
             console.log({
-                reviewContent,
-                rewardOption,
+                ...inputs,
+                rewardOption, // 리워드 옵션 출력
+                reviewContent, // 리뷰 내용 출력
             });
-            setReviewContent('');
-            setRewardOption('');
-            navigate('/projectdetail', {
-                state: { selectedTab: 3 },
-            });
+            try {
+                // 서버로 데이터 전송
+                const response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/projects/${projectId}/reviews`,
+                    {
+                        ...inputs,
+                        rewardOption,
+                        reviewContent
+                    }, // 각각의 내용 전송
+                    {
+                        headers: {
+                            Authorization: localStorage.getItem("token"),
+                        },
+                    },
+                );
+                alert('프로젝트 후기가 등록되었습니다!');
+                console.log(response.data);
+                navigate(`/projects/${projectId}`, {
+                    // selectedTab 스테이트를 넘겨준다.
+                    state: { selectedTab: 3 },
+                });
+            } catch (err) {
+                console.error(err);
+            }
         } else {
             alert('내용을 입력해주세요!');
         }
