@@ -8,7 +8,7 @@ exports.getUser = async (req, res, next) => {
     });
     res.json({
       code: 200,
-      payload: user || {},
+      payload: user,
     });
   } catch (err) {
     console.error(err);
