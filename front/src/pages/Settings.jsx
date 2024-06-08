@@ -121,7 +121,7 @@ const Settings = () => {
           >
             <Avatar
               alt="프로필 이미지"
-              src={profilePreview}
+              src={`http://localhost:8000/${profilePreview}`}
               sx={{ width: 90, height: 90, border: "1px solid grey" }}
             />
             <input
