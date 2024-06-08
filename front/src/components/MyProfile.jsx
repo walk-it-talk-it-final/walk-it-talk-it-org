@@ -8,14 +8,23 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import CardList from "./layouts/CardList";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../api/services/user";
+import Button from "@mui/material/Button";
+import Swal from "sweetalert2";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 export const MyProfile = ({ user }) => {
+  const token = localStorage.getItem("token");
+  const { loginUser } = useAuth();
+
   const [followerNum, setFollowerNum] = useState(0);
   const [followingNum, setFollowingNum] = useState(0);
 
   const [followingList, setFollowingList] = useState();
-
   const [followerList, setFollowerList] = useState();
+
+  // 후원한 프로젝트 개수
+  const [ingProjectCount, setIngProjectCount] = useState(0);
 
   const theme = useTheme();
   const mainColor = theme.palette.mainColor.main;
@@ -33,9 +42,27 @@ export const MyProfile = ({ user }) => {
     setFollowingList(res.payload);
   };
 
+  const getIngProject = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users/ingprojects/${loginUser.id}`,
+        {
+          headers: { Authorization: token },
+        },
+      );
+
+      if (res.data.payload) {
+        setIngProjectCount(res.data.payload.length);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     getFollowingList();
     getFollowerList();
+    getIngProject();
   }, []);
 
   // 각 페이지로 이동하는 함수
@@ -155,7 +182,7 @@ export const MyProfile = ({ user }) => {
                 id="myFundingNum"
                 onClick={goTofundingProjectList}
               >
-                3
+                {ingProjectCount}
               </Typography>{" "}
               {/* 펀딩한 프로젝트 수 */}
               <Typography
