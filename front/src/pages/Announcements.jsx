@@ -29,7 +29,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   const subColor4 = theme.palette.subColor4.main;
   const navigate = useNavigate();
 
-  const [notices, setNotices] = useState([]);
+  const [notices, setNotices] = useState();
 
   const getAnnouncementsData = async () => {
     try {
@@ -45,14 +45,14 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
 
   useEffect(() => {
     getAnnouncementsData();
-  }, [projectId]);
+  }, []);
 
-  useEffect(() => {
-    if (notices) {
-      const sorted = sortedAnnouncements();
-      setNotices(sorted);
-    }
-  }, [sortOrder]);
+  // useEffect(() => {
+  //   if (notices) {
+  //     const sorted = sortedAnnouncements();
+  //     setNotices(sorted);
+  //   }
+  // }, [sortOrder]);
 
   // 공지사항 작성 페이지로 이동 (동그란 펜 버튼)
   const handleButtonClick = () => {
@@ -86,7 +86,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
     );
   }, [notices]);
 
-  const totalPages = Math.ceil(notices.length / announcementsPerPage);
+  const totalPages = Math.ceil(notices?.length / announcementsPerPage);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -108,31 +108,31 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
         </Typography>
         {!selectedAnnouncement && (
           <div>
-          <Button
-                variant="contained"
-                color="mainColor"
-                sx={{
-                  color: "white",
-                  width: 30,
-                  maxHeight: 40,
-                  marginRight: 1,
-                  marginBottom: 0.5,
-                  padding: 1.2 
-                }}
-                onClick={() => handleButtonClick()}
-              >
-                <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
-              </Button>
-          <Select
-            value={sortOrder}
-            onChange={(e) => sortedAnnouncements(e)}
-            displayEmpty
-            sx={{ minWidth: 100, maxHeight: 40 }}
-          >
-            <MenuItem value="newest">최신순</MenuItem>
-            <MenuItem value="oldest">오래된 순</MenuItem>
-          </Select>
-        </div>
+            <Button
+              variant="contained"
+              color="mainColor"
+              sx={{
+                color: "white",
+                width: 30,
+                maxHeight: 40,
+                marginRight: 1,
+                marginBottom: 0.5,
+                padding: 1.2,
+              }}
+              onClick={() => handleButtonClick()}
+            >
+              <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
+            </Button>
+            <Select
+              value={sortOrder}
+              onChange={(e) => sortedAnnouncements(e)}
+              displayEmpty
+              sx={{ minWidth: 100, maxHeight: 40 }}
+            >
+              <MenuItem value="newest">최신순</MenuItem>
+              <MenuItem value="oldest">오래된 순</MenuItem>
+            </Select>
+          </div>
         )}
       </Box>
       <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
@@ -205,7 +205,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                     {announcement.noticeTitle}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#888", mb: 1 }}>
-                    {formatDate(announcement.noticeUploadDate)}
+                    {formatDate(announcement?.noticeUploadDate)}
                   </Typography>
                 </Box>
                 <Divider sx={{ borderColor: "#e0e0e0" }} />
@@ -221,8 +221,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
               marginLeft: 43,
               zIndex: 1000,
             }}
-          >
-          </Box>
+          ></Box>
           {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <IconButton
               onClick={() => handlePageChange(1)}
