@@ -65,6 +65,29 @@ export const MyProfile = ({ user }) => {
     getIngProject();
   }, []);
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
+  const { logout } = useAuth();
+  const handleLogout = () => {
+    logout(() => {
+      Toast.fire({
+        icon: "success",
+        title: "정상적으로 로그아웃 되었습니다.",
+      });
+      navigate("/");
+    });
+  };
+
   // 각 페이지로 이동하는 함수
   const goTofundingProjectList = () => navigate("/profile/myfunding");
   const goToFollowingList = () => navigate("/profile/following");
@@ -154,6 +177,14 @@ export const MyProfile = ({ user }) => {
               >
                 {user.nickname}
               </Typography>
+
+              <Button
+                variant="outlined"
+                color="mainColor"
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Button>
             </div>
           </div>
 

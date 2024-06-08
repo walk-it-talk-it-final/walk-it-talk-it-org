@@ -9,17 +9,35 @@ import SearchIcon from "@mui/icons-material/Search";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 function Header() {
   const theme = useTheme(); // 테마 접근
   const mainColor = theme.palette.mainColor.main; // mainColor 가져오기
 
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
 
   // 각 페이지로 이동하는 함수
   const goToSearch = () => navigate("/search");
-  const goToChat = () => navigate("/chat");
-  const goToProfile = () => navigate("/profile");
+
+  // 채팅 페이지 이동 시 사용자 로그인 검사
+  const handleChatCllick = () => {
+    if (!loginUser) {
+      navigate("/signin");
+    } else {
+      navigate("/chat");
+    }
+  };
+
+  // 프로필 페이지 이동 시 사용자 로그인 검사
+  const handleProfileClick = () => {
+    if (!loginUser) {
+      navigate("/signin");
+    } else {
+      navigate("/profile");
+    }
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -51,7 +69,7 @@ function Header() {
               marginLeft: "16px",
               cursor: "pointer",
             }}
-            onClick={goToChat}
+            onClick={handleChatCllick}
           />
           {/* 프로필 */}
           {/* 프로필 페이지 만들어지면 url 연결 */}
@@ -61,7 +79,7 @@ function Header() {
               marginLeft: "16px",
               cursor: "pointer",
             }}
-            onClick={goToProfile}
+            onClick={handleProfileClick}
           />
         </Toolbar>
       </AppBar>

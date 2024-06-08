@@ -47,6 +47,13 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
     getAnnouncementsData();
   }, []);
 
+  // useEffect(() => {
+  //   if (notices) {
+  //     const sorted = sortedAnnouncements();
+  //     setNotices(sorted);
+  //   }
+  // }, [sortOrder]);
+
   // 공지사항 작성 페이지로 이동 (동그란 펜 버튼)
   const handleButtonClick = () => {
     navigate(`/projectdetail/announcements/write/${projectId}`);
@@ -100,15 +107,32 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
           공지사항
         </Typography>
         {!selectedAnnouncement && (
-          <Select
-            value={sortOrder}
-            onChange={(e) => sortedAnnouncements(e)}
-            displayEmpty
-            sx={{ minWidth: 100, maxHeight: 40 }}
-          >
-            <MenuItem value="newest">최신순</MenuItem>
-            <MenuItem value="oldest">오래된 순</MenuItem>
-          </Select>
+          <div>
+            <Button
+              variant="contained"
+              color="mainColor"
+              sx={{
+                color: "white",
+                width: 30,
+                maxHeight: 40,
+                marginRight: 1,
+                marginBottom: 0.5,
+                padding: 1.2,
+              }}
+              onClick={() => handleButtonClick()}
+            >
+              <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
+            </Button>
+            <Select
+              value={sortOrder}
+              onChange={(e) => sortedAnnouncements(e)}
+              displayEmpty
+              sx={{ minWidth: 100, maxHeight: 40 }}
+            >
+              <MenuItem value="newest">최신순</MenuItem>
+              <MenuItem value="oldest">오래된 순</MenuItem>
+            </Select>
+          </div>
         )}
       </Box>
       <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
@@ -178,7 +202,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                       overflowWrap: "break-word",
                     }}
                   >
-                    {announcement?.noticeTitle}
+                    {announcement.noticeTitle}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#888", mb: 1 }}>
                     {formatDate(announcement?.noticeUploadDate)}
@@ -197,21 +221,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
               marginLeft: 43,
               zIndex: 1000,
             }}
-          >
-            <Button
-              variant="contained"
-              color="mainColor"
-              sx={{
-                color: "white",
-                width: 40,
-                height: 60,
-                borderRadius: 100,
-              }}
-              onClick={() => handleButtonClick()}
-            >
-              <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
-            </Button>
-          </Box>
+          ></Box>
           {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <IconButton
               onClick={() => handlePageChange(1)}

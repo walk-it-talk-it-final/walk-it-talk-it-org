@@ -6,10 +6,6 @@ import Edit from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const PostDetail = ({ selectedPost, onBackClick, onCommentChange, onCommentSubmit, anchorEl, onMenuOpen, onMenuClose, onActionChange, newComment, comments, mainColor }) => {
-    const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-        return new Date(dateString).toLocaleDateString(undefined, options);
-    };
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyreplyContent: 'flex-end', mt: 2, mb: 2 }}>
@@ -41,7 +37,7 @@ const PostDetail = ({ selectedPost, onBackClick, onCommentChange, onCommentSubmi
                                 {selectedPost.User.nickname}
                             </Typography>
                             <Typography variant="body1" sx={{ color: 'text.secondary' }} id="commuUploadDate">
-                                {formatDate(selectedPost.commuUploadDate)}
+                                {new Date(selectedPost.commuUploadDate).toLocaleString()}
                             </Typography>
                         </div>
                     </div>
