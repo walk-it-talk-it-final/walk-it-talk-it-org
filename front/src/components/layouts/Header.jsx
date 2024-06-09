@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 function Header() {
@@ -45,13 +45,18 @@ function Header() {
       <AppBar component="nav" sx={{ backgroundColor: "#fff" }}>
         <Toolbar>
           {/* 로고 이미지 완성되면 이미지 대체 */}
-          <Typography
+          <div style={{ flexGrow: 1 }}>
+            <Link to="/">
+              <img src={"/logo.png"} alt="logo" />
+            </Link>
+          </div>
+          {/* <Typography
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, color: "#000" }}
           >
             LOGO
-          </Typography>
+          </Typography> */}
           {/* 검색 */}
           {/* 검색 페이지 만들어지면 url 연결 */}
           <SearchIcon
