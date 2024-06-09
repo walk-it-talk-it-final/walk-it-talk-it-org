@@ -484,3 +484,28 @@ exports.getReviews = async (req, res, next) => {
     next(err);
   }
 };
+
+// 프로젝트 후원자 조회
+exports.getSponsors = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const sponsors = await Guestinfo.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["nickname", "profileImage"], // 필요한 유저 정보 선택
+        },
+        {
+          model: Reward,
+        },
+      ],
+    });
+    res.json({
+      code: 200,
+      payload: sponsors,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
