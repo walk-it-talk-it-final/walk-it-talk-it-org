@@ -32,6 +32,7 @@ export const MyProfile = ({ user }) => {
   const mainColor = theme.palette.mainColor.main;
   const navigate = useNavigate();
 
+  // 팔로워하는 유저 불러오기
   const getFollowerList = async () => {
     const id = user.id;
     const res = await userApi.getFollowers(id);
@@ -39,6 +40,7 @@ export const MyProfile = ({ user }) => {
     setFollowerNum(res.payload.length);
   };
 
+  // 팔로잉하는 유저 불러오기
   const getFollowingList = async () => {
     const id = user.id;
     const res = await userApi.getFollowings(id);

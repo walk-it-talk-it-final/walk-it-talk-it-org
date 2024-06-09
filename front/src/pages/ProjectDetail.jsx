@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   Button,
@@ -26,6 +26,7 @@ import Community from "./Community.jsx";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { projectApi } from "../api/services/project.js";
+import { userApi } from "../api/services/user.js";
 
 //프로젝트 이미지
 const ProjectImage = ({ content }) => {
@@ -212,13 +213,68 @@ const ProjectHeader = ({
 );
 
 // 프로젝트 제작자
-const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followers, setfollows] = useState(426);
+const UserProfile = ({ user, satisfaction, reviewCount, mainColor }) => {
+  const { loginUser } = useAuth();
+  const [myFollowing, setMyFollowing] = useState();
+  const [followers, setFollowers] = useState(0);
 
-  const handleFollow = () => {
-    setIsFollowing(!isFollowing);
-    setfollows(isFollowing ? followers - 1 : followers + 1);
+  useEffect(() => {
+    getFollowings();
+    getFollwerNum();
+  }, []);
+
+  // 사용자가 팔로우하는 사람들 조회
+  const getFollowings = useCallback(async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/users/followings/${loginUser?.id}`,
+      {},
+    );
+    setMyFollowing(res.data.payload);
+  }, [loginUser]);
+
+  // 프로젝트 관리자를 팔로우하는 사람들 조회
+  const getFollwerNum = async () => {
+    const id = user.id;
+    const res = await userApi.getFollowers(id);
+    setFollowers(res.payload.length);
+  };
+
+  // 프로젝트 관리자 팔로우
+  const followUser = async (id) => {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/users/follow`,
+      {
+        id,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      },
+    );
+    if (res.data.code === 200) {
+      alert(res.data.message);
+      getFollowings();
+    }
+  };
+
+  // 프로젝트 관리자 언팔로우
+  const unfollowUser = async (id) => {
+    const res = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/users/follow`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+        data: {
+          id,
+        },
+      },
+    );
+    if (res.data.code === 200) {
+      alert(res.data.message);
+      getFollowings();
+    }
   };
 
   return (
@@ -239,34 +295,56 @@ const UserProfile = ({ nickname, satisfaction, reviewCount, mainColor }) => {
       <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
         <Avatar
           alt="User"
-          src="/static/images/avatar/1.jpg"
+          src={`http://localhost:8000/${user.profileImage}`}
           sx={{ width: 56, height: 56, mr: 2 }}
         />
         <Box sx={{ flexGrow: 1 }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "16px" }}>
-            {nickname}
+            {user.nickname}
           </Typography>
           <Typography sx={{ color: mainColor, mb: 1, fontSize: "14px" }}>
             {followers}명이 팔로우 중
           </Typography>
         </Box>
         <Button
-          variant={isFollowing ? "outlined" : "contained"}
-          onClick={handleFollow}
+          variant={
+            myFollowing?.findIndex((f) => f.id === user.id) !== -1
+              ? "outlined"
+              : "contained"
+          }
+          onClick={
+            myFollowing?.findIndex((f) => f.id === user.id) !== -1
+              ? () => unfollowUser(user.id)
+              : () => followUser(user.id)
+          }
           sx={{
-            backgroundColor: isFollowing ? "white" : mainColor,
-            color: isFollowing ? mainColor : "white",
+            backgroundColor:
+              myFollowing?.findIndex((f) => f.id === user.id) !== -1
+                ? "white"
+                : mainColor,
+            color:
+              myFollowing?.findIndex((f) => f.id === user.id) !== -1
+                ? mainColor
+                : "white",
             fontWeight: "bold",
             ml: "auto",
             borderColor: mainColor,
             ":hover": {
-              backgroundColor: isFollowing ? "white" : mainColor,
-              color: isFollowing ? mainColor : "white",
+              backgroundColor:
+                myFollowing?.findIndex((f) => f.id === user.id) !== -1
+                  ? "white"
+                  : mainColor,
+              color:
+                myFollowing?.findIndex((f) => f.id === user.id) !== -1
+                  ? mainColor
+                  : "white",
               borderColor: mainColor,
             },
           }}
         >
-          {isFollowing ? "팔로우 중" : "+ 팔로우"}
+          {myFollowing?.findIndex((f) => f.id === user.id) !== -1
+            ? "팔로우 중"
+            : "+ 팔로우"}
         </Button>
       </Box>
       <Typography
@@ -399,6 +477,10 @@ const ProjectDetail = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [sortOrder, setSortOrder] = useState("newest");
   const [filterOption, setFilterOption] = useState("all");
+  // 좋아요 버튼 누르기
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const loadProject = async () => {
@@ -407,6 +489,7 @@ const ProjectDetail = () => {
           `${process.env.REACT_APP_API_URL}/projects/${id}`,
         );
         setProject(response.data.payload);
+        setLikes(response.data.payload.likeCount);
         console.log(response.data.payload);
       } catch (err) {
         console.error(err);
@@ -427,10 +510,6 @@ const ProjectDetail = () => {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
-
-  // 좋아요 버튼 누르기
-  const [liked, setLiked] = useState(false);
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (loginUser?.id) {
@@ -457,6 +536,8 @@ const ProjectDetail = () => {
   const handleLike = async () => {
     const newLikedStatus = !liked;
     setLiked(newLikedStatus);
+    setLikes((prevLikes) => (newLikedStatus ? prevLikes + 1 : prevLikes - 1));
+    console.log(liked);
 
     try {
       await axios.post(
@@ -476,6 +557,7 @@ const ProjectDetail = () => {
       console.error(error);
       // 서버 요청이 실패하면 liked 상태를 다시 원래대로 돌림
       setLiked(!newLikedStatus);
+      setLikes((prevLikes) => (newLikedStatus ? prevLikes - 1 : prevLikes + 1));
     }
   };
 
@@ -554,7 +636,7 @@ const ProjectDetail = () => {
               maker={project.UserId}
             />
             <UserProfile
-              nickname={project?.User.nickname}
+              user={project?.User}
               followers="357"
               satisfaction="5.0"
               reviewCount="10"
