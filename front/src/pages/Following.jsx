@@ -66,9 +66,7 @@ const Following = () => {
             {followingList.map((user) => (
               <Follow
                 key={user.id}
-                id={user.id}
-                name={user.nickname}
-                avatarUrl={user.profileImage}
+                user={user}
                 initiallyFollowing={true}
                 onToggleFollow={handleFollowToggle}
               />

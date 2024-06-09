@@ -58,9 +58,7 @@ const Follower = () => {
             {followerList.map((user) => (
               <Follow
                 key={user.id}
-                id={user.id}
-                name={user.nickname}
-                avatarUrl={user.profileImage}
+                user={user}
                 initiallyFollowing={user.following} // 초기 팔로잉 상태를 사용자 데이터에 따라 설정
                 onToggleFollow={handleFollowToggle}
               />
