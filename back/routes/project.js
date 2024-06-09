@@ -17,6 +17,7 @@ const {
   getPosts,
   uploadReview,
   getReviews,
+  getSponsors,
 } = require("../controllers/project");
 const router = express.Router();
 const { verifyToken } = require("../middlewares");
@@ -74,16 +75,18 @@ router.get("/:id/notices", getNotices);
 router.post("/:id/notices", verifyToken, uploadNotice);
 
 // GET /api/projects/:id/communities - 특정 게시물의 커뮤니티 게시글 조회
-router.get('/:id/communities', getPosts);
+router.get("/:id/communities", getPosts);
 
 // POST /api/projects/:id/communities - 특정 게시물의 커뮤니티 게시글 등록
-router.post('/:id/communities', verifyToken, uploadPost);
+router.post("/:id/communities", verifyToken, uploadPost);
 
 // GET /api/projects/:id/reviews - 특정 게시물의 후기 조회
-router.get('/:id/reviews', getReviews);
+router.get("/:id/reviews", getReviews);
 
 // POST /api/projects/:id/reviews - 특정 게시물의 후기 등록
-router.post('/:id/reviews', verifyToken, uploadReview);
+router.post("/:id/reviews", verifyToken, uploadReview);
 
+// GET /api/projects/:id/sponsors - 특정 게시물의 후원자 조회
+router.get("/:id/sponsors", verifyToken, getSponsors);
 
 module.exports = router;
