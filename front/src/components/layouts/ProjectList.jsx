@@ -87,7 +87,7 @@ const ProjectList = ({ project }) => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/projects/rewards/${project.projectId}`,
         );
-        const rewards = response.data;
+        const rewards = response.data.payload;
         console.log(rewards);
 
         if (rewards && rewards.length > 0) {

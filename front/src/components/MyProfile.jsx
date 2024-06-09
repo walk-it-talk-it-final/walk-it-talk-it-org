@@ -12,16 +12,18 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
+import { ClassSharp } from "@mui/icons-material";
 
 export const MyProfile = ({ user }) => {
   const token = localStorage.getItem("token");
   const { loginUser } = useAuth();
 
+  // 팔로워 수
   const [followerNum, setFollowerNum] = useState(0);
   const [followingNum, setFollowingNum] = useState(0);
 
-  const [followingList, setFollowingList] = useState();
   const [followerList, setFollowerList] = useState();
+  const [followingList, setFollowingList] = useState();
 
   // 후원한 프로젝트 개수
   const [ingProjectCount, setIngProjectCount] = useState(0);
@@ -34,12 +36,14 @@ export const MyProfile = ({ user }) => {
     const id = user.id;
     const res = await userApi.getFollowers(id);
     setFollowerList(res.payload);
+    setFollowerNum(res.payload.length);
   };
 
   const getFollowingList = async () => {
     const id = user.id;
     const res = await userApi.getFollowings(id);
     setFollowingList(res.payload);
+    setFollowingNum(res.payload.length);
   };
 
   const getIngProject = async () => {
@@ -90,8 +94,10 @@ export const MyProfile = ({ user }) => {
 
   // 각 페이지로 이동하는 함수
   const goTofundingProjectList = () => navigate("/profile/myfunding");
-  const goToFollowingList = () => navigate("/profile/following");
-  const goToFollowerList = () => navigate("/profile/follower");
+  const goToFollowingList = () =>
+    navigate("/profile/following", { state: { followingList } });
+  const goToFollowerList = () =>
+    navigate("/profile/follower", { state: { followerList } });
   const goToMyProject = () => navigate("/profile/myproject");
   const goToAddProject = () => navigate("/addmaker");
   const goToLikeProject = () => navigate("/profile/likeproject");
@@ -242,7 +248,7 @@ export const MyProfile = ({ user }) => {
                 onClick={goToFollowingList}
                 num={followingNum}
               >
-                5
+                {followingNum}
               </Typography>{" "}
               {/* 팔로잉 수 */}
               <Typography
@@ -271,7 +277,7 @@ export const MyProfile = ({ user }) => {
                 onClick={goToFollowerList}
                 num={followerNum}
               >
-                7
+                {followerNum}
               </Typography>{" "}
               {/* 팔로워 수 */}
               <Typography

@@ -110,9 +110,7 @@ exports.getFollowers = async (req, res, next) => {
       where: { id: req.params.id },
     });
     if (user) {
-      const followers = await user.getFollowers({
-        attributes: ["id", "nickname", "email", "provider"],
-      });
+      const followers = await user.getFollowers({});
       res.json({
         code: 200,
         payload: followers,
@@ -136,9 +134,7 @@ exports.getFollowings = async (req, res, next) => {
       where: { id: req.params.id },
     });
     if (user) {
-      const followings = await user.getFollowings({
-        attributes: ["id", "nickname", "email", "provider"],
-      });
+      const followings = await user.getFollowings({});
       res.json({
         code: 200,
         payload: followings,
