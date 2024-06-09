@@ -143,7 +143,6 @@ exports.getProjectDetail = async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["id", "nickname"], // 게시물 작성자 정보(아이디, 닉네임) 포함
         },
       ],
     });
@@ -343,7 +342,7 @@ exports.getRewards = async (req, res, next) => {
       payload: rewards,
     });
   } catch (error) {
-    console.error('Error fetching reward options:', error);
+    console.error("Error fetching reward options:", error);
     next(error);
   }
 };
@@ -417,10 +416,12 @@ exports.getPosts = async (req, res, next) => {
     // 해당 프로젝트의 공지사항 목록을 불러옴
     const posts = await Community.findAll({
       where: { ProjectProjectId: projectId },
-      include: [{
-        model: User,
-        attributes: ['nickname', 'profileImage'], // 필요한 유저 정보 선택
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ["nickname", "profileImage"], // 필요한 유저 정보 선택
+        },
+      ],
     });
 
     res.json({
@@ -442,8 +443,8 @@ exports.uploadReview = async (req, res, next) => {
     const review = await Review.create({
       reviewContent,
       ProjectProjectId: req.params.id,
-      UserId:  req.user.id,
-      RewardId: rewardOption
+      UserId: req.user.id,
+      RewardId: rewardOption,
     });
 
     res.json({
@@ -463,12 +464,15 @@ exports.getReviews = async (req, res, next) => {
     // 해당 프로젝트의 후기 목록을 불러옴
     const reviews = await Review.findAll({
       where: { ProjectProjectId: projectId },
-      include: [{
-        model: User,
-        attributes: ['nickname', 'profileImage'], // 필요한 유저 정보 선택
-      },{
-        model: Reward
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ["nickname", "profileImage"], // 필요한 유저 정보 선택
+        },
+        {
+          model: Reward,
+        },
+      ],
     });
 
     res.json({
