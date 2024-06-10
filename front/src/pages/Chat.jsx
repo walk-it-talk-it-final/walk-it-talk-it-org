@@ -52,7 +52,7 @@ const Chat = () => {
     "--sendbird-light-primary-100": "#817F82",
   };
   return (
-    <div className="App">
+    <div className="App" style={{marginTop: 75}}>
       <SendbirdApp
         appId={APP_ID}
         userId={USER_ID}

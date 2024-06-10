@@ -1,3 +1,4 @@
+// setting
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Avatar, Typography, Box, Button, TextField } from "@mui/material";
@@ -100,6 +101,7 @@ const Settings = () => {
           flexDirection: "column",
           width: "50ch",
           gap: "30px",
+          minHeight: 700
         }}
       >
         <div

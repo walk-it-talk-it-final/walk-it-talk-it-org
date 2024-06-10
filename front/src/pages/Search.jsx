@@ -1,3 +1,4 @@
+// Search
 import React, { useState, useEffect, useCallback } from "react";
 import {
   TextField,
@@ -126,7 +127,7 @@ const Search = () => {
   };
 
   return (
-    <>
+    <div style={{minHeight: 700}}>
       {/* 검색바 */}
       <Box
         component="form"
@@ -305,7 +306,7 @@ const Search = () => {
           </Box>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
