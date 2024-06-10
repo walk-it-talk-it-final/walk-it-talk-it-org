@@ -1,3 +1,4 @@
+// 내 프로젝트
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Typography } from "@mui/material";
@@ -5,6 +6,8 @@ import ProjectList from "../components/layouts/ProjectList";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
+import nothingIMG from "../assets/nothing.png";
+
 
 const MyProject = () => {
   const { loginUser } = useAuth();
@@ -45,6 +48,7 @@ const MyProject = () => {
           flexDirection: "column",
           width: "50ch",
           gap: "30px",
+          minHeight: 700
         }}
       >
         <div className="fundingProject" style={{ marginTop: 70, padding: 10 }}>
@@ -60,9 +64,9 @@ const MyProject = () => {
             }}
           >
             <Typography sx={{ fontSize: 8 }}>
-              전체 {projects?.length}개
+              전체 {projects?.length || 0}개
             </Typography>
-            <select
+            {/* <select
               id="basic-select"
               name="options"
               style={{ border: "none" }}
@@ -76,7 +80,7 @@ const MyProject = () => {
               <option value="option4">마감임박순</option>
               <option value="option5">낮은 금액순</option>
               <option value="option6">높은 금액순</option>
-            </select>
+            </select> */}
           </div>
           <div
             style={{
@@ -85,12 +89,18 @@ const MyProject = () => {
               justifyContent: "space-between",
             }}
           >
-            {projects &&
+            {projects && projects.length > 0 ? (
               projects.map((project) => (
                 <div onClick={() => handleCardClick(project)} key={project.id}>
                   <ProjectList project={project} />
                 </div>
-              ))}
+              ))
+            ) : (
+              <div>
+                <img src={nothingIMG} style={{ width: "50%", padding: 20, marginLeft: 100 }}></img>
+                <Typography variant="body1">등록한 프로젝트가 없습니다.</Typography>
+              </div>
+            )}
           </div>
         </div>
       </Box>

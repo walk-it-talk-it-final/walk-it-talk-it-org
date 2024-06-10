@@ -1,9 +1,12 @@
+// 리뷰 페이지
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Select, MenuItem, Divider, Button } from '@mui/material';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@emotion/react';
+import nothingIMG from "../assets/nothing.png";
+
 
 const Reviews = () => {
   const theme = useTheme();
@@ -75,7 +78,7 @@ const Reviews = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ minHeight: 650 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
           후기
@@ -104,42 +107,51 @@ const Reviews = () => {
         </Box>
       </Box>
       <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
-      {reviewsToShow.map((review) => (
-        <Box key={review.id} sx={{ mb: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-            <Avatar src={review.profileImage} sx={{ mr: 2 }} />
-            <Box>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{review.User.nickname}</Typography>
-              <Typography variant="body2" sx={{ color: subColor4, fontWeight: 'medium' }}>{review.Reward.rewardOption}</Typography>
+      {sortedReviews.length === 0 ? (
+        <div>
+          <img src={nothingIMG} style={{ width: "50%", padding: 20, marginLeft: 100 }}></img>
+          <Typography variant="body1">등록된 후기가 없습니다.</Typography>
+        </div>
+      ) : (
+        <>
+          {reviewsToShow.map((review) => (
+            <Box key={review.id} sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Avatar src={review.profileImage} sx={{ mr: 2 }} />
+                <Box>
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{review.User.nickname}</Typography>
+                  <Typography variant="body2" sx={{ color: subColor4, fontWeight: 'medium' }}>{review.Reward.rewardOption}</Typography>
+                </Box>
+              </Box>
+              <div key={review.id}>
+                <p style={{ fontSize: 18 }}>{stripHtmlTags(review.reviewContent)}</p>
+                <small style={{ color: "darkgrey" }}>{new Date(review.reviewUploadDate).toLocaleString()}</small>
+              </div>
+              <Divider sx={{ borderColor: '#e0e0e0', mt: 2 }} />
             </Box>
-          </Box>
-          <div key={review.id}>
-            <p style={{fontSize: 18}}>{stripHtmlTags(review.reviewContent)}</p>
-            <small style={{color:"darkgrey"}}>{new Date(review.reviewUploadDate).toLocaleString()}</small>
-          </div>
-          <Divider sx={{ borderColor: '#e0e0e0', mt: 2 }} />
-        </Box>
-      ))}
-      {!showAll && sortedReviews.length > 5 && (
-        <Button
-          variant="outlined"
-          onClick={handleShowAllClick}
-          sx={{
-            color: mainColor,
-            borderColor: mainColor,
-            backgroundColor: '#fff',
-            '&:hover': {
-              backgroundColor: mainColor,
-              borderColor: mainColor,
-              color: '#fff'
-            },
-            mt: 2,
-            width: '100%',
-            fontSize: '16px'
-          }}
-        >
-          후기 전체보기
-        </Button>
+          ))}
+          {!showAll && sortedReviews.length > 5 && (
+            <Button
+              variant="outlined"
+              onClick={handleShowAllClick}
+              sx={{
+                color: mainColor,
+                borderColor: mainColor,
+                backgroundColor: '#fff',
+                '&:hover': {
+                  backgroundColor: mainColor,
+                  borderColor: mainColor,
+                  color: '#fff'
+                },
+                mt: 2,
+                width: '100%',
+                fontSize: '16px'
+              }}
+            >
+              후기 전체보기
+            </Button>
+          )}
+        </>
       )}
       <Box sx={{ position: 'sticky', bottom: 50, marginLeft: 43, zIndex: 1000 }}>
         <Button
