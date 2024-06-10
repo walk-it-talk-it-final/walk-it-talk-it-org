@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTheme } from "@emotion/react";
 import ProjectCard from "../components/layouts/ProjectCard";
+import searchIMG from "../assets/searchIMG.png";
 
 const Search = () => {
   const theme = useTheme(); // 테마 접근
@@ -257,23 +258,7 @@ const Search = () => {
               textAlign: "left",
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              인기 검색어
-            </Typography>
-            <List
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                maxWidth: "600px",
-                textAlign: "left",
-              }}
-            >
-              {popularSearchTerms.map((term, index) => (
-                <ListItem key={index} sx={{ width: "50%" }}>
-                  <ListItemText primary={`${index + 1}  ${term}`} />
-                </ListItem>
-              ))}
-            </List>
+            <img src={searchIMG} style={{marginTop: 40, width: 320, height: 320}}></img>
           </Box>
         </Box>
       ) : (
