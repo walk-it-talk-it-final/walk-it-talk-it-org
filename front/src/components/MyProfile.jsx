@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { ClassSharp } from "@mui/icons-material";
+import introIMG from "../assets/intro.png";
 
 export const MyProfile = ({ user }) => {
   const token = localStorage.getItem("token");
@@ -390,33 +391,8 @@ export const MyProfile = ({ user }) => {
               <Typography sx={{ marginTop: 1 }}>프로필 수정</Typography>
             </div>
           </div>
-          <div className="recentView" style={{ marginTop: 50, padding: 10 }}>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", marginBottom: 2 }}
-            >
-              최근에 본 프로젝트
-            </Typography>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {projects.map((project) => (
-                <CardList
-                  key={project.id}
-                  mainColor={mainColor}
-                  title={project.title}
-                  creator={project.creator}
-                  progress={project.progress}
-                  amount={project.amount}
-                  remainingDays={project.remainingDays}
-                  image={project.image}
-                />
-              ))}
-            </div>
+          <div className="recentView" style={{ marginTop: 50, padding: 10}}>
+            <img src={introIMG} style={{width: "100%"}}></img>
           </div>
         </div>
       </Box>
