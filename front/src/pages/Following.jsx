@@ -10,9 +10,7 @@ const Following = () => {
 
   const location = useLocation();
   const followingList = location.state?.followingList || [];
-  console.log(followingList);
-
-  const [followingData, setFollowingData] = useState();
+  const [followingData, setFollowingData] = useState(followingList);
 
   // 언팔로우를 클릭하면 팔로잉 리스트에서 삭제되는 역할을 함 (토글)
   const handleFollowToggle = (id) => {
@@ -49,7 +47,7 @@ const Following = () => {
             }}
           >
             <Typography sx={{ fontSize: 20 }}>
-              총 {followingList.length}명
+              총 {followingData.length}명
             </Typography>
           </div>
           <div>
@@ -63,7 +61,7 @@ const Following = () => {
                                 onToggleFollow={handleFollowToggle} // 팔로우 상태 토글 이벤트 핸들러
                             />
                         ))} */}
-            {followingList.map((user) => (
+            {followingData.map((user) => (
               <Follow
                 key={user.id}
                 user={user}

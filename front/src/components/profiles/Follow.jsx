@@ -15,9 +15,9 @@ const Follow = ({ user, initiallyFollowing, onToggleFollow }) => {
 
       if (!newFollowingState) {
         unfollowUser(user.id);
+        onToggleFollow(user.id);
       } else {
         followUser(user.id);
-        onToggleFollow(user.id);
       }
       return newFollowingState;
     });

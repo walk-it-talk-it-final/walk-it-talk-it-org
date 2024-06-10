@@ -10,7 +10,7 @@ const Follower = () => {
   const location = useLocation();
   const followerList = location.state?.followerList || [];
 
-  const [followerData, setFollowerData] = useState();
+  const [followerData, setFollowerData] = useState(followerList);
 
   // 팔로우/언팔로우 상태 관리
   const handleFollowToggle = (id) => {
