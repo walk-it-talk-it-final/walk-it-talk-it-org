@@ -113,8 +113,8 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
             </Box>
             <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
             {commuPosts.length === 0 ? (
-                <div>
-                    <img src={nothingIMG} style={{ width: "50%", padding: 20, marginLeft: 100 }}></img>
+                <div style={{textAlign: "center"}}>
+                    <img src={nothingIMG} style={{ width: "50%", padding: 20 }}></img>
                     <Typography>등록된 커뮤니티 게시글이 없습니다.</Typography>
                 </div>
             ) : (
