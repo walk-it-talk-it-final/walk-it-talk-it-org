@@ -1,9 +1,8 @@
-const { Project, Hashtag, User, Reward } = require("../models");
+const { Project, Hashtag, User, Reward, Reply } = require("../models");
 const Guestinfo = require("../models/guestinfo");
 const Ongoingproject = require("../models/ongoingproject");
 const Projectnotice = require("../models/projectnotice");
 const Community = require("../models/community");
-const Reply = require("../models/reply");
 const Review = require("../models/review");
 const op = require("sequelize").Op;
 const sequelize = require("sequelize");
@@ -420,6 +419,15 @@ exports.getPosts = async (req, res, next) => {
         {
           model: User,
           attributes: ["nickname", "profileImage"], // 필요한 유저 정보 선택
+        },
+        {
+          model: Reply,
+          include: [
+            {
+              model: User,
+              attributes: ["nickname", "profileImage"],
+            },
+          ],
         },
       ],
     });
