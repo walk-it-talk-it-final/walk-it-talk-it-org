@@ -58,18 +58,15 @@ const Home = () => {
     let sorted = [...projects];
     switch (option) {
       case "option2":
-        sorted = sorted.sort((a, b) => b.likeCount - a.likeCount);
-        break;
-      case "option3":
         sorted = sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         break;
-      case "option4":
+      case "option3":
         sorted = sorted.sort((a, b) => new Date(a.projectFinishAt) - new Date(b.projectFinishAt));
         break;
-      case "option5":
+      case "option4":
         sorted = sorted.sort((a, b) => a.projectTargetPrice - b.projectTargetPrice);
         break;
-      case "option6":
+      case "option5":
         sorted = sorted.sort((a, b) => b.projectTargetPrice - a.projectTargetPrice);
         break;
       default:
@@ -124,11 +121,10 @@ const Home = () => {
             <option value="option1" disabled>
               정렬
             </option>
-            <option value="option2">좋아요 많은순</option>
-            <option value="option3">최신 등록순</option>
-            <option value="option4">마감임박순</option>
-            <option value="option5">낮은 금액순</option>
-            <option value="option6">높은 금액순</option>
+            <option value="option2">최신 등록순</option>
+            <option value="option3">마감임박순</option>
+            <option value="option4">낮은 금액순</option>
+            <option value="option5">높은 금액순</option>
           </select>
         </div>
 
