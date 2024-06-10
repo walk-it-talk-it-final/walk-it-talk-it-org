@@ -6,6 +6,7 @@ const router = express.Router();
 const projectRouter = require("./project");
 const userRouter = require("./user");
 const tossRouter = require("./toss");
+const communityRouter = require("./community.js");
 const { verifyToken } = require("../middlewares");
 const passport = require("passport");
 const controller = require("../controllers/payments.controller.js");
@@ -43,6 +44,8 @@ router.post("/auth/join", join);
 router.use("/projects", projectRouter);
 router.use("/users", userRouter);
 router.use("/toss", tossRouter);
+router.use("/posts", communityRouter);
+
 router.post("/auth/login", createToken);
 
 router.get("/auth/kakao", passport.authenticate("kakao"));
