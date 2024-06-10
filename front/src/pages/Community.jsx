@@ -1,3 +1,4 @@
+// 커뮤니티 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Select, MenuItem, Divider } from '@mui/material';
 import PostDetail from './../components/communities/PostDetail';
@@ -6,6 +7,7 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import axios from 'axios';
+import nothingIMG from "../assets/nothing.png";
 
 const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
 
@@ -92,7 +94,7 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
     }
 
     return (
-        <Box sx={{ maxWidth: "407px" }}>
+        <Box sx={{ maxWidth: "407px", minHeight: 650 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
                     커뮤니티
@@ -110,45 +112,56 @@ const Community = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 )}
             </Box>
             <Divider sx={{ mb: 2, borderColor: mainColor, borderWidth: 2 }} />
-            {selectedPost ? (
-                <PostDetail
-                    selectedPost={selectedPost}
-                    onBackClick={handleBackClick}
-                    onCommentChange={handleCommentChange}
-                    onCommentSubmit={handleCommentSubmit}
-                    anchorEl={anchorEl}
-                    onMenuOpen={handleMenuOpen}
-                    onMenuClose={handleMenuClose}
-                    onActionChange={handleActionChange}
-                    newComment={newComment}
-                    comments={comments}
-                    mainColor={mainColor}
-                />
+            {commuPosts.length === 0 ? (
+                <div>
+                    <img src={nothingIMG} style={{ width: "50%", padding: 20, marginLeft: 100 }}></img>
+                    <Typography>등록된 커뮤니티 게시글이 없습니다.</Typography>
+                </div>
             ) : (
                 <>
-                    {sortedCommuPosts().map((post) => (
-                        <PostLists
-                            key={post.id}
-                            post={post}
-                            onClick={() => handlePostClick(post)}
+                    {selectedPost ? (
+                        <PostDetail
+                            selectedPost={selectedPost}
+                            onBackClick={handleBackClick}
+                            onCommentChange={handleCommentChange}
+                            onCommentSubmit={handleCommentSubmit}
+                            anchorEl={anchorEl}
+                            onMenuOpen={handleMenuOpen}
+                            onMenuClose={handleMenuClose}
+                            onActionChange={handleActionChange}
+                            newComment={newComment}
+                            comments={comments}
+                            mainColor={mainColor}
                         />
-                    ))}
-                    <Box sx={{ position: 'sticky', bottom: 30, marginLeft: 43, zIndex: 1000 }}>
-                        <Button
-                            variant='contained'
-                            color='mainColor'
-                            sx={{
-                                color: 'white',
-                                width: 40,
-                                height: 60,
-                                borderRadius: 100,
-                            }}
-                            onClick={handleButtonClick}
-                        >
-                            <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
-                        </Button>
-                    </Box>
+                    ) : (
+                        <>
+                            {sortedCommuPosts().map((post) => (
+                                <PostLists
+                                    key={post.id}
+                                    post={post}
+                                    onClick={() => handlePostClick(post)}
+                                />
+                            ))}
+                        </>
+                    )}
                 </>
+            )}
+            {!selectedPost && (
+                <Box sx={{ position: 'sticky', bottom: 30, marginLeft: 43, zIndex: 1000 }}>
+                    <Button
+                        variant='contained'
+                        color='mainColor'
+                        sx={{
+                            color: 'white',
+                            width: 40,
+                            height: 60,
+                            borderRadius: 100,
+                        }}
+                        onClick={handleButtonClick}
+                    >
+                        <CreateOutlinedIcon sx={{ width: 50, height: 30 }} />
+                    </Button>
+                </Box>
             )}
         </Box>
     );

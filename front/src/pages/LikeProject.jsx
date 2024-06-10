@@ -1,9 +1,12 @@
+// 찜한 페이지
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Typography, Box } from "@mui/material";
 import ProjectList from "../components/layouts/ProjectList";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
+import nothingIMG from "../assets/nothing.png";
+
 
 const LikeProject = () => {
   const { loginUser } = useAuth();
@@ -42,6 +45,7 @@ const LikeProject = () => {
           flexDirection: "column",
           width: "50ch",
           gap: "30px",
+          minHeight: 700
         }}
       >
         <div className="fundingProject" style={{ marginTop: 70, padding: 10 }}>
@@ -59,7 +63,7 @@ const LikeProject = () => {
             <Typography sx={{ fontSize: 8 }}>
               전체 {projects?.length}개
             </Typography>
-            <select
+            {/* <select
               id="basic-select"
               name="options"
               style={{ border: "none" }}
@@ -73,18 +77,26 @@ const LikeProject = () => {
               <option value="option4">마감임박순</option>
               <option value="option5">낮은 금액순</option>
               <option value="option6">높은 금액순</option>
-            </select>
+            </select> */}
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-            }}
-          >
-            {projects &&
-              projects.map((project) => <ProjectList project={project} />)}
-          </div>
+          {projects && projects.length > 0 ? (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
+            >
+              {projects.map((project) => (
+                <ProjectList project={project} key={project.id} />
+              ))}
+            </div>
+          ) : (
+            <div>
+          <img src={nothingIMG} style={{ width: "50%", padding: 20, marginLeft: 100 }}></img>
+          <Typography variant="body1">찜한 프로젝트가 없습니다.</Typography>
+        </div>
+          )}
         </div>
       </Box>
     </div>
