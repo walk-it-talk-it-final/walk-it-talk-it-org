@@ -42,7 +42,14 @@ const FundingProgress = () => {
     };
 
     const handleGoPayments = () => {
-        navigate('/funding/checkout');
+        console.log(selectedOption);
+        console.log(selectedQuantity);
+        navigate('/funding/checkout', {state: {
+            option: selectedOption,
+            quantity:selectedQuantity,
+            projectId: 1,
+            rewardId: 1
+        }});
     }
 
     return (

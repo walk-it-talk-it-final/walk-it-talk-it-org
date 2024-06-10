@@ -17,6 +17,10 @@ class Guestinfo extends Sequelize.Model {
           type: Sequelize.STRING(15),
           allowNull: false,
         },
+        orderId: {
+          type: Sequelize.STRING(50),
+          allowNull: false,
+        },
       },
       {
         sequelize,
