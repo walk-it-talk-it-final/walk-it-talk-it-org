@@ -18,6 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import axios from "axios";
+import nothingIMG from "../assets/nothing.png";
 
 const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -29,7 +30,7 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   const subColor4 = theme.palette.subColor4.main;
   const navigate = useNavigate();
 
-  const [notices, setNotices] = useState();
+  const [notices, setNotices] = useState([]);
 
   const getAnnouncementsData = async () => {
     try {
@@ -79,14 +80,9 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
   };
 
   const startIndex = (currentPage - 1) * announcementsPerPage;
-  const [currentNotices, setCurrentNotices] = useState();
-  useEffect(() => {
-    setCurrentNotices(
-      notices?.slice(startIndex, startIndex + announcementsPerPage),
-    );
-  }, [notices]);
+  const currentNotices = notices.slice(startIndex, startIndex + announcementsPerPage);
 
-  const totalPages = Math.ceil(notices?.length / announcementsPerPage);
+  const totalPages = Math.ceil(notices.length / announcementsPerPage);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -119,13 +115,13 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 marginBottom: 0.5,
                 padding: 1.2,
               }}
-              onClick={() => handleButtonClick()}
+              onClick={handleButtonClick}
             >
               <CreateOutlinedIcon sx={{ width: 40, height: 20 }} />
             </Button>
             <Select
               value={sortOrder}
-              onChange={(e) => sortedAnnouncements(e)}
+              onChange={sortedAnnouncements}
               displayEmpty
               sx={{ minWidth: 100, maxHeight: 40 }}
             >
@@ -183,7 +179,12 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
         </Box>
       ) : (
         <Box sx={{ height: 400 }}>
-          {currentNotices ? (
+          {currentNotices.length === 0 ? (
+            <div style={{ textAlign: 'center', marginTop: 50 }}>
+              <img src={nothingIMG} alt="Nothing" style={{ width: "50%", padding: 20 }} />
+              <Typography variant="body1">등록된 공지사항이 없습니다.</Typography>
+            </div>
+          ) : (
             currentNotices.map((announcement) => (
               <Box key={announcement.id} sx={{ mb: 2 }}>
                 <Box
@@ -211,17 +212,8 @@ const Announcements = ({ sortOrder, handleSortOrderChange, projectId }) => {
                 <Divider sx={{ borderColor: "#e0e0e0" }} />
               </Box>
             ))
-          ) : (
-            <p>No Notices found</p>
           )}
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 120,
-              marginLeft: 43,
-              zIndex: 1000,
-            }}
-          ></Box>
+          {/* 페이지네이션 버튼들을 추가하려면 아래 코드를 주석 해제 */}
           {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <IconButton
               onClick={() => handlePageChange(1)}
