@@ -44,12 +44,7 @@ const BasicInfo = ({
     ref,
     reset,
     control,
-  } = useForm({
-    defaultValues: {
-      projectTitle: "1박2일 여행가자",
-      projectTargetPrice: "33333333",
-    },
-  });
+  } = useForm({});
 
   // 미리보기 이미지를 저장할 상태
   const [thumbnailPreview, setThumbnailPreview] = useState(null);

@@ -24,14 +24,7 @@ const AddMaker = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm({
-    defaultValues: {
-      managerName: "가나다",
-      managerEmail: "abcd@gmail.com",
-      managerPhone: "01012345678",
-      managerAccount: "01234567890",
-    },
-  });
+  } = useForm({});
 
   const navigate = useNavigate();
   // 핸드폰 인증(하는 척..) 구현

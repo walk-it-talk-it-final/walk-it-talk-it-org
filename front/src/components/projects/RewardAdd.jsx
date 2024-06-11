@@ -54,15 +54,10 @@ const RewardAdd = ({
     setValue,
     getValues,
     reset,
-  } = useForm({
-    defaultValues: {
-      rewardPrice: "1000000",
-      rewardOption: "1인 패키지",
-    },
-  });
+  } = useForm({});
 
   return (
-    <div className="rewardInfo" style={{ marginTop: "20%", marginBottom : 70}}>
+    <div className="rewardInfo" style={{ marginTop: "20%", marginBottom: 70 }}>
       <Typography variant="h4" color="initial" fontWeight="medium">
         리워드 추가
       </Typography>
