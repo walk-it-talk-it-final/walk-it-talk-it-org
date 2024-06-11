@@ -11,10 +11,14 @@ const SlideImg = ({ slideImages }) => {
 
   // 이미지 슬라이드
   const renderSlides = slideImages.map((image, index) => (
-    <div key={index}>
+    <div key={index} onClick={() => handleClick(image.link)}>
       <img src={image.url} />
     </div>
   ));
+
+  const handleClick = (link) => {
+    window.location.href = link;
+  };
 
   return (
     <div style={{ marginTop: 70 }}>

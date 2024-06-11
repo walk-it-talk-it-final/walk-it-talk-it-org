@@ -12,27 +12,32 @@ const slideImages = [
   {
     label: "Image 1",
     alt: "image1",
-    url: "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+    url: "/slider1.png",
+    link: "/projects/6",
   },
   {
     label: "Image 2",
     alt: "image2",
-    url: "https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80",
+    url: "/slider3.png",
+    link: "/projects/7",
   },
   {
     label: "Image 3",
     alt: "image3",
-    url: "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+    url: "/slider5.png",
+    link: "/projects/11",
   },
   {
     label: "Image 4",
     alt: "image4",
-    url: "https://images.unsplash.com/photo-1622307053412-5404f0c427c0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    url: "/slider6.png",
+    link: "/projects/12",
   },
   {
     label: "Image 5",
     alt: "image5",
-    url: "https://media.istockphoto.com/id/1084351348/ko/%EC%82%AC%EC%A7%84/%EA%B2%BD%ED%9D%AC%EA%B6%81-%EC%84%9C%EC%9A%B8-%ED%95%9C%EA%B5%AD%EC%97%90%EC%84%9C-%ED%95%9C%EA%B5%AD-%EC%A0%84%ED%86%B5-%EA%B1%B4%EC%B6%95.jpg?s=1024x1024&w=is&k=20&c=bQ_45lSY29JE9K_CvVYZU9C0eK8zXLIRaslbbJmd4Jo=",
+    url: "/slider7.png",
+    link: "/projects/10",
   },
 ];
 
@@ -58,16 +63,24 @@ const Home = () => {
     let sorted = [...projects];
     switch (option) {
       case "option2":
-        sorted = sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        sorted = sorted.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        );
         break;
       case "option3":
-        sorted = sorted.sort((a, b) => new Date(a.projectFinishAt) - new Date(b.projectFinishAt));
+        sorted = sorted.sort(
+          (a, b) => new Date(a.projectFinishAt) - new Date(b.projectFinishAt),
+        );
         break;
       case "option4":
-        sorted = sorted.sort((a, b) => a.projectTargetPrice - b.projectTargetPrice);
+        sorted = sorted.sort(
+          (a, b) => a.projectTargetPrice - b.projectTargetPrice,
+        );
         break;
       case "option5":
-        sorted = sorted.sort((a, b) => b.projectTargetPrice - a.projectTargetPrice);
+        sorted = sorted.sort(
+          (a, b) => b.projectTargetPrice - a.projectTargetPrice,
+        );
         break;
       default:
         break;
@@ -98,7 +111,7 @@ const Home = () => {
           flexDirection: "column",
           width: "50ch",
           gap: "30px",
-          minHeight: 800
+          minHeight: 800,
         }}
       >
         {/* 이미지 슬라이더 부분 */}
@@ -131,12 +144,14 @@ const Home = () => {
         {/* 프로젝트가 없을 때의 메시지 */}
         {sortedProjects.length === 0 && (
           <>
-          <img src={nothingIMG} style={{ width: "60%", padding: 20, marginLeft: 75 }}></img>
+            <img
+              src={nothingIMG}
+              style={{ width: "60%", padding: 20, marginLeft: 75 }}
+            ></img>
             <Typography variant="h5" align="center">
               현재 등록된 프로젝트가 없습니다.
             </Typography>
           </>
-
         )}
 
         {/* 프로젝트 리스트 */}
